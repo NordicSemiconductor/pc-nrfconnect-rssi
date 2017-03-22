@@ -1,0 +1,6 @@
+exports[`decorateMainView should render component 1`] = `
+<div>
+  <h3 />
+  MainView content
+</div>
+`;

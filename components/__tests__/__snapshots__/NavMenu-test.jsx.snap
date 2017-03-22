@@ -1,0 +1,12 @@
+exports[`decorateNavMenu should render component 1`] = `
+<div
+  menuItems={
+    Array [
+      Object {
+        "iconClass": "icon-star",
+        "id": "about",
+        "text": "About",
+      },
+    ]
+  } />
+`;
