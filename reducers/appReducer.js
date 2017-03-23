@@ -35,28 +35,31 @@
  */
 
 export default function reduceApp(state, action) {
+    // set initial values:
+    let { data, dataMax, animationDuration } = {
+        data: [],
+        dataMax: [],
+        animationDuration: 500,
+        ...state,
+    };
+
     switch (action.type) {
-        case 'RSSI_DATA': {
-            const { data, dataMax } = action;
-            return {
-                ...state,
-                data,
-                dataMax,
-            };
-        }
-        case 'RSSI_CHANGE_ANIMATION_DURATION': {
-            const { animationDuration } = action;
-            return {
-                ...state,
-                animationDuration,
-            };
-        }
+        case 'RSSI_DATA':
+            data = action.data;
+            dataMax = action.dataMax;
+            break;
+
+        case 'RSSI_CHANGE_ANIMATION_DURATION':
+            animationDuration = action.animationDuration;
+            break;
+
         default:
-            return {
-                ...state,
-                data: [],
-                dataMax: [],
-                animationDuration: 500,
-            };
     }
+
+    return {
+        ...state,
+        data,
+        dataMax,
+        animationDuration,
+    };
 }
