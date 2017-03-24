@@ -6,7 +6,7 @@ const isProd = nodeEnv === 'production';
 
 module.exports = {
     devtool: isProd ? 'hidden-source-map' : 'inline-eval-cheap-source-map',
-    entry: './index.js',
+    entry: './index.jsx',
     output: {
         path: path.join(__dirname, 'dist'),
         publicPath: './dist/',

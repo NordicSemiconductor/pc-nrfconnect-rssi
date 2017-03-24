@@ -44,9 +44,8 @@ const theRssiDataMax = [];
 function resetRssiData() {
     theRssiData.splice(0);
     theRssiDataMax.splice(0);
-    for (let i = 0; i < 163; i += 1) {
-        theRssiData.push([127]);
-        theRssiDataMax.push(127);
+    for (let i = 0; i <= 80; i += 1) {
+        theRssiData.push([]);
     }
 }
 resetRssiData();
@@ -112,15 +111,16 @@ function open(serialPort) {
             logger.info(`${serialPort.comName} is open`);
             dispatch(serialPortOpenedAction(port));
 
-            setDelay(500);
-            setScanRepeatTimes(10);
+            scanAdvertisementChannels(false);
+            setDelay(10);
+            setScanRepeatTimes(1);
             setMaxScans(30);
             startReading();
 
             clearInterval(updateInterval);
             updateInterval = setInterval(() => {
                 dispatch(rssiData());
-            }, 10);
+            }, 30);
 
             const buf = [];
             port.on('data', data => {
@@ -133,10 +133,9 @@ function open(serialPort) {
 
                     const [ch, d] = buf.splice(0, 2);
                     if (ch !== 0xff && d !== 0xff) {
-                        const i = (ch * 2) + 1;
-                        theRssiData[i].unshift(d);
-                        theRssiData[i].splice(maxScans);
-                        theRssiDataMax[i] = Math.min(...(theRssiData[i]));
+                        theRssiData[ch].unshift(d);
+                        theRssiData[ch].splice(maxScans);
+                        theRssiDataMax[ch] = Math.min(...(theRssiData[ch]));
                     }
                 }
             });
@@ -161,8 +160,6 @@ export default {
     setDelay,
     setMaxScans,
     setScanRepeatTimes,
-    startReading,
-    stopReading,
     scanAdvertisementChannels,
     toggleLED,
 };

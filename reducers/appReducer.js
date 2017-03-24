@@ -38,6 +38,7 @@ const initialState = {
     data: [],
     dataMax: [],
     animationDuration: 500,
+    separateFrequencies: false,
 };
 
 export default function reduceApp(state = initialState, action) {
@@ -52,6 +53,11 @@ export default function reduceApp(state = initialState, action) {
             return {
                 ...state,
                 animationDuration: action.animationDuration,
+            };
+        case 'RSSI_SEPARATE_FREQUENCIES':
+            return {
+                ...state,
+                separateFrequencies: action.separateFrequencies,
             };
         default:
     }

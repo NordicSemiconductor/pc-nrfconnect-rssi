@@ -1,5 +1,0 @@
-exports[`decorateSidePanel should render component 1`] = `
-<div>
-  SidePanel content
-</div>
-`;
