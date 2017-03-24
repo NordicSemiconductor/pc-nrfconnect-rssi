@@ -41,26 +41,29 @@ export default function middleware(store) {
         if (!action) {
             return;
         }
-        if (action.type === 'SERIAL_PORT_SELECTED') {
-            store.dispatch(SerialPortActions.open(action.port));
-        }
-        if (action.type === 'SERIAL_PORT_DESELECTED') {
-            store.dispatch(SerialPortActions.close());
-        }
-        if (action.type === 'RSSI_CHANGE_DELAY') {
-            store.dispatch(SerialPortActions.setDelay(action.delay));
-        }
-        if (action.type === 'RSSI_CHANGE_MAX_SCANS') {
-            store.dispatch(SerialPortActions.setMaxScans(action.maxScans));
-        }
-        if (action.type === 'RSSI_CHANGE_SCAN_REPEAT_TIMES') {
-            store.dispatch(SerialPortActions.setScanRepeatTimes(action.scanRepeatTimes));
-        }
-        if (action.type === 'RSSI_SCAN_ADVERTISEMENTS') {
-            store.dispatch(SerialPortActions.scanAdvertisementChannels(action.enable));
-        }
-        if (action.type === 'RSSI_TOGGLE_LED') {
-            store.dispatch(SerialPortActions.toggleLED());
+        switch (action.type) {
+            case 'SERIAL_PORT_SELECTED':
+                store.dispatch(SerialPortActions.open(action.port));
+                break;
+            case 'SERIAL_PORT_DESELECTED':
+                store.dispatch(SerialPortActions.close());
+                break;
+            case 'RSSI_CHANGE_DELAY':
+                store.dispatch(SerialPortActions.setDelay(action.delay));
+                break;
+            case 'RSSI_CHANGE_MAX_SCANS':
+                store.dispatch(SerialPortActions.setMaxScans(action.maxScans));
+                break;
+            case 'RSSI_CHANGE_SCAN_REPEAT_TIMES':
+                store.dispatch(SerialPortActions.setScanRepeatTimes(action.scanRepeatTimes));
+                break;
+            case 'RSSI_SCAN_ADVERTISEMENTS':
+                store.dispatch(SerialPortActions.scanAdvertisementChannels(action.enable));
+                break;
+            case 'RSSI_TOGGLE_LED':
+                store.dispatch(SerialPortActions.toggleLED());
+                break;
+            default:
         }
         next(action);
     };

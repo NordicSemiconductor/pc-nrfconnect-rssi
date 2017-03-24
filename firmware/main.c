@@ -107,6 +107,9 @@ void rssi_measurer_configure_radio(void)
 	NRF_RADIO->POWER  = 1;
 	NRF_RADIO->SHORTS = RADIO_SHORTS_READY_START_Msk | RADIO_SHORTS_END_DISABLE_Msk;
 	NVIC_EnableIRQ(RADIO_IRQn);
+	
+	NRF_CLOCK->TASKS_HFCLKSTART = 1;
+	while (NRF_CLOCK->EVENTS_HFCLKSTARTED == 0);
 }
 
 #define WAIT_FOR( m ) do { while (!m); m = 0; } while(0)
