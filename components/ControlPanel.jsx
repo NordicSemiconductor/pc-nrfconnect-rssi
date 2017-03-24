@@ -53,7 +53,7 @@ const ControlPanel = props => {
             Sweep Delay (ms)<br />
             <ReactBootstrapSlider
                 value={10}
-                slideStop={onDelayChange}
+                slideStop={event => onDelayChange(event.target.value)}
                 max={1000}
                 min={5}
                 ticks={[5, 1000]}
@@ -62,7 +62,7 @@ const ControlPanel = props => {
             # of sweeps to display maximum value
             <ReactBootstrapSlider
                 value={30}
-                slideStop={onMaxScansChange}
+                slideStop={event => onMaxScansChange(event.target.value)}
                 max={100}
                 min={1}
                 ticks={[1, 100]}
@@ -71,7 +71,7 @@ const ControlPanel = props => {
             Channel scan repeat
             <ReactBootstrapSlider
                 value={1}
-                slideStop={onChannelScanRepeatChange}
+                slideStop={event => onChannelScanRepeatChange(event.target.value)}
                 max={100}
                 min={1}
                 ticks={[1, 100]}
@@ -80,16 +80,16 @@ const ControlPanel = props => {
             Animation duration (ms)
             <ReactBootstrapSlider
                 value={500}
-                slideStop={onAnimationDurationChange}
+                slideStop={event => onAnimationDurationChange(event.target.value)}
                 max={1000}
                 min={10}
                 ticks={[10, 1000]}
                 ticks_labels={['10', '1000']}
             />
-            <Checkbox onChange={onScanAdvertisementsToggle}>
+            <Checkbox onChange={event => onScanAdvertisementsToggle(event.target.checked)}>
                 Advertisements only
             </Checkbox>
-            <Checkbox onChange={onSeparateFrequencies}>
+            <Checkbox onChange={event => onSeparateFrequencies(event.target.checked)}>
                 Separate Frequencies
             </Checkbox>
             <Button onClick={onToggleLED}>Toggle LED</Button>

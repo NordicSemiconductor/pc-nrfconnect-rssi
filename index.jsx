@@ -40,7 +40,6 @@ import React from 'react';
 import Chart from './components/Chart';
 import ControlPanel from './components/ControlPanel';
 import reduceApp from './reducers/appReducer';
-import middleware from './middleware';
 import SerialPortActions from './actions/serialPortActions';
 import './resources/css/index.less';
 
@@ -95,24 +94,33 @@ export default {
     ),
     mapSidePanelDispatch: (dispatch, props) => ({
         ...props,
-        onDelayChange: sender => dispatch(
-            SerialPortActions.setDelay(sender.target.value)),
-        onMaxScansChange: sender => dispatch(
-            SerialPortActions.setMaxScans(sender.target.value)),
-        onChannelScanRepeatChange: sender => dispatch(
-            SerialPortActions.setScanRepeatTimes(sender.target.value)),
-        onAnimationDurationChange: sender => dispatch({
+        onDelayChange: delay => dispatch(SerialPortActions.setDelay(delay)),
+        onMaxScansChange: maxScans => dispatch(SerialPortActions.setMaxScans(maxScans)),
+        onChannelScanRepeatChange: scanRepeat => dispatch(
+            SerialPortActions.setScanRepeatTimes(scanRepeat)),
+        onAnimationDurationChange: animationDuration => dispatch({
             type: 'RSSI_CHANGE_ANIMATION_DURATION',
-            animationDuration: sender.target.value,
+            animationDuration,
         }),
-        onScanAdvertisementsToggle: sender => dispatch(
-            SerialPortActions.scanAdvertisementChannels(sender.target.checked)),
-        onSeparateFrequencies: sender => dispatch({
+        onScanAdvertisementsToggle: scanAdvertisementChannels => dispatch(
+            SerialPortActions.scanAdvertisementChannels(scanAdvertisementChannels)),
+        onSeparateFrequencies: separateFrequencies => dispatch({
             type: 'RSSI_SEPARATE_FREQUENCIES',
-            separateFrequencies: sender.target.checked,
+            separateFrequencies,
         }),
         onToggleLED: () => dispatch(SerialPortActions.toggleLED()),
     }),
+    middleware: store => next => action => {
+        if (!action) {
+            return;
+        }
+        if (action.type === 'SERIAL_PORT_SELECTED') {
+            store.dispatch(SerialPortActions.open(action.port));
+        }
+        if (action.type === 'SERIAL_PORT_DESELECTED') {
+            store.dispatch(SerialPortActions.close());
+        }
+        next(action);
+    },
     reduceApp,
-    middleware,
 };
