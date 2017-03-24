@@ -34,32 +34,26 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export default function reduceApp(state, action) {
-    // set initial values:
-    let { data, dataMax, animationDuration } = {
-        data: [],
-        dataMax: [],
-        animationDuration: 500,
-        ...state,
-    };
+const initialState = {
+    data: [],
+    dataMax: [],
+    animationDuration: 500,
+};
 
+export default function reduceApp(state = initialState, action) {
     switch (action.type) {
         case 'RSSI_DATA':
-            data = action.data;
-            dataMax = action.dataMax;
-            break;
-
+            return {
+                ...state,
+                data: action.data,
+                dataMax: action.dataMax,
+            };
         case 'RSSI_CHANGE_ANIMATION_DURATION':
-            animationDuration = action.animationDuration;
-            break;
-
+            return {
+                ...state,
+                animationDuration: action.animationDuration,
+            };
         default:
     }
-
-    return {
-        ...state,
-        data,
-        dataMax,
-        animationDuration,
-    };
+    return state;
 }
