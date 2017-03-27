@@ -10,4 +10,4 @@ The application displays the Received Signal Strength Indicator in dBm per frequ
 
 The application connects to the selected serial port, checks and performs firmware update if needed, finally starts serial communication with nRF52832.
 
-The communication in PC to firmware direction is simply few ASCII commands, firmware to PC direction is binary flow of 3 bytes [0xff, channel_number, rssi]. The received data is visualized by a chart.js based Line chart in the MainView, and few simple controls in the SidePanel to change the communication or the visualization.
+The communication in PC to firmware direction is simply few ASCII commands, firmware to PC direction is binary flow of 3 bytes [0xff, channel_number, rssi]. The received data is visualized by a chart.js based Line chart in the MainView, and few simple controls in the SidePanel demonstrates some actions to change the communication and the visualization.
