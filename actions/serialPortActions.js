@@ -34,12 +34,34 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-let port;
+let thePort;
 let updateInterval;
 
 let maxScans = 30;
 const theRssiData = [];
 const theRssiDataMax = [];
+
+const firmware = {
+    address: 0x2000,
+    id: 'rssi-fw-1.0.0',
+};
+
+function checkShouldUpdateFirmware(store, next, action) {
+    return (dispatch, getState, { programming, logger }) => {
+        const { port } = action;
+        programming.readAddress(port.serialNumber, firmware.address, firmware.id.length).then(
+            res => {
+                const data = new Buffer(res).toString();
+                if (data === firmware.id) {
+                    store.dispatch({ type: 'SERIAL_PORT_SELECTED', port });
+                    return;
+                }
+                next(action);
+            },
+            err => err && logger.error(err),
+        );
+    };
+}
 
 function resetRssiData() {
     theRssiData.splice(0);
@@ -72,11 +94,11 @@ function rssiData() {
 }
 
 function setDelay(delay) {
-    port.write(`set delay ${delay}\r`);
+    thePort.write(`set delay ${delay}\r`);
 }
 
 function setScanRepeatTimes(repeatTimes) {
-    port.write(`set repeat ${repeatTimes}\r`);
+    thePort.write(`set repeat ${repeatTimes}\r`);
 }
 
 function setMaxScans(scans) {
@@ -85,31 +107,31 @@ function setMaxScans(scans) {
 
 function startReading() {
     resetRssiData();
-    port.write('start\r');
+    thePort.write('start\r');
 }
 
 function stopReading() {
-    port.write('stop\r');
+    thePort.write('stop\r');
     clearInterval(updateInterval);
     resetRssiData();
 }
 
 function scanAdvertisementChannels(enable) {
-    port.write(`scan adv ${enable ? 'true' : 'false'}\r`);
+    thePort.write(`scan adv ${enable ? 'true' : 'false'}\r`);
     resetRssiData();
 }
 
 function toggleLED() {
-    port.write('led\r');
+    thePort.write('led\r');
 }
 
 function open(serialPort) {
     return (dispatch, getState, { SerialPort, logger }) => {
-        port = new SerialPort(serialPort.comName, {
+        thePort = new SerialPort(serialPort.comName, {
             baudRate: 115200,
         }, () => {
             logger.info(`${serialPort.comName} is open`);
-            dispatch(serialPortOpenedAction(port));
+            dispatch(serialPortOpenedAction(thePort));
 
             scanAdvertisementChannels(false);
             setDelay(10);
@@ -123,7 +145,7 @@ function open(serialPort) {
             }, 30);
 
             const buf = [];
-            port.on('data', data => {
+            thePort.on('data', data => {
                 buf.splice(buf.length, 0, ...data);
                 if (buf.length > 246) {
                     buf.splice(0, buf.length - 246);
@@ -147,7 +169,7 @@ function close() {
     return (dispatch, getState, { logger }) => {
         stopReading();
         dispatch(rssiData());
-        port.close(() => {
+        thePort.close(() => {
             logger.info('serial port is closed');
             dispatch(serialPortClosedAction());
         });
@@ -155,6 +177,7 @@ function close() {
 }
 
 export default {
+    checkShouldUpdateFirmware,
     open,
     close,
     setDelay,
