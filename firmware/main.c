@@ -1,30 +1,30 @@
 /**
  * Copyright (c) 2014 - 2017, Nordic Semiconductor ASA
- * 
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
- * 
+ *
  * 2. Redistributions in binary form, except as embedded into a Nordic
  *    Semiconductor ASA integrated circuit in a product or a software update for
  *    such product, must reproduce the above copyright notice, this list of
  *    conditions and the following disclaimer in the documentation and/or other
  *    materials provided with the distribution.
- * 
+ *
  * 3. Neither the name of Nordic Semiconductor ASA nor the names of its
  *    contributors may be used to endorse or promote products derived from this
  *    software without specific prior written permission.
- * 
+ *
  * 4. This software, with or without modification, must only be used with a
  *    Nordic Semiconductor ASA integrated circuit.
- * 
+ *
  * 5. Any software provided in binary form under this license must not be reverse
  *    engineered, decompiled, modified and/or disassembled.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
  * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -35,19 +35,13 @@
  * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  */
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
 #include <string.h>
 #include "app_uart.h"
-#include "app_error.h"
 #include "nrf_delay.h"
-#include "nrf.h"
 #include "bsp.h"
-#include "nrf_soc.h"
 
 #define FREQ_ADV_CHANNEL_37         2      /**<Radio channel number which corresponds with 37-th BLE channel **/
 #define FREQ_ADV_CHANNEL_38         26     /**<Radio channel number which corresponds with 38-th BLE channel **/
@@ -55,7 +49,12 @@
 #define UART_TX_BUF_SIZE            512    /**< UART TX buffer size. */
 #define UART_RX_BUF_SIZE            2048   /**< UART RX buffer size. */
 #define NEW_PACKET_BYTE             255
-#define RSSI_NO_SIGNAL				127    /**< Minimum value of RSSISAMPLE */
+#define RSSI_NO_SIGNAL              127    /**< Minimum value of RSSISAMPLE */
+
+#if defined ( __CC_ARM )
+static const char version_str[16] __attribute__((at(0x2000))) = "rssi-fw-1.0.0\0\0\0";
+#endif
+
 
 static uint8_t min_channel        = 0;     /**< Lowest scanned channel if adv_channels_en = true */
 static uint8_t max_channel        = 80;    /**< highest scanned channel if adv_channels_en = true */
@@ -65,7 +64,6 @@ static uint32_t scan_repeat_times = 1;
 static bool uart_error = false;
 static bool uart_send = false;
 static bool scan_ble_adv = false;
-
 
 void uart_put(uint8_t c)
 {
@@ -107,7 +105,7 @@ void rssi_measurer_configure_radio(void)
 	NRF_RADIO->POWER  = 1;
 	NRF_RADIO->SHORTS = RADIO_SHORTS_READY_START_Msk | RADIO_SHORTS_END_DISABLE_Msk;
 	NVIC_EnableIRQ(RADIO_IRQn);
-	
+
 	NRF_CLOCK->TASKS_HFCLKSTART = 1;
 	while (NRF_CLOCK->EVENTS_HFCLKSTARTED == 0);
 }
@@ -117,19 +115,19 @@ void rssi_measurer_configure_radio(void)
 uint8_t rssi_measurer_scan_channel(uint8_t channel_number)
 {
 	uint8_t sample;
-	
+
 	NRF_RADIO->FREQUENCY  = channel_number;
 	NRF_RADIO->TASKS_RXEN = 1;
 
 	WAIT_FOR(NRF_RADIO->EVENTS_READY);
 	NRF_RADIO->TASKS_RSSISTART = 1;
 	WAIT_FOR(NRF_RADIO->EVENTS_RSSIEND);
-	
+
 	sample = 127 & NRF_RADIO->RSSISAMPLE;
-	
+
 	NRF_RADIO->TASKS_DISABLE = 1;
 	WAIT_FOR(NRF_RADIO->EVENTS_DISABLED);
-	
+
 	return sample;
 }
 
@@ -162,19 +160,19 @@ void uart_get_line()
 	static const int bufsize = 64;
 	uint8_t buf[bufsize];
 	uint8_t* p = &buf[0];
-	
+
 	if (app_uart_get(p) != NRF_SUCCESS) {
 		return;
 	}
 
 	memset(buf+1, bufsize-1, 0);
-	
+
 	while (*p != 0x0d && *p != 0x00 && (p-buf < bufsize)) {
 		if (app_uart_get(++p) != NRF_SUCCESS) {
 			break;
 		}
 	}
-	
+
 	char* q = (char*)&buf[0];
 	if (strncmp(q, "set ", 4) == 0) {
 		q += 4;
@@ -246,15 +244,15 @@ void uart_loopback()
 			uart_send_packet(i, sample);
 		}
 	}
-	
+
 	uart_get_line();
-	
+
 	if (uart_error) {
 		nrf_delay_ms(MAX(sweep_delay, 500));
 		uart_error = false;
 		set_uart_send_enable(uart_send);
 	}
-	
+
 	nrf_delay_ms(sweep_delay);
 }
 
