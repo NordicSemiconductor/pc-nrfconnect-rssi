@@ -52,7 +52,7 @@ const yRange = {
 export default {
     config: {
         firmwarePaths: {
-            nrf52: './firmware/pca10040/blank/arm5_no_packs/_build/nrf52832_xxaa.hex',
+            nrf52: './firmware/_build/nrf52832_xxaa.hex',
         },
     },
     decorateMainView: MainView => (
@@ -73,7 +73,7 @@ export default {
         props => (
             <div className="nav-menu-wrap">
                 <NavMenu {...props} />
-                RSSI Measurer
+                RSSI Viewer
             </div>
         )
     ),
@@ -112,6 +112,14 @@ export default {
     }),
     middleware: store => next => action => {
         if (!action) {
+            return;
+        }
+        if (action.type === 'FIRMWARE_DIALOG_SHOW') {
+            const { port } = action;
+            store.dispatch(SerialPortActions.validateFirmware(port.serialNumber, {
+                onValid: () => store.dispatch({ type: 'SERIAL_PORT_SELECTED', port }),
+                onInvalid: () => next(action),
+            }));
             return;
         }
         if (action.type === 'SERIAL_PORT_SELECTED') {
