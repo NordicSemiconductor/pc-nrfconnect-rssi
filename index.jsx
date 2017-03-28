@@ -115,7 +115,11 @@ export default {
             return;
         }
         if (action.type === 'FIRMWARE_DIALOG_SHOW') {
-            store.dispatch(SerialPortActions.checkShouldUpdateFirmware(store, next, action));
+            const { port } = action;
+            store.dispatch(SerialPortActions.validateFirmware(port.serialNumber, {
+                onValid: () => store.dispatch({ type: 'SERIAL_PORT_SELECTED', port }),
+                onInvalid: () => next(action),
+            }));
             return;
         }
         if (action.type === 'SERIAL_PORT_SELECTED') {

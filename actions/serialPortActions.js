@@ -34,7 +34,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-let thePort;
+let port;
 let updateInterval;
 
 let maxScans = 30;
@@ -46,20 +46,14 @@ const firmware = {
     id: 'rssi-fw-1.0.0',
 };
 
-function checkShouldUpdateFirmware(store, next, action) {
+function validateFirmware(serialNumber, { onValid, onInvalid }) {
     return (dispatch, getState, { programming, logger }) => {
-        const { port } = action;
-        programming.readAddress(port.serialNumber, firmware.address, firmware.id.length).then(
-            res => {
-                const data = new Buffer(res).toString();
-                if (data === firmware.id) {
-                    store.dispatch({ type: 'SERIAL_PORT_SELECTED', port });
-                    return;
-                }
-                next(action);
-            },
-            err => err && logger.error(err),
-        );
+        programming.readAddress(serialNumber, firmware.address, firmware.id.length)
+        .then(res => {
+            const data = new Buffer(res).toString();
+            return data === firmware.id ? onValid() : onInvalid();
+        })
+        .catch(err => logger.error(`Error when validating firmware: ${err.message}`));
     };
 }
 
@@ -94,11 +88,11 @@ function rssiData() {
 }
 
 function setDelay(delay) {
-    thePort.write(`set delay ${delay}\r`);
+    port.write(`set delay ${delay}\r`);
 }
 
 function setScanRepeatTimes(repeatTimes) {
-    thePort.write(`set repeat ${repeatTimes}\r`);
+    port.write(`set repeat ${repeatTimes}\r`);
 }
 
 function setMaxScans(scans) {
@@ -107,31 +101,31 @@ function setMaxScans(scans) {
 
 function startReading() {
     resetRssiData();
-    thePort.write('start\r');
+    port.write('start\r');
 }
 
 function stopReading() {
-    thePort.write('stop\r');
+    port.write('stop\r');
     clearInterval(updateInterval);
     resetRssiData();
 }
 
 function scanAdvertisementChannels(enable) {
-    thePort.write(`scan adv ${enable ? 'true' : 'false'}\r`);
+    port.write(`scan adv ${enable ? 'true' : 'false'}\r`);
     resetRssiData();
 }
 
 function toggleLED() {
-    thePort.write('led\r');
+    port.write('led\r');
 }
 
 function open(serialPort) {
     return (dispatch, getState, { SerialPort, logger }) => {
-        thePort = new SerialPort(serialPort.comName, {
+        port = new SerialPort(serialPort.comName, {
             baudRate: 115200,
         }, () => {
             logger.info(`${serialPort.comName} is open`);
-            dispatch(serialPortOpenedAction(thePort));
+            dispatch(serialPortOpenedAction(port));
 
             scanAdvertisementChannels(false);
             setDelay(10);
@@ -145,7 +139,7 @@ function open(serialPort) {
             }, 30);
 
             const buf = [];
-            thePort.on('data', data => {
+            port.on('data', data => {
                 buf.splice(buf.length, 0, ...data);
                 if (buf.length > 246) {
                     buf.splice(0, buf.length - 246);
@@ -169,7 +163,7 @@ function close() {
     return (dispatch, getState, { logger }) => {
         stopReading();
         dispatch(rssiData());
-        thePort.close(() => {
+        port.close(() => {
             logger.info('serial port is closed');
             dispatch(serialPortClosedAction());
         });
@@ -177,7 +171,7 @@ function close() {
 }
 
 export default {
-    checkShouldUpdateFirmware,
+    validateFirmware,
     open,
     close,
     setDelay,
