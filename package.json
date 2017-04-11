@@ -21,7 +21,9 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
+    "bootstrap": "^3.3.7",
     "chart.js": "^2.3",
+    "jquery": "^2.2.4",
     "pc-nrfconnect-devdep": "https://github.com/NordicSemiconductor/pc-nrfconnect-devdep.git",
     "react-bootstrap-slider": "^1.1.5",
     "react-chartjs-2": "^2.0.5"
