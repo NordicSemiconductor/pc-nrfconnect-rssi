@@ -9,6 +9,12 @@
   },
   "author": "Nordic Semiconductor ASA",
   "license": "ISC",
+  "files": [
+    "dist/",
+    "firmware/",
+    "icon.png",
+    "LICENSE"
+  ],
   "main": "dist/bundle.js",
   "scripts": {
     "dev": "webpack --watch",
