@@ -68,12 +68,16 @@ const arrayConverter = (arr, separate) => {
     a.push(kMinRSSIValue);
     return a;
 };
+const toChartData = (arr, yMin, yMax) => (
+    arr.map(y => -(yMin + yMax) - y)
+);
+
 
 const Chart = props => {
-    const { rssi, rssiMax, animationDuration, yMin, yMax, separateFrequencies } = props;
-    const sep = separateFrequencies ? 'separated' : 'continuous';
-    const rssiData = arrayConverter(rssi, separateFrequencies);
-    const rssiMaxData = arrayConverter(rssiMax, separateFrequencies);
+    const { rssi, rssiMax, animationDuration, yMin, yMax, showSeparateFrequencies } = props;
+    const sep = showSeparateFrequencies ? 'separated' : 'continuous';
+    const rssiData = arrayConverter(toChartData(rssi, yMin, yMax), showSeparateFrequencies);
+    const rssiMaxData = arrayConverter(toChartData(rssiMax, yMin, yMax), showSeparateFrequencies);
     const chartData = {
         labels: labels[sep].index,
         datasets: [{
@@ -141,7 +145,7 @@ Chart.propTypes = {
     animationDuration: PropTypes.number,
     yMin: PropTypes.number,
     yMax: PropTypes.number,
-    separateFrequencies: PropTypes.bool,
+    showSeparateFrequencies: PropTypes.bool,
 };
 
 Chart.defaultProps = {
@@ -150,7 +154,7 @@ Chart.defaultProps = {
     animationDuration: 500,
     yMin: -110,
     yMax: -20,
-    separateFrequencies: false,
+    showSeparateFrequencies: false,
 };
 
 export default Chart;

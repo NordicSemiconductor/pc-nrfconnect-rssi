@@ -34,34 +34,29 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const initialState = {
-    rssiData: [],
-    rssiDataMax: [],
-    animationDuration: 500,
-    showSeparateFrequencies: false,
+const firmware = {
+    address: 0x2000,
+    id: 'rssi-fw-1.0.0',
+    files: {
+        nrf52: './firmware/_build/nrf52832_xxaa.hex',
+    },
 };
 
-export default (state = initialState, action) => {
-    switch (action.type) {
-        case 'RSSI_DATA_RECEIVED':
-            return {
-                ...state,
-                rssiData: action.rssiData,
-                rssiDataMax: action.rssiDataMax,
-            };
-        case 'RSSI_ANIMATION_DURATION_CHANGED':
-            return {
-                ...state,
-                animationDuration: action.duration,
-            };
-        case 'RSSI_SEPARATE_FREQUENCIES_CHANGED':
-            return {
-                ...state,
-                showSeparateFrequencies: action.isEnabled,
-            };
-        case 'RSSI_SERIAL_CLOSED':
-            return initialState;
-        default:
-    }
-    return state;
-};
+export function validateFirmware(serialNumber, { onValid, onInvalid }) {
+    return (dispatch, getState, { programming, logger }) => {
+        programming.readAddress(serialNumber, firmware.address, firmware.id.length)
+        .then(res => {
+            const data = new Buffer(res).toString();
+            return data === firmware.id ? onValid() : onInvalid();
+        })
+        .catch(err => logger.error(`Error when validating firmware: ${err.message}`));
+    };
+}
+
+export function programFirmware(serialNumber, { onSuccess }) {
+    return (dispatch, getState, { programming, logger }) => {
+        programming.programWithHexFile(serialNumber, firmware.files)
+            .then(onSuccess)
+            .catch(err => logger.error(`Error when programming: ${err.message}`));
+    };
+}

@@ -34,40 +34,30 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* eslint react/prop-types: 0 */
+/* eslint-disable react/prop-types */
 
 import React from 'react';
 import Chart from './components/Chart';
 import ControlPanel from './components/ControlPanel';
 import reduceApp from './reducers/appReducer';
-import SerialPortActions from './actions/serialPortActions';
+import * as FirmwareActions from './actions/firmwareActions';
+import * as RssiActions from './actions/rssiActions';
 import './resources/css/index.less';
 
-const yRange = {
-    min: -110,
-    max: -20,
-    map: y => -(yRange.min + yRange.max) - y,
-};
-
 export default {
-    config: {
-        firmwarePaths: {
-            nrf52: './firmware/_build/nrf52832_xxaa.hex',
-        },
-    },
     decorateMainView: MainView => (
         props => (
             <MainView>
-                <Chart {...props} yMin={yRange.min} yMax={yRange.max} />
+                <Chart {...props} />
             </MainView>
         )
     ),
     mapMainViewState: (state, props) => ({
         ...props,
-        rssi: state.app.data.map(yRange.map),
-        rssiMax: state.app.dataMax.map(yRange.map),
+        rssi: state.app.rssiData,
+        rssiMax: state.app.rssiDataMax,
         animationDuration: state.app.animationDuration,
-        separateFrequencies: state.app.separateFrequencies,
+        showSeparateFrequencies: state.app.showSeparateFrequencies,
     }),
     decorateNavMenu: NavMenu => (
         props => (
@@ -80,53 +70,51 @@ export default {
     decorateSidePanel: SidePanel => (
         props => (
             <SidePanel>
-                <ControlPanel
-                    onDelayChange={props.onDelayChange}
-                    onMaxScansChange={props.onMaxScansChange}
-                    onChannelScanRepeatChange={props.onChannelScanRepeatChange}
-                    onAnimationDurationChange={props.onAnimationDurationChange}
-                    onScanAdvertisementsToggle={props.onScanAdvertisementsToggle}
-                    onSeparateFrequencies={props.onSeparateFrequencies}
-                    onToggleLED={props.onToggleLED}
-                />
+                <ControlPanel {...props} />
             </SidePanel>
         )
     ),
     mapSidePanelDispatch: (dispatch, props) => ({
         ...props,
-        onDelayChange: delay => dispatch(SerialPortActions.setDelay(delay)),
-        onMaxScansChange: maxScans => dispatch(SerialPortActions.setMaxScans(maxScans)),
+        onDelayChange: delay => dispatch(
+            RssiActions.setDelay(delay),
+        ),
+        onMaxScansChange: maxScans => dispatch(
+            RssiActions.setMaxScans(maxScans),
+        ),
         onChannelScanRepeatChange: scanRepeat => dispatch(
-            SerialPortActions.setScanRepeatTimes(scanRepeat)),
-        onAnimationDurationChange: animationDuration => dispatch({
-            type: 'RSSI_CHANGE_ANIMATION_DURATION',
-            animationDuration,
-        }),
-        onScanAdvertisementsToggle: scanAdvertisementChannels => dispatch(
-            SerialPortActions.scanAdvertisementChannels(scanAdvertisementChannels)),
-        onSeparateFrequencies: separateFrequencies => dispatch({
-            type: 'RSSI_SEPARATE_FREQUENCIES',
-            separateFrequencies,
-        }),
-        onToggleLED: () => dispatch(SerialPortActions.toggleLED()),
+            RssiActions.setScanRepeatTimes(scanRepeat),
+        ),
+        onAnimationDurationChange: duration => dispatch(
+            RssiActions.setAnimationDuration(duration),
+        ),
+        onScanAdvertisementChannelsChange: isEnabled => dispatch(
+            RssiActions.shouldScanAdvertisementChannels(isEnabled),
+        ),
+        onSeparateFrequenciesChange: isEnabled => dispatch(
+            RssiActions.shouldShowSeparateFrequencies(isEnabled),
+        ),
+        onToggleLED: () => dispatch(RssiActions.toggleLED()),
     }),
     middleware: store => next => action => {
-        if (!action) {
-            return;
-        }
-        if (action.type === 'FIRMWARE_DIALOG_SHOW') {
-            const { port } = action;
-            store.dispatch(SerialPortActions.validateFirmware(port.serialNumber, {
-                onValid: () => store.dispatch({ type: 'SERIAL_PORT_SELECTED', port }),
-                onInvalid: () => next(action),
-            }));
-            return;
-        }
         if (action.type === 'SERIAL_PORT_SELECTED') {
-            store.dispatch(SerialPortActions.open(action.port));
+            const { port } = action;
+            store.dispatch(FirmwareActions.validateFirmware(port.serialNumber, {
+                onValid: () => store.dispatch(RssiActions.open(port)),
+                onInvalid: () => store.dispatch({ type: 'FIRMWARE_DIALOG_SHOW', port }),
+            }));
         }
         if (action.type === 'SERIAL_PORT_DESELECTED') {
-            store.dispatch(SerialPortActions.close());
+            store.dispatch(RssiActions.close());
+        }
+        if (action.type === 'FIRMWARE_DIALOG_UPDATE_REQUESTED') {
+            const { port } = action;
+            store.dispatch(FirmwareActions.programFirmware(port.serialNumber, {
+                onSuccess: () => {
+                    store.dispatch(RssiActions.open(port));
+                    store.dispatch({ type: 'FIRMWARE_DIALOG_HIDE' });
+                },
+            }));
         }
         next(action);
     },

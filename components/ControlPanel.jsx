@@ -44,8 +44,8 @@ const ControlPanel = props => {
         onMaxScansChange,
         onChannelScanRepeatChange,
         onAnimationDurationChange,
-        onScanAdvertisementsToggle,
-        onSeparateFrequencies,
+        onScanAdvertisementChannelsChange,
+        onSeparateFrequenciesChange,
         onToggleLED,
     } = props;
     return (
@@ -86,10 +86,10 @@ const ControlPanel = props => {
                 ticks={[10, 1000]}
                 ticks_labels={['10', '1000']}
             />
-            <Checkbox onChange={event => onScanAdvertisementsToggle(event.target.checked)}>
+            <Checkbox onChange={event => onScanAdvertisementChannelsChange(event.target.checked)}>
                 Advertisements only
             </Checkbox>
-            <Checkbox onChange={event => onSeparateFrequencies(event.target.checked)}>
+            <Checkbox onChange={event => onSeparateFrequenciesChange(event.target.checked)}>
                 Separate Frequencies
             </Checkbox>
             <Button onClick={onToggleLED}>Toggle LED</Button>
@@ -102,8 +102,8 @@ ControlPanel.propTypes = {
     onMaxScansChange: PropTypes.func.isRequired,
     onChannelScanRepeatChange: PropTypes.func.isRequired,
     onAnimationDurationChange: PropTypes.func.isRequired,
-    onScanAdvertisementsToggle: PropTypes.func.isRequired,
-    onSeparateFrequencies: PropTypes.func.isRequired,
+    onScanAdvertisementChannelsChange: PropTypes.func.isRequired,
+    onSeparateFrequenciesChange: PropTypes.func.isRequired,
     onToggleLED: PropTypes.func.isRequired,
 };
 
