@@ -37,15 +37,26 @@
 const firmware = {
     address: 0x2000,
     id: 'rssi-fw-1.0.0',
+    files: {
+        nrf52: './firmware/_build/nrf52832_xxaa.hex',
+    },
 };
 
 export function validateFirmware(serialNumber, { onValid, onInvalid }) {
     return (dispatch, getState, { programming, logger }) => {
         programming.readAddress(serialNumber, firmware.address, firmware.id.length)
-        .then(res => {
-            const data = new Buffer(res).toString();
-            return data === firmware.id ? onValid() : onInvalid();
-        })
-        .catch(err => logger.error(`Error when validating firmware: ${err.message}`));
+            .then(res => {
+                const data = new Buffer(res).toString();
+                return data === firmware.id ? onValid() : onInvalid();
+            })
+            .catch(err => logger.error(`Error when validating firmware: ${err.message}`));
+    };
+}
+
+export function programFirmware(serialNumber, { onSuccess }) {
+    return (dispatch, getState, { programming, logger }) => {
+        programming.programWithHexFile(serialNumber, firmware.files)
+            .then(onSuccess)
+            .catch(err => logger.error(`Error when programming: ${err.message}`));
     };
 }

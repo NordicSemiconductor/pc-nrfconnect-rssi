@@ -51,11 +51,6 @@ const yRange = {
 };
 
 export default {
-    config: {
-        firmwarePaths: {
-            nrf52: './firmware/_build/nrf52832_xxaa.hex',
-        },
-    },
     decorateMainView: MainView => (
         props => (
             <MainView>
@@ -115,19 +110,24 @@ export default {
         if (!action) {
             return;
         }
-        if (action.type === 'FIRMWARE_DIALOG_SHOW') {
+        if (action.type === 'SERIAL_PORT_SELECTED') {
             const { port } = action;
             store.dispatch(FirmwareActions.validateFirmware(port.serialNumber, {
-                onValid: () => store.dispatch({ type: 'SERIAL_PORT_SELECTED', port }),
-                onInvalid: () => next(action),
+                onValid: () => store.dispatch(RssiActions.open(port)),
+                onInvalid: () => store.dispatch({ type: 'FIRMWARE_DIALOG_SHOW', port }),
             }));
-            return;
-        }
-        if (action.type === 'SERIAL_PORT_SELECTED') {
-            store.dispatch(RssiActions.open(action.port));
         }
         if (action.type === 'SERIAL_PORT_DESELECTED') {
             store.dispatch(RssiActions.close());
+        }
+        if (action.type === 'FIRMWARE_DIALOG_UPDATE_REQUESTED') {
+            const { port } = action;
+            store.dispatch(FirmwareActions.programFirmware(port.serialNumber, {
+                onSuccess: () => {
+                    store.dispatch(RssiActions.open(port));
+                    store.dispatch({ type: 'FIRMWARE_DIALOG_HIDE' });
+                },
+            }));
         }
         next(action);
     },

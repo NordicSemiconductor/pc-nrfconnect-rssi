@@ -146,11 +146,13 @@ export function open(serialPort) {
 
 export function close() {
     return (dispatch, getState, { logger }) => {
-        stopReading();
-        dispatch(rssiData());
-        port.close(() => {
-            logger.info('serial port is closed');
-            dispatch(serialPortClosedAction());
-        });
+        if (port && port.isOpen()) {
+            stopReading();
+            dispatch(rssiData());
+            port.close(() => {
+                logger.info('Serial port is closed');
+                dispatch(serialPortClosedAction());
+            });
+        }
     };
 }
