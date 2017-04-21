@@ -41,22 +41,6 @@ let maxScans = 30;
 const theRssiData = [];
 const theRssiDataMax = [];
 
-const firmware = {
-    address: 0x2000,
-    id: 'rssi-fw-1.0.0',
-};
-
-function validateFirmware(serialNumber, { onValid, onInvalid }) {
-    return (dispatch, getState, { programming, logger }) => {
-        programming.readAddress(serialNumber, firmware.address, firmware.id.length)
-        .then(res => {
-            const data = new Buffer(res).toString();
-            return data === firmware.id ? onValid() : onInvalid();
-        })
-        .catch(err => logger.error(`Error when validating firmware: ${err.message}`));
-    };
-}
-
 function resetRssiData() {
     theRssiData.splice(0);
     theRssiDataMax.splice(0);
@@ -87,18 +71,6 @@ function rssiData() {
     };
 }
 
-function setDelay(delay) {
-    port.write(`set delay ${delay}\r`);
-}
-
-function setScanRepeatTimes(repeatTimes) {
-    port.write(`set repeat ${repeatTimes}\r`);
-}
-
-function setMaxScans(scans) {
-    maxScans = scans;
-}
-
 function startReading() {
     resetRssiData();
     port.write('start\r');
@@ -110,16 +82,29 @@ function stopReading() {
     resetRssiData();
 }
 
-function scanAdvertisementChannels(enable) {
+
+export function setDelay(delay) {
+    port.write(`set delay ${delay}\r`);
+}
+
+export function setScanRepeatTimes(repeatTimes) {
+    port.write(`set repeat ${repeatTimes}\r`);
+}
+
+export function setMaxScans(scans) {
+    maxScans = scans;
+}
+
+export function scanAdvertisementChannels(enable) {
     port.write(`scan adv ${enable ? 'true' : 'false'}\r`);
     resetRssiData();
 }
 
-function toggleLED() {
+export function toggleLED() {
     port.write('led\r');
 }
 
-function open(serialPort) {
+export function open(serialPort) {
     return (dispatch, getState, { SerialPort, logger }) => {
         port = new SerialPort(serialPort.comName, {
             baudRate: 115200,
@@ -159,7 +144,7 @@ function open(serialPort) {
     };
 }
 
-function close() {
+export function close() {
     return (dispatch, getState, { logger }) => {
         stopReading();
         dispatch(rssiData());
@@ -169,14 +154,3 @@ function close() {
         });
     };
 }
-
-export default {
-    validateFirmware,
-    open,
-    close,
-    setDelay,
-    setMaxScans,
-    setScanRepeatTimes,
-    scanAdvertisementChannels,
-    toggleLED,
-};

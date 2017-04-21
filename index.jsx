@@ -40,7 +40,8 @@ import React from 'react';
 import Chart from './components/Chart';
 import ControlPanel from './components/ControlPanel';
 import reduceApp from './reducers/appReducer';
-import SerialPortActions from './actions/serialPortActions';
+import * as FirmwareActions from './actions/firmwareActions';
+import * as RssiActions from './actions/rssiActions';
 import './resources/css/index.less';
 
 const yRange = {
@@ -94,21 +95,21 @@ export default {
     ),
     mapSidePanelDispatch: (dispatch, props) => ({
         ...props,
-        onDelayChange: delay => dispatch(SerialPortActions.setDelay(delay)),
-        onMaxScansChange: maxScans => dispatch(SerialPortActions.setMaxScans(maxScans)),
+        onDelayChange: delay => dispatch(RssiActions.setDelay(delay)),
+        onMaxScansChange: maxScans => dispatch(RssiActions.setMaxScans(maxScans)),
         onChannelScanRepeatChange: scanRepeat => dispatch(
-            SerialPortActions.setScanRepeatTimes(scanRepeat)),
+            RssiActions.setScanRepeatTimes(scanRepeat)),
         onAnimationDurationChange: animationDuration => dispatch({
             type: 'RSSI_CHANGE_ANIMATION_DURATION',
             animationDuration,
         }),
         onScanAdvertisementsToggle: scanAdvertisementChannels => dispatch(
-            SerialPortActions.scanAdvertisementChannels(scanAdvertisementChannels)),
+            RssiActions.scanAdvertisementChannels(scanAdvertisementChannels)),
         onSeparateFrequencies: separateFrequencies => dispatch({
             type: 'RSSI_SEPARATE_FREQUENCIES',
             separateFrequencies,
         }),
-        onToggleLED: () => dispatch(SerialPortActions.toggleLED()),
+        onToggleLED: () => dispatch(RssiActions.toggleLED()),
     }),
     middleware: store => next => action => {
         if (!action) {
@@ -116,17 +117,17 @@ export default {
         }
         if (action.type === 'FIRMWARE_DIALOG_SHOW') {
             const { port } = action;
-            store.dispatch(SerialPortActions.validateFirmware(port.serialNumber, {
+            store.dispatch(FirmwareActions.validateFirmware(port.serialNumber, {
                 onValid: () => store.dispatch({ type: 'SERIAL_PORT_SELECTED', port }),
                 onInvalid: () => next(action),
             }));
             return;
         }
         if (action.type === 'SERIAL_PORT_SELECTED') {
-            store.dispatch(SerialPortActions.open(action.port));
+            store.dispatch(RssiActions.open(action.port));
         }
         if (action.type === 'SERIAL_PORT_DESELECTED') {
-            store.dispatch(SerialPortActions.close());
+            store.dispatch(RssiActions.close());
         }
         next(action);
     },
