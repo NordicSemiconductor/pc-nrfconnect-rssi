@@ -40,7 +40,8 @@ import React from 'react';
 import Chart from './components/Chart';
 import ControlPanel from './components/ControlPanel';
 import reduceApp from './reducers/appReducer';
-import SerialPortActions from './actions/serialPortActions';
+import * as FirmwareActions from './actions/firmwareActions';
+import * as RssiActions from './actions/rssiActions';
 import './resources/css/index.less';
 
 const yRange = {
@@ -50,11 +51,6 @@ const yRange = {
 };
 
 export default {
-    config: {
-        firmwarePaths: {
-            nrf52: './firmware/_build/nrf52832_xxaa.hex',
-        },
-    },
     decorateMainView: MainView => (
         props => (
             <MainView>
@@ -94,39 +90,44 @@ export default {
     ),
     mapSidePanelDispatch: (dispatch, props) => ({
         ...props,
-        onDelayChange: delay => dispatch(SerialPortActions.setDelay(delay)),
-        onMaxScansChange: maxScans => dispatch(SerialPortActions.setMaxScans(maxScans)),
+        onDelayChange: delay => dispatch(RssiActions.setDelay(delay)),
+        onMaxScansChange: maxScans => dispatch(RssiActions.setMaxScans(maxScans)),
         onChannelScanRepeatChange: scanRepeat => dispatch(
-            SerialPortActions.setScanRepeatTimes(scanRepeat)),
+            RssiActions.setScanRepeatTimes(scanRepeat)),
         onAnimationDurationChange: animationDuration => dispatch({
             type: 'RSSI_CHANGE_ANIMATION_DURATION',
             animationDuration,
         }),
         onScanAdvertisementsToggle: scanAdvertisementChannels => dispatch(
-            SerialPortActions.scanAdvertisementChannels(scanAdvertisementChannels)),
+            RssiActions.scanAdvertisementChannels(scanAdvertisementChannels)),
         onSeparateFrequencies: separateFrequencies => dispatch({
             type: 'RSSI_SEPARATE_FREQUENCIES',
             separateFrequencies,
         }),
-        onToggleLED: () => dispatch(SerialPortActions.toggleLED()),
+        onToggleLED: () => dispatch(RssiActions.toggleLED()),
     }),
     middleware: store => next => action => {
         if (!action) {
             return;
         }
-        if (action.type === 'FIRMWARE_DIALOG_SHOW') {
-            const { port } = action;
-            store.dispatch(SerialPortActions.validateFirmware(port.serialNumber, {
-                onValid: () => store.dispatch({ type: 'SERIAL_PORT_SELECTED', port }),
-                onInvalid: () => next(action),
-            }));
-            return;
-        }
         if (action.type === 'SERIAL_PORT_SELECTED') {
-            store.dispatch(SerialPortActions.open(action.port));
+            const { port } = action;
+            store.dispatch(FirmwareActions.validateFirmware(port.serialNumber, {
+                onValid: () => store.dispatch(RssiActions.open(port)),
+                onInvalid: () => store.dispatch({ type: 'FIRMWARE_DIALOG_SHOW', port }),
+            }));
         }
         if (action.type === 'SERIAL_PORT_DESELECTED') {
-            store.dispatch(SerialPortActions.close());
+            store.dispatch(RssiActions.close());
+        }
+        if (action.type === 'FIRMWARE_DIALOG_UPDATE_REQUESTED') {
+            const { port } = action;
+            store.dispatch(FirmwareActions.programFirmware(port.serialNumber, {
+                onSuccess: () => {
+                    store.dispatch(RssiActions.open(port));
+                    store.dispatch({ type: 'FIRMWARE_DIALOG_HIDE' });
+                },
+            }));
         }
         next(action);
     },
