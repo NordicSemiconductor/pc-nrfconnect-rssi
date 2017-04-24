@@ -8,7 +8,7 @@
     "url": "https://github.com/NordicSemiconductor/pc-nrfconnect-rssi.git"
   },
   "author": "Nordic Semiconductor ASA",
-  "license": "ISC",
+  "license": "SEE LICENSE IN LICENSE",
   "files": [
     "dist/",
     "firmware/",
