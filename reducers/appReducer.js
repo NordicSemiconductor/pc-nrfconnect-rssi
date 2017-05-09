@@ -39,6 +39,7 @@ const initialState = {
     dataMax: [],
     animationDuration: 500,
     separateFrequencies: false,
+    port: null,
 };
 
 export default function reduceApp(state = initialState, action) {
@@ -58,6 +59,16 @@ export default function reduceApp(state = initialState, action) {
             return {
                 ...state,
                 separateFrequencies: action.separateFrequencies,
+            };
+        case 'RSSI_SERIAL_OPENED':
+            return {
+                ...state,
+                port: action.portName,
+            };
+        case 'RSSI_SERIAL_CLOSED':
+            return {
+                ...state,
+                port: null,
             };
         default:
     }
