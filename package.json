@@ -18,6 +18,7 @@
   "main": "dist/bundle.js",
   "scripts": {
     "dev": "webpack --watch",
+    "webpack": "webpack",
     "build": "cross-env NODE_ENV=production webpack",
     "lint": "eslint components reducers",
     "test": "jest --testResultsProcessor jest-bamboo-formatter",
