@@ -4,6 +4,23 @@ const path = require('path');
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isProd = nodeEnv === 'production';
 
+const dependencies = require('./node_modules/pc-nrfconnect-devdep/package.json').dependencies;
+
+function createExternals() {
+    // Add production dependencies as externals, but keep the require behavior.
+    // http://jlongster.com/Backend-Apps-with-Webpack--Part-I
+    const externals = {};
+    const coreApis = ['pc-ble-driver-js', 'serialport', 'logger', 'programming', 'electron', 'core'];
+    coreApis.forEach(api => {
+        const modPath = `nrfconnect/${api}`;
+        externals[modPath] = modPath;
+    });
+    Object.keys(dependencies).forEach(dependency => {
+        externals[dependency] = dependency;
+    });
+    return externals;
+}
+
 module.exports = {
     devtool: isProd ? 'hidden-source-map' : 'inline-eval-cheap-source-map',
     entry: './index.jsx',
@@ -47,13 +64,5 @@ module.exports = {
         }),
     ],
     target: 'electron-renderer',
-    externals: {
-        react: {
-            root: 'React',
-            commonjs2: 'react',
-            commonjs: 'react',
-            amd: 'react',
-            umd: 'react',
-        },
-    },
+    externals: createExternals(),
 };
