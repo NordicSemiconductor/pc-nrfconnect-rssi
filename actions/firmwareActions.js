@@ -34,6 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { logger } from 'nrfconnect/core';
+import programming from 'nrfconnect/programming';
+
 const firmware = {
     address: 0x2000,
     id: 'rssi-fw-1.0.0',
@@ -43,7 +46,7 @@ const firmware = {
 };
 
 export function validateFirmware(serialNumber, { onValid, onInvalid }) {
-    return (dispatch, getState, { programming, logger }) => {
+    return () => {
         programming.readAddress(serialNumber, firmware.address, firmware.id.length)
             .then(res => {
                 const data = new Buffer(res).toString();
@@ -54,7 +57,7 @@ export function validateFirmware(serialNumber, { onValid, onInvalid }) {
 }
 
 export function programFirmware(serialNumber, { onSuccess }) {
-    return (dispatch, getState, { programming, logger }) => {
+    return () => {
         programming.programWithHexFile(serialNumber, firmware.files)
             .then(onSuccess)
             .catch(err => logger.error(`Error when programming: ${err.message}`));
