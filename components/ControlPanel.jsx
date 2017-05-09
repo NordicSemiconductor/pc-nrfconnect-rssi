@@ -47,9 +47,11 @@ const ControlPanel = props => {
         onScanAdvertisementsToggle,
         onSeparateFrequencies,
         onToggleLED,
+        disabled,
     } = props;
+    const sliderDisabled = disabled ? 'disabled' : null;
     return (
-        <div>
+        <div >
             Sweep Delay (ms)<br />
             <ReactBootstrapSlider
                 value={10}
@@ -58,6 +60,7 @@ const ControlPanel = props => {
                 min={5}
                 ticks={[5, 1000]}
                 ticks_labels={['5', '1000']}
+                disabled={sliderDisabled}
             />
             # of sweeps to display maximum value
             <ReactBootstrapSlider
@@ -67,6 +70,7 @@ const ControlPanel = props => {
                 min={1}
                 ticks={[1, 100]}
                 ticks_labels={['1', '100']}
+                disabled={sliderDisabled}
             />
             Channel scan repeat
             <ReactBootstrapSlider
@@ -76,6 +80,7 @@ const ControlPanel = props => {
                 min={1}
                 ticks={[1, 100]}
                 ticks_labels={['1', '100']}
+                disabled={sliderDisabled}
             />
             Animation duration (ms)
             <ReactBootstrapSlider
@@ -85,14 +90,21 @@ const ControlPanel = props => {
                 min={10}
                 ticks={[10, 1000]}
                 ticks_labels={['10', '1000']}
+                disabled={sliderDisabled}
             />
-            <Checkbox onChange={event => onScanAdvertisementsToggle(event.target.checked)}>
+            <Checkbox
+                disabled={disabled}
+                onChange={event => onScanAdvertisementsToggle(event.target.checked)}
+            >
                 Advertisements only
             </Checkbox>
-            <Checkbox onChange={event => onSeparateFrequencies(event.target.checked)}>
+            <Checkbox
+                disabled={disabled}
+                onChange={event => onSeparateFrequencies(event.target.checked)}
+            >
                 Separate Frequencies
             </Checkbox>
-            <Button onClick={onToggleLED}>Toggle LED</Button>
+            <Button disabled={disabled} onClick={onToggleLED}>Toggle LED</Button>
         </div>
     );
 };
@@ -105,6 +117,7 @@ ControlPanel.propTypes = {
     onScanAdvertisementsToggle: PropTypes.func.isRequired,
     onSeparateFrequencies: PropTypes.func.isRequired,
     onToggleLED: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired,
 };
 
 export default ControlPanel;
