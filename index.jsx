@@ -108,7 +108,7 @@ export default {
         onToggleLED: () => dispatch(RssiActions.toggleLED()),
     }),
     mapSidePanelState: (state, props) => ({
-        disabled: !!(state.app.port === null),
+        disabled: state.app.port === null,
         ...props,
     }),
     mapSerialPortSelectorState: (state, props) => ({
