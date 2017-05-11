@@ -35,7 +35,7 @@
  */
 
 import { logger } from 'nrfconnect/core';
-import SerialPort from 'nrfconnect/serialport';
+import SerialPort from 'serialport';
 
 let port;
 let updateInterval;
