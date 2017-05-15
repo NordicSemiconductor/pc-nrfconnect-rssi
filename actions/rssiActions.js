@@ -34,6 +34,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { logger } from 'nrfconnect/core';
+import SerialPort from 'serialport';
+
 let port;
 let updateInterval;
 
@@ -105,12 +108,12 @@ export function toggleLED() {
 }
 
 export function open(serialPort) {
-    return (dispatch, getState, { SerialPort, logger }) => {
+    return dispatch => {
         port = new SerialPort(serialPort.comName, {
             baudRate: 115200,
         }, () => {
             logger.info(`${serialPort.comName} is open`);
-            dispatch(serialPortOpenedAction(port));
+            dispatch(serialPortOpenedAction(serialPort.comName));
 
             scanAdvertisementChannels(false);
             setDelay(10);
@@ -145,7 +148,7 @@ export function open(serialPort) {
 }
 
 export function close() {
-    return (dispatch, getState, { logger }) => {
+    return dispatch => {
         if (port && port.isOpen()) {
             stopReading();
             dispatch(rssiData());

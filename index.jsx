@@ -84,6 +84,7 @@ export default {
                     onScanAdvertisementsToggle={props.onScanAdvertisementsToggle}
                     onSeparateFrequencies={props.onSeparateFrequencies}
                     onToggleLED={props.onToggleLED}
+                    disabled={props.disabled}
                 />
             </SidePanel>
         )
@@ -105,6 +106,14 @@ export default {
             separateFrequencies,
         }),
         onToggleLED: () => dispatch(RssiActions.toggleLED()),
+    }),
+    mapSidePanelState: (state, props) => ({
+        disabled: state.app.port === null,
+        ...props,
+    }),
+    mapSerialPortSelectorState: (state, props) => ({
+        portIndicatorStatus: (state.app.port !== null) ? 'on' : 'off',
+        ...props,
     }),
     middleware: store => next => action => {
         if (!action) {
