@@ -35,5 +35,8 @@
     "react-bootstrap-slider": "^1.1.5",
     "react-chartjs-2": "^2.0.5"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "engines": {
+    "nrfconnect": "2.x"
+  }
 }
