@@ -1,6 +1,6 @@
 {
   "name": "pc-nrfconnect-rssi",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Demo application for nRF52832 SoC",
   "displayName": "RSSI Viewer",
   "repository": {
