@@ -27,7 +27,7 @@ function createExternals() {
 }
 
 module.exports = {
-    devtool: isProd ? 'hidden-source-map' : 'inline-eval-cheap-source-map',
+    devtool: isProd ? 'hidden-source-map' : 'cheap-module-source-map',
     entry: './index.jsx',
     output: {
         path: path.join(__dirname, 'dist'),
