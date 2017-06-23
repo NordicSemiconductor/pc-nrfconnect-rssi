@@ -12,10 +12,10 @@ function createExternals() {
         'react-dom',
         'react-redux',
         'pc-ble-driver-js',
+        'pc-nrfjprog-js',
         'serialport',
         'electron',
         'nrfconnect/core',
-        'nrfconnect/programming',
     ];
 
     // Libs provided by the app at runtime
@@ -27,7 +27,7 @@ function createExternals() {
 }
 
 module.exports = {
-    devtool: isProd ? 'hidden-source-map' : 'inline-eval-cheap-source-map',
+    devtool: isProd ? 'hidden-source-map' : 'cheap-module-source-map',
     entry: './index.jsx',
     output: {
         path: path.join(__dirname, 'dist'),
