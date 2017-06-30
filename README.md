@@ -1,5 +1,7 @@
 # nRF Connect RSSI Viewer
 
+[![Build Status](https://travis-ci.org/NordicSemiconductor/pc-nrfconnect-rssi.svg?branch=master)](https://travis-ci.org/NordicSemiconductor/pc-nrfconnect-rssi)
+
 Simple app for [nRF Connect](https://github.com/NordicSemiconductor/pc-nrfconnect-core) that shows a visualization of RSSI data measured by the nRF52832 SoC. The app shows dBm per frequency in the 2400-2480 MHz range, and allows the user to tweak settings like sweep delay and animation duration. The app can be installed from the *Add/remove apps* screen in nRF Connect.
 
 ![screenshot](resources/rssi_viewer.jpg)
