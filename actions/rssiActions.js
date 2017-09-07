@@ -38,7 +38,6 @@ import { logger } from 'nrfconnect/core';
 import SerialPort from 'serialport';
 
 let port;
-let updateInterval;
 
 let maxScans = 30;
 const theRssiData = [];
@@ -81,7 +80,6 @@ function startReading() {
 
 function stopReading() {
     port.write('stop\r');
-    clearInterval(updateInterval);
     resetRssiData();
 }
 
@@ -121,10 +119,7 @@ export function open(serialPort) {
             setMaxScans(30);
             startReading();
 
-            clearInterval(updateInterval);
-            updateInterval = setInterval(() => {
-                dispatch(rssiData());
-            }, 30);
+            let throttleUpdates = false;
 
             const buf = [];
             port.on('data', data => {
@@ -142,6 +137,14 @@ export function open(serialPort) {
                         theRssiDataMax[ch] = Math.min(...(theRssiData[ch]));
                     }
                 }
+
+                if (throttleUpdates) { return; }
+
+                throttleUpdates = true;
+                requestAnimationFrame(() => {
+                    throttleUpdates = false;
+                    dispatch(rssiData());
+                });
             });
         });
     };
