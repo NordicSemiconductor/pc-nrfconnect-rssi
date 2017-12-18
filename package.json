@@ -12,6 +12,7 @@
   "files": [
     "dist/",
     "firmware/",
+    "resources/icon.*",
     "icon.png",
     "LICENSE"
   ],
