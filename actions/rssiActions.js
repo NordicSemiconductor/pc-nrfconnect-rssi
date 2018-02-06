@@ -152,7 +152,7 @@ export function open(serialPort) {
 
 export function close() {
     return dispatch => {
-        if (port && port.isOpen()) {
+        if (port && (typeof (port.isOpen) === 'function' ? port.isOpen() : port.isOpen)) {
             stopReading();
             dispatch(rssiData());
             port.close(() => {
