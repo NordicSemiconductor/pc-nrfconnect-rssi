@@ -83,26 +83,33 @@ async function stopReading() {
     resetRssiData();
 }
 
-
-export async function setDelay(delay) {
-    await port.write(`set delay ${delay}\r`);
+export function setDelay(delay) {
+    return async () => {
+        await port.write(`set delay ${delay}\r`);
+    };
 }
 
-export async function setScanRepeatTimes(repeatTimes) {
-    await port.write(`set repeat ${repeatTimes}\r`);
+export function setScanRepeatTimes(repeatTimes) {
+    return async () => {
+        await port.write(`set repeat ${repeatTimes}\r`);
+    };
 }
 
 export function setMaxScans(scans) {
     maxScans = scans;
 }
 
-export async function scanAdvertisementChannels(enable) {
-    await port.write(`scan adv ${enable ? 'true' : 'false'}\r`);
-    resetRssiData();
+export function scanAdvertisementChannels(enable) {
+    return async () => {
+        await port.write(`scan adv ${enable ? 'true' : 'false'}\r`);
+        resetRssiData();
+    };
 }
 
-export async function toggleLED() {
-    await port.write('led\r');
+export function toggleLED() {
+    return async () => {
+        await port.write('led\r');
+    };
 }
 
 export function open(serialPort) {
