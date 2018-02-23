@@ -29,7 +29,7 @@ The RSSI data is visualized in the MainView by a [Chart component](components/Ch
 To build the app you will need to install the following tools:
 
 * Node.js (>=6.9)
-* npm (>=3.7.0)
+* npm (>=5.6.0) / yarn (>=1.4.0)
 
 ### Clone the repository
 
