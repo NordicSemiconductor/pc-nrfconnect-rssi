@@ -37,10 +37,11 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react';
+import { logger, getAppDir } from 'nrfconnect/core';
+import path from 'path';
 import Chart from './components/Chart';
 import ControlPanel from './components/ControlPanel';
 import reduceApp from './reducers/appReducer';
-import * as FirmwareActions from './actions/firmwareActions';
 import * as RssiActions from './actions/rssiActions';
 import './resources/css/index.less';
 
@@ -119,26 +120,49 @@ export default {
         if (!action) {
             return;
         }
-        if (action.type === 'SERIAL_PORT_SELECTED') {
-            const { port } = action;
-            store.dispatch(FirmwareActions.validateFirmware(port.serialNumber, {
-                onValid: () => store.dispatch(RssiActions.open(port)),
-                onInvalid: () => store.dispatch({ type: 'FIRMWARE_DIALOG_SHOW', port }),
-            }));
+
+        switch (action.type) {
+            case 'DEVICE_DESELECTED':
+                logger.info('Deselecting device');
+                store.dispatch(RssiActions.close());
+                break;
+
+            case 'DEVICE_SETUP_COMPLETE':
+                logger.info(`Selecting device with s/n ${action.device.serialNumber}`);
+                store.dispatch(RssiActions.open(action.device.serialport));
+                break;
+
+            default:
         }
-        if (action.type === 'SERIAL_PORT_DESELECTED') {
-            store.dispatch(RssiActions.close());
-        }
-        if (action.type === 'FIRMWARE_DIALOG_UPDATE_REQUESTED') {
-            const { port } = action;
-            store.dispatch(FirmwareActions.programFirmware(port.serialNumber, {
-                onSuccess: () => {
-                    store.dispatch(RssiActions.open(port));
-                    store.dispatch({ type: 'FIRMWARE_DIALOG_HIDE' });
-                },
-            }));
-        }
+
         next(action);
     },
     reduceApp,
+    config: {
+        selectorTraits: {
+            nordicUsb: true,
+            serialport: true,
+            jlink: true,
+        },
+        deviceSetup: {
+            dfu: {
+                pca10056: {
+                    fw: path.resolve(getAppDir(), 'fw/rssi-10056.hex'),
+                    semver: 'rssi_cdc_acm 2.0.0+dfuApr--9-2018-10-36-11',
+                },
+                pca10059: {
+                    fw: path.resolve(getAppDir(), 'fw/rssi-10059.hex'),
+                    semver: 'rssi_cdc_acm 2.0.0+dfuApr--9-2018-10-34-12',
+                },
+            },
+            jprog: {
+                nrf52: {
+                    fw: path.resolve(getAppDir(), 'fw/rssi-10040.hex'),
+                    fwVersion: 'rssi-fw-1.0.0',
+                    fwIdAddress: 0x2000,
+                },
+            },
+            needSerialport: true,
+        },
+    },
 };
