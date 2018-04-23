@@ -146,13 +146,9 @@ export default {
         },
         deviceSetup: {
             dfu: {
-                pca10056: {
-                    fw: path.resolve(getAppDir(), 'fw/rssi-10056.hex'),
-                    semver: 'rssi_cdc_acm 2.0.0+dfuApr--9-2018-10-36-11',
-                },
                 pca10059: {
-                    fw: path.resolve(getAppDir(), 'fw/rssi-10059.hex'),
-                    semver: 'rssi_cdc_acm 2.0.0+dfuApr--9-2018-10-34-12',
+                    application: path.resolve(getAppDir(), 'fw/rssi-10059.hex'),
+                    semver: 'rssi_cdc_acm 2.0.0+dfuApr--9-2018-10-34-11',
                 },
             },
             jprog: {
