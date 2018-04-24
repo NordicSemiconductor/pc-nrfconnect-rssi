@@ -32,7 +32,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>..\..\..\..\..\..\modules\nrfx\mdk\nrf52840.svd</SFDFile>
+          <SFDFile>..\..\..\..\sdk\modules\nrfx\mdk\nrf52840.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -48,7 +48,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\_build\</OutputDirectory>
-          <OutputName>nrf52840_xxaa</OutputName>
+          <OutputName>rssi-10056</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -332,7 +332,7 @@
               <MiscControls>--reduce_paths</MiscControls>
               <Define>BOARD_PCA10056 FLOAT_ABI_HARD NRF52840_XXAA SWI_DISABLE0 DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\config;..\..\..\..\..\..\components;..\..\..\..\..\..\components\boards;..\..\..\..\..\..\components\device;..\..\..\..\..\..\components\drivers_nrf\nrf_soc_nosd;..\..\..\..\..\..\components\drivers_nrf\usbd;..\..\..\..\..\..\components\libraries\atomic;..\..\..\..\..\..\components\libraries\atomic_fifo;..\..\..\..\..\..\components\libraries\balloc;..\..\..\..\..\..\components\libraries\bsp;..\..\..\..\..\..\components\libraries\button;..\..\..\..\..\..\components\libraries\delay;..\..\..\..\..\..\components\libraries\experimental_log;..\..\..\..\..\..\components\libraries\experimental_log\src;..\..\..\..\..\..\components\libraries\experimental_memobj;..\..\..\..\..\..\components\libraries\experimental_section_vars;..\..\..\..\..\..\components\libraries\fifo;..\..\..\..\..\..\components\libraries\hardfault;..\..\..\..\..\..\components\libraries\hardfault\nrf52;..\..\..\..\..\..\components\libraries\scheduler;..\..\..\..\..\..\components\libraries\strerror;..\..\..\..\..\..\components\libraries\timer;..\..\..\..\..\..\components\libraries\uart;..\..\..\..\..\..\components\libraries\usbd;..\..\..\..\..\..\components\libraries\usbd\class\cdc;..\..\..\..\..\..\components\libraries\usbd\class\cdc\acm;..\..\..\..\..\..\components\libraries\usbd\config;..\..\..\..\..\..\components\libraries\util;..\..\..;..\..\..\..\..\..\external\fprintf;..\..\..\..\..\..\external\protothreads;..\..\..\..\..\..\external\protothreads\pt-1.4;..\..\..\..\..\..\external\segger_rtt;..\..\..\..\..\..\integration\nrfx;..\..\..\..\..\..\integration\nrfx\legacy;..\..\..\..\..\..\modules\nrfx;..\..\..\..\..\..\modules\nrfx\drivers\include;..\..\..\..\..\..\modules\nrfx\hal;..\..\..\..\..\..\modules\nrfx\mdk;..\config;..\..\..\..\..\..\components\libraries\simple_timer;..\..\..\..\..\..\components\libraries\usbd\class\nrf_dfu_trigger;..\..\..\..\..\..\components\libraries\block_dev;..\..\..\..\..\..\components\libraries\usb_dfu_trigger;..\..\..\..\..\..\components\libraries\bootloader\dfu</IncludePath>
+              <IncludePath>..\..\..\config;..\..\..\..\sdk\components;..\..\..\..\sdk\components\boards;..\..\..\..\sdk\components\device;..\..\..\..\sdk\components\drivers_nrf\nrf_soc_nosd;..\..\..\..\sdk\components\drivers_nrf\usbd;..\..\..\..\sdk\components\libraries\atomic;..\..\..\..\sdk\components\libraries\atomic_fifo;..\..\..\..\sdk\components\libraries\balloc;..\..\..\..\sdk\components\libraries\bsp;..\..\..\..\sdk\components\libraries\button;..\..\..\..\sdk\components\libraries\delay;..\..\..\..\sdk\components\libraries\experimental_log;..\..\..\..\sdk\components\libraries\experimental_log\src;..\..\..\..\sdk\components\libraries\experimental_memobj;..\..\..\..\sdk\components\libraries\experimental_section_vars;..\..\..\..\sdk\components\libraries\fifo;..\..\..\..\sdk\components\libraries\hardfault;..\..\..\..\sdk\components\libraries\hardfault\nrf52;..\..\..\..\sdk\components\libraries\scheduler;..\..\..\..\sdk\components\libraries\strerror;..\..\..\..\sdk\components\libraries\timer;..\..\..\..\sdk\components\libraries\uart;..\..\..\..\sdk\components\libraries\usbd;..\..\..\..\sdk\components\libraries\usbd\class\cdc;..\..\..\..\sdk\components\libraries\usbd\class\cdc\acm;..\..\..\..\sdk\components\libraries\usbd\config;..\..\..\..\sdk\components\libraries\util;..\..\..;..\..\..\..\sdk\external\fprintf;..\..\..\..\sdk\external\protothreads;..\..\..\..\sdk\external\protothreads\pt-1.4;..\..\..\..\sdk\external\segger_rtt;..\..\..\..\sdk\integration\nrfx;..\..\..\..\sdk\integration\nrfx\legacy;..\..\..\..\sdk\modules\nrfx;..\..\..\..\sdk\modules\nrfx\drivers\include;..\..\..\..\sdk\modules\nrfx\hal;..\..\..\..\sdk\modules\nrfx\mdk;..\config;..\..\..\..\sdk\components\libraries\simple_timer;..\..\..\..\sdk\components\libraries\usbd\class\nrf_dfu_trigger;..\..\..\..\sdk\components\libraries\block_dev;..\..\..\..\sdk\components\libraries\usb_dfu_trigger;..\..\..\..\sdk\components\libraries\bootloader\dfu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -349,7 +349,7 @@
               <MiscControls> --cpreproc_opts=-DBOARD_PCA10056,-DCONFIG_GPIO_AS_PINRESET,-DFLOAT_ABI_HARD,-DNRF52840_XXAA,-DSWI_DISABLE0</MiscControls>
               <Define>BOARD_PCA10056 CONFIG_GPIO_AS_PINRESET FLOAT_ABI_HARD NRF52840_XXAA SWI_DISABLE0</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\config;..\..\..\..\..\..\components;..\..\..\..\..\..\components\boards;..\..\..\..\..\..\components\device;..\..\..\..\..\..\components\drivers_nrf\nrf_soc_nosd;..\..\..\..\..\..\components\drivers_nrf\usbd;..\..\..\..\..\..\components\libraries\atomic;..\..\..\..\..\..\components\libraries\atomic_fifo;..\..\..\..\..\..\components\libraries\balloc;..\..\..\..\..\..\components\libraries\bsp;..\..\..\..\..\..\components\libraries\button;..\..\..\..\..\..\components\libraries\delay;..\..\..\..\..\..\components\libraries\experimental_log;..\..\..\..\..\..\components\libraries\experimental_log\src;..\..\..\..\..\..\components\libraries\experimental_memobj;..\..\..\..\..\..\components\libraries\experimental_section_vars;..\..\..\..\..\..\components\libraries\fifo;..\..\..\..\..\..\components\libraries\hardfault;..\..\..\..\..\..\components\libraries\hardfault\nrf52;..\..\..\..\..\..\components\libraries\scheduler;..\..\..\..\..\..\components\libraries\strerror;..\..\..\..\..\..\components\libraries\timer;..\..\..\..\..\..\components\libraries\uart;..\..\..\..\..\..\components\libraries\usbd;..\..\..\..\..\..\components\libraries\usbd\class\cdc;..\..\..\..\..\..\components\libraries\usbd\class\cdc\acm;..\..\..\..\..\..\components\libraries\usbd\config;..\..\..\..\..\..\components\libraries\util;..\..\..;..\..\..\..\..\..\external\fprintf;..\..\..\..\..\..\external\protothreads;..\..\..\..\..\..\external\protothreads\pt-1.4;..\..\..\..\..\..\external\segger_rtt;..\..\..\..\..\..\integration\nrfx;..\..\..\..\..\..\integration\nrfx\legacy;..\..\..\..\..\..\modules\nrfx;..\..\..\..\..\..\modules\nrfx\drivers\include;..\..\..\..\..\..\modules\nrfx\hal;..\..\..\..\..\..\modules\nrfx\mdk;..\config</IncludePath>
+              <IncludePath>..\..\..\config;..\..\..\..\sdk\components;..\..\..\..\sdk\components\boards;..\..\..\..\sdk\components\device;..\..\..\..\sdk\components\drivers_nrf\nrf_soc_nosd;..\..\..\..\sdk\components\drivers_nrf\usbd;..\..\..\..\sdk\components\libraries\atomic;..\..\..\..\sdk\components\libraries\atomic_fifo;..\..\..\..\sdk\components\libraries\balloc;..\..\..\..\sdk\components\libraries\bsp;..\..\..\..\sdk\components\libraries\button;..\..\..\..\sdk\components\libraries\delay;..\..\..\..\sdk\components\libraries\experimental_log;..\..\..\..\sdk\components\libraries\experimental_log\src;..\..\..\..\sdk\components\libraries\experimental_memobj;..\..\..\..\sdk\components\libraries\experimental_section_vars;..\..\..\..\sdk\components\libraries\fifo;..\..\..\..\sdk\components\libraries\hardfault;..\..\..\..\sdk\components\libraries\hardfault\nrf52;..\..\..\..\sdk\components\libraries\scheduler;..\..\..\..\sdk\components\libraries\strerror;..\..\..\..\sdk\components\libraries\timer;..\..\..\..\sdk\components\libraries\uart;..\..\..\..\sdk\components\libraries\usbd;..\..\..\..\sdk\components\libraries\usbd\class\cdc;..\..\..\..\sdk\components\libraries\usbd\class\cdc\acm;..\..\..\..\sdk\components\libraries\usbd\config;..\..\..\..\sdk\components\libraries\util;..\..\..;..\..\..\..\sdk\external\fprintf;..\..\..\..\sdk\external\protothreads;..\..\..\..\sdk\external\protothreads\pt-1.4;..\..\..\..\sdk\external\segger_rtt;..\..\..\..\sdk\integration\nrfx;..\..\..\..\sdk\integration\nrfx\legacy;..\..\..\..\sdk\modules\nrfx;..\..\..\..\sdk\modules\nrfx\drivers\include;..\..\..\..\sdk\modules\nrfx\hal;..\..\..\..\sdk\modules\nrfx\mdk;..\config</IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -393,7 +393,7 @@
             <File>
               <FileName>boards.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\boards\boards.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\boards\boards.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -403,12 +403,12 @@
             <File>
               <FileName>bsp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\bsp\bsp.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\bsp\bsp.c</FilePath>
             </File>
             <File>
               <FileName>bsp_nfc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\bsp\bsp_nfc.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\bsp\bsp_nfc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -418,77 +418,77 @@
             <File>
               <FileName>nrf_drv_clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\integration\nrfx\legacy\nrf_drv_clock.c</FilePath>
+              <FilePath>..\..\..\..\sdk\integration\nrfx\legacy\nrf_drv_clock.c</FilePath>
             </File>
             <File>
               <FileName>nrf_drv_power.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\integration\nrfx\legacy\nrf_drv_power.c</FilePath>
+              <FilePath>..\..\..\..\sdk\integration\nrfx\legacy\nrf_drv_power.c</FilePath>
             </File>
             <File>
               <FileName>nrf_drv_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\integration\nrfx\legacy\nrf_drv_uart.c</FilePath>
+              <FilePath>..\..\..\..\sdk\integration\nrfx\legacy\nrf_drv_uart.c</FilePath>
             </File>
             <File>
               <FileName>nrf_drv_usbd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\drivers_nrf\usbd\nrf_drv_usbd.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\drivers_nrf\usbd\nrf_drv_usbd.c</FilePath>
             </File>
             <File>
               <FileName>nrf_nvic.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\drivers_nrf\nrf_soc_nosd\nrf_nvic.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\drivers_nrf\nrf_soc_nosd\nrf_nvic.c</FilePath>
             </File>
             <File>
               <FileName>nrf_soc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\drivers_nrf\nrf_soc_nosd\nrf_soc.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\drivers_nrf\nrf_soc_nosd\nrf_soc.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\nrfx_clock.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\nrfx_clock.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_gpiote.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\nrfx_gpiote.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\nrfx_gpiote.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_power.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\nrfx_power.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\nrfx_power.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_power_clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\nrfx_power_clock.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\nrfx_power_clock.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_prs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\prs\nrfx_prs.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\prs\nrfx_prs.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_systick.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\nrfx_systick.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\nrfx_systick.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\nrfx_uart.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\nrfx_uart.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_uarte.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\nrfx_uarte.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\nrfx_uarte.c</FilePath>
             </File>
             <File>
               <FileName>nrfx_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\modules\nrfx\drivers\src\nrfx_timer.c</FilePath>
+              <FilePath>..\..\..\..\sdk\modules\nrfx\drivers\src\nrfx_timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -498,137 +498,137 @@
             <File>
               <FileName>app_button.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\button\app_button.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\button\app_button.c</FilePath>
             </File>
             <File>
               <FileName>app_error.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\util\app_error.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\util\app_error.c</FilePath>
             </File>
             <File>
               <FileName>app_error_handler_keil.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\util\app_error_handler_keil.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\util\app_error_handler_keil.c</FilePath>
             </File>
             <File>
               <FileName>app_error_weak.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\util\app_error_weak.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\util\app_error_weak.c</FilePath>
             </File>
             <File>
               <FileName>app_fifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\fifo\app_fifo.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\fifo\app_fifo.c</FilePath>
             </File>
             <File>
               <FileName>app_scheduler.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\scheduler\app_scheduler.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\scheduler\app_scheduler.c</FilePath>
             </File>
             <File>
               <FileName>app_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\timer\app_timer.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\timer\app_timer.c</FilePath>
             </File>
             <File>
               <FileName>app_uart_fifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\uart\app_uart_fifo.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\uart\app_uart_fifo.c</FilePath>
             </File>
             <File>
               <FileName>app_usbd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\usbd\app_usbd.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\usbd\app_usbd.c</FilePath>
             </File>
             <File>
               <FileName>app_usbd_cdc_acm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\usbd\class\cdc\acm\app_usbd_cdc_acm.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\usbd\class\cdc\acm\app_usbd_cdc_acm.c</FilePath>
             </File>
             <File>
               <FileName>app_usbd_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\usbd\app_usbd_core.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\usbd\app_usbd_core.c</FilePath>
             </File>
             <File>
               <FileName>app_usbd_string_desc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\usbd\app_usbd_string_desc.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\usbd\app_usbd_string_desc.c</FilePath>
             </File>
             <File>
               <FileName>app_util_platform.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\util\app_util_platform.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\util\app_util_platform.c</FilePath>
             </File>
             <File>
               <FileName>hardfault_handler_keil.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\hardfault\nrf52\handler\hardfault_handler_keil.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\hardfault\nrf52\handler\hardfault_handler_keil.c</FilePath>
             </File>
             <File>
               <FileName>hardfault_implementation.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\hardfault\hardfault_implementation.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\hardfault\hardfault_implementation.c</FilePath>
             </File>
             <File>
               <FileName>nrf_assert.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\util\nrf_assert.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\util\nrf_assert.c</FilePath>
             </File>
             <File>
               <FileName>nrf_atfifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\atomic_fifo\nrf_atfifo.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\atomic_fifo\nrf_atfifo.c</FilePath>
             </File>
             <File>
               <FileName>nrf_balloc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\balloc\nrf_balloc.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\balloc\nrf_balloc.c</FilePath>
             </File>
             <File>
               <FileName>nrf_fprintf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\fprintf\nrf_fprintf.c</FilePath>
+              <FilePath>..\..\..\..\sdk\external\fprintf\nrf_fprintf.c</FilePath>
             </File>
             <File>
               <FileName>nrf_fprintf_format.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\external\fprintf\nrf_fprintf_format.c</FilePath>
+              <FilePath>..\..\..\..\sdk\external\fprintf\nrf_fprintf_format.c</FilePath>
             </File>
             <File>
               <FileName>nrf_memobj.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\experimental_memobj\nrf_memobj.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\experimental_memobj\nrf_memobj.c</FilePath>
             </File>
             <File>
               <FileName>nrf_strerror.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\strerror\nrf_strerror.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\strerror\nrf_strerror.c</FilePath>
             </File>
             <File>
               <FileName>app_simple_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\simple_timer\app_simple_timer.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\simple_timer\app_simple_timer.c</FilePath>
             </File>
             <File>
               <FileName>app_usbd_nrf_dfu_trigger.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\usbd\class\nrf_dfu_trigger\app_usbd_nrf_dfu_trigger.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\usbd\class\nrf_dfu_trigger\app_usbd_nrf_dfu_trigger.c</FilePath>
             </File>
             <File>
               <FileName>nrf_atomic.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\atomic\nrf_atomic.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\atomic\nrf_atomic.c</FilePath>
             </File>
             <File>
               <FileName>app_usbd_serial_num.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\usbd\app_usbd_serial_num.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\usbd\app_usbd_serial_num.c</FilePath>
             </File>
             <File>
               <FileName>nrf_dfu_trigger_usb.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\components\libraries\bootloader\dfu\nrf_dfu_trigger_usb.c</FilePath>
+              <FilePath>..\..\..\..\sdk\components\libraries\bootloader\dfu\nrf_dfu_trigger_usb.c</FilePath>
             </File>
           </Files>
         </Group>

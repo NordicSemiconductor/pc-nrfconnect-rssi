@@ -2,7 +2,6 @@
 
 ABS_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KEIL="c:/Keil_v5/UV4/UV4.exe"
-PROJECT=rssi_pca10040.uvprojx
 
 # Display an error message
 function error () {
@@ -23,7 +22,9 @@ function check_requirements () {
 check_requirements
 
 $ABS_PATH/bootstrap.sh \
-    -l "http://developer.nordicsemi.com/nRF5_SDK/nRF5_SDK_v13.x.x/nRF5_SDK_13.0.0_04a0bfd.zip" \
+    -l "http://developer.nordicsemi.com/nRF5_SDK/nRF5_SDK_v15.x.x/nRF5_SDK_15.0.0_a53641a.zip" \
     -d "./sdk"
 
-command $KEIL -b $PROJECT
+command $KEIL -b rssi_cdc_acm/pca10059/blank/arm5_no_packs/rssi_cdc_acm.uvprojx
+command $KEIL -b rssi_cdc_acm/pca10056/blank/arm5_no_packs/rssi_cdc_acm.uvprojx
+# command $KEIL -b rssi_uart/rssi_pca10040.uvprojx

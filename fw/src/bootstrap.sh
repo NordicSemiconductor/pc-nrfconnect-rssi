@@ -48,7 +48,6 @@ function check_requirements () {
     command -v unzip >/dev/null 2>&1 || { fatal "Unzip is not available"; }
     command -v curl >/dev/null 2>&1 || { fatal "Curl is not available"; }
     command -v git >/dev/null 2>&1 || { fatal "Git is not available"; }
-    command -v patch >/dev/null 2>&1 || { fatal "Patch is not available"; }
 }
 
 # Check if the SDK folder already exist
@@ -71,11 +70,11 @@ function sdk_exists () {
     return 1
 }
 
-# Download and patch the SDK. Check if it is already available
+# Download the SDK. Check if it is already available
 function sdk_download () {
     # First check if the SDK already exist
     if sdk_exists $1; then
-        # SDK folder already available (assume patched)
+        # SDK folder already available
         return 0
     fi
 
@@ -96,7 +95,13 @@ function sdk_download () {
     fi
 
     echo "> Unzipping SDK..."
-    unzip -q $DL_LOCATION/$SDK_FILE 'components/**' 'config/**' 'svd/**' -d $DL_LOCATION
+    unzip -q $DL_LOCATION/$SDK_FILE "${SDK_NAME}/components/**" "${SDK_NAME}/config/**" "${SDK_NAME}/modules/**" "${SDK_NAME}/integration/**" "${SDK_NAME}/external/**" -d $DL_LOCATION
+
+    mv ${DL_LOCATION}/${SDK_NAME}/components ${DL_LOCATION}/
+    mv ${DL_LOCATION}/${SDK_NAME}/config ${DL_LOCATION}/
+    mv ${DL_LOCATION}/${SDK_NAME}/modules ${DL_LOCATION}/
+    mv ${DL_LOCATION}/${SDK_NAME}/integration ${DL_LOCATION}/
+    mv ${DL_LOCATION}/${SDK_NAME}/external ${DL_LOCATION}/
 
     err_code=$?
     if [ "$err_code" != "0" ]; then
