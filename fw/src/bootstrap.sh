@@ -118,6 +118,9 @@ function sdk_download () {
 
     # FIXME: unused files from the modified SDK should be deleted
     # Keep only the components and the connectivity application ?
+
+    echo "Patching..."
+    patch sdk/components/drivers_nrf/usbd/nrf_drv_usbd_errata.h usdb.patch
 }
 
 function main() {
