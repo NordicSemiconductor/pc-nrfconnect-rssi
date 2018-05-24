@@ -171,6 +171,11 @@ export function close() {
                 logger.info('Serial port is closed');
                 dispatch(serialPortClosedAction());
             });
+        } else {
+            resetRssiData();
+            dispatch(rssiData());
+            logger.info('Serial port is closed');
+            dispatch(serialPortClosedAction());
         }
     };
 }
