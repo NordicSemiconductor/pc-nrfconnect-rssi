@@ -122,13 +122,17 @@ export default {
         }
 
         switch (action.type) {
+            case 'DEVICE_SELECTED':
+                logger.info(`Validating firmware for device with s/n ${action.device.serialNumber}`);
+                break;
+
             case 'DEVICE_DESELECTED':
                 logger.info('Deselecting device');
                 store.dispatch(RssiActions.close());
                 break;
 
             case 'DEVICE_SETUP_COMPLETE':
-                logger.info(`Selecting device with s/n ${action.device.serialNumber}`);
+                logger.info(`Opening device with s/n ${action.device.serialNumber}`);
                 store.dispatch(RssiActions.open(action.device.serialport));
                 break;
 
