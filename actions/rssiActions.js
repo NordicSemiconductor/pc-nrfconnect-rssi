@@ -73,26 +73,30 @@ function rssiData() {
     };
 }
 
-async function startReading() {
+function writeAndDrain(cmd) {
+    return new Promise(resolve => {
+        port.write(cmd, () => {
+            port.drain(resolve);
+        });
+    });
+}
+
+function startReading() {
     resetRssiData();
-    await port.write('start\r');
+    return writeAndDrain('start\r');
 }
 
 async function stopReading() {
-    await port.write('stop\r');
+    await writeAndDrain('stop\r');
     resetRssiData();
 }
 
 export function setDelay(delay) {
-    return async () => {
-        await port.write(`set delay ${delay}\r`);
-    };
+    return () => writeAndDrain(`set delay ${delay}\r`);
 }
 
 export function setScanRepeatTimes(repeatTimes) {
-    return async () => {
-        await port.write(`set repeat ${repeatTimes}\r`);
-    };
+    return () => writeAndDrain(`set repeat ${repeatTimes}\r`);
 }
 
 export function setMaxScans(scans) {
@@ -101,15 +105,13 @@ export function setMaxScans(scans) {
 
 export function scanAdvertisementChannels(enable) {
     return async () => {
-        await port.write(`scan adv ${enable ? 'true' : 'false'}\r`);
+        await writeAndDrain(`scan adv ${enable ? 'true' : 'false'}\r`);
         resetRssiData();
     };
 }
 
 export function toggleLED() {
-    return async () => {
-        await port.write('led\r');
-    };
+    return () => writeAndDrain('led\r');
 }
 
 export function open(serialPort) {
@@ -120,11 +122,13 @@ export function open(serialPort) {
             logger.info(`${serialPort.comName} is open`);
             dispatch(serialPortOpenedAction(serialPort.comName));
 
-            scanAdvertisementChannels(false);
-            setDelay(10);
-            setScanRepeatTimes(1);
-            setMaxScans(30);
-            startReading();
+            (async () => {
+                await scanAdvertisementChannels(false)();
+                await setDelay(100)();
+                await setScanRepeatTimes(1)();
+                await setMaxScans(30);
+                await startReading();
+            })();
 
             let throttleUpdates = false;
 
@@ -152,7 +156,8 @@ export function open(serialPort) {
                     throttleUpdates = false;
                     dispatch(rssiData());
                 });
-            });
+            })
+                .on('error', console.log);
         });
     };
 }
@@ -166,6 +171,11 @@ export function close() {
                 logger.info('Serial port is closed');
                 dispatch(serialPortClosedAction());
             });
+        } else {
+            resetRssiData();
+            dispatch(rssiData());
+            logger.info('Serial port is closed');
+            dispatch(serialPortClosedAction());
         }
     };
 }
