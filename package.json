@@ -39,6 +39,6 @@
   },
   "dependencies": {},
   "engines": {
-    "nrfconnect": "2.4.x"
+    "nrfconnect": "^2.4.0"
   }
 }
