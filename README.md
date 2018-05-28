@@ -2,7 +2,12 @@
 
 [![Build Status](https://travis-ci.org/NordicSemiconductor/pc-nrfconnect-rssi.svg?branch=master)](https://travis-ci.org/NordicSemiconductor/pc-nrfconnect-rssi)
 
-Simple app for [nRF Connect](https://github.com/NordicSemiconductor/pc-nrfconnect-core) that shows a visualization of RSSI data measured by the nRF52832 SoC. The app shows dBm per frequency in the 2400-2480 MHz range, and allows the user to tweak settings like sweep delay and animation duration. The app can be installed from the *Add/remove apps* screen in nRF Connect.
+Simple app for [nRF Connect](https://github.com/NordicSemiconductor/pc-nrfconnect-core) that shows a visualization of RSSI data. The app shows dBm per frequency in the 2400-2480 MHz range, and allows the user to tweak settings like sweep delay and animation duration. The app can be installed from the *Add/remove apps* screen in nRF Connect.
+
+The following devices are supported:
+
+* PCA10040 nRF52832 Development Kit
+* PCA10059 nRF52840 Dongle
 
 ![screenshot](resources/rssi_viewer.jpg)
 
@@ -14,7 +19,7 @@ While the RSSI Viewer is a useful tool in itself, the main purpose behind it is 
 
 ### Firmware
 
-The app comes with a firmware that sends RSSI data over serial port. The source code for this firmware can be found in [firmware/main.c](firmware/main.c), and is included as a hex file in [firmware/_build](firmware/_build). When selecting a serial port, the app will program the chip with this hex file (unless the firmware has not already been programmed).
+The app comes with firmwares for the supported devices that sends RSSI data over serial port. The source code for these firmwares can be found in [fw/src](fw/src), and is included as hex files in [fw/](fw/). When selecting a device, the app will program the chip with a corresponding hex file (unless the firmware has not already been programmed).
 
 The serial port communication from the app to the firmware is simply a few ASCII commands for starting, stopping, and adjusting settings. From the firmware to the app there is a binary flow of 3 bytes: `[0xff, channel_number, rssi]`.
 
