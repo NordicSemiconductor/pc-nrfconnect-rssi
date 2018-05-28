@@ -19,7 +19,7 @@ While the RSSI Viewer is a useful tool in itself, the main purpose behind it is 
 
 ### Firmware
 
-The app comes with firmwares for the supported devices that sends RSSI data over serial port. The source code for these firmwares can be found in [fw/src](fw/src), and is included as hex files in [fw/](fw/). When selecting a device, the app will program the chip with a corresponding hex file (unless the firmware has not already been programmed).
+The app comes with firmwares for the supported devices that sends RSSI data over serial port. The source code for these firmwares can be found in [fw/src](fw/src), and are included as hex files in [fw/](fw/). When selecting a device, the app will program the chip with a corresponding hex file (unless the firmware has not already been programmed).
 
 The serial port communication from the app to the firmware is simply a few ASCII commands for starting, stopping, and adjusting settings. From the firmware to the app there is a binary flow of 3 bytes: `[0xff, channel_number, rssi]`.
 
