@@ -114,7 +114,7 @@ export function toggleLED() {
     return () => writeAndDrain('led\r');
 }
 
-export function open(serialPort) {
+function openWhenClosed(serialPort) {
     return dispatch => {
         port = new SerialPort(serialPort.comName, {
             baudRate: 115200,
@@ -166,16 +166,17 @@ export function close() {
     return async dispatch => {
         if (port && (typeof (port.isOpen) === 'function' ? port.isOpen() : port.isOpen)) {
             await stopReading();
-            dispatch(rssiData());
-            port.close(() => {
-                logger.info('Serial port is closed');
-                dispatch(serialPortClosedAction());
-            });
+            await new Promise(resolve => port.close(resolve));
         } else {
             resetRssiData();
-            dispatch(rssiData());
-            logger.info('Serial port is closed');
-            dispatch(serialPortClosedAction());
         }
+        dispatch(rssiData());
+        logger.info('Serial port is closed');
+        return dispatch(serialPortClosedAction());
     };
+}
+
+export function open(serialPort) {
+    return dispatch => dispatch(close())
+        .then(() => dispatch(openWhenClosed(serialPort)));
 }
