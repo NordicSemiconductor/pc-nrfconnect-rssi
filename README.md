@@ -7,7 +7,7 @@ Simple app for [nRF Connect](https://github.com/NordicSemiconductor/pc-nrfconnec
 The following devices are supported:
 
 * PCA10040 nRF52832 Development Kit
-* PCA10059 nRF52840 Dongle
+* PCA10059
 
 ![screenshot](resources/rssi_viewer.jpg)
 
