@@ -7,4 +7,3 @@ steps:
 - script: |
     npm i
     npm run build
-    npm test
