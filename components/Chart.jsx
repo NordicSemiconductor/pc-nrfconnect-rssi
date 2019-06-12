@@ -71,7 +71,9 @@ const arrayConverter = (arr, separate) => {
 };
 
 const Chart = props => {
-    const { rssi, rssiMax, animationDuration, yMin, yMax, separateFrequencies } = props;
+    const {
+        rssi, rssiMax, animationDuration, yMin, yMax, separateFrequencies,
+    } = props;
     const sep = separateFrequencies ? 'separated' : 'continuous';
     const rssiData = arrayConverter(rssi, separateFrequencies);
     const rssiMaxData = arrayConverter(rssiMax, separateFrequencies);

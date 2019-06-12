@@ -37,7 +37,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactBootstrapSlider from 'react-bootstrap-slider';
-import { Checkbox, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 const ControlPanel = props => {
     const {
@@ -52,7 +53,7 @@ const ControlPanel = props => {
     } = props;
     const sliderDisabled = disabled ? 'disabled' : null;
     return (
-        <div >
+        <Form>
             Sweep Delay (ms)<br />
             <ReactBootstrapSlider
                 value={10}
@@ -93,20 +94,24 @@ const ControlPanel = props => {
                 ticks_labels={['10', '1000']}
                 disabled={sliderDisabled}
             />
-            <Checkbox
-                disabled={disabled}
-                onChange={event => onScanAdvertisementsToggle(event.target.checked)}
-            >
-                Advertisements only
-            </Checkbox>
-            <Checkbox
-                disabled={disabled}
-                onChange={event => onSeparateFrequencies(event.target.checked)}
-            >
-                Separate Frequencies
-            </Checkbox>
+            <Form.Group controlId="advCheck">
+                <Form.Check
+                    disabled={disabled}
+                    onChange={event => onScanAdvertisementsToggle(event.target.checked)}
+                    type="checkbox"
+                    label="Advertisements only"
+                />
+            </Form.Group>
+            <Form.Group controlId="freqCheck">
+                <Form.Check
+                    disabled={disabled}
+                    onChange={event => onSeparateFrequencies(event.target.checked)}
+                    type="checkbox"
+                    label="Separate Frequencies"
+                />
+            </Form.Group>
             <Button disabled={disabled} onClick={onToggleLED}>Toggle LED</Button>
-        </div>
+        </Form>
     );
 };
 
