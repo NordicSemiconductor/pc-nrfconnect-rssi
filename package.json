@@ -33,7 +33,7 @@
   "devDependencies": {
     "bootstrap": "4.3.1",
     "chart.js": "2.7.3",
-    "jquery": "3.3.1",
+    "jquery": "3.4.0",
     "pc-nrfconnect-devdep": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-devdep.git#feature/react-bootstrap-4",
     "react-bootstrap-slider": "2.2.2",
     "react-chartjs-2": "2.7.4"
