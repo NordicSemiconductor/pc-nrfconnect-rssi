@@ -1,6 +1,7 @@
 # nRF Connect RSSI Viewer
 
-[![Build Status](https://travis-ci.org/NordicSemiconductor/pc-nrfconnect-rssi.svg?branch=master)](https://travis-ci.org/NordicSemiconductor/pc-nrfconnect-rssi)
+[![Build Status](https://dev.azure.com/NordicSemiconductor/Wayland/_apis/build/status/NordicSemiconductor.pc-nrfconnect-rssi?branchName=master)](https://dev.azure.com/NordicSemiconductor/Wayland/_build/latest?definitionId=9&branchName=master)
+[![License](https://img.shields.io/badge/license-Modified%20BSD%20License-blue.svg)](LICENSE)
 
 Simple app for [nRF Connect](https://github.com/NordicSemiconductor/pc-nrfconnect-core) that shows a visualization of RSSI data. The app shows dBm per frequency in the 2400-2480 MHz range, and allows the user to tweak settings like sweep delay and animation duration. The app can be installed from the *Add/remove apps* screen in nRF Connect.
 
