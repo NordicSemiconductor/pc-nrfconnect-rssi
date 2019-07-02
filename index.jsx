@@ -76,6 +76,12 @@ export default {
     ),
     decorateSidePanel: SidePanel => (
         ({
+            delay,
+            scanRepeat,
+            maxScans,
+            animationDuration,
+            writeDelay,
+            writeScanRepeat,
             onDelayChange,
             onMaxScansChange,
             onChannelScanRepeatChange,
@@ -87,6 +93,12 @@ export default {
         }) => (
             <SidePanel>
                 <ControlPanel
+                    delay={delay}
+                    scanRepeat={scanRepeat}
+                    maxScans={maxScans}
+                    animationDuration={animationDuration}
+                    writeDelay={writeDelay}
+                    writeScanRepeat={writeScanRepeat}
                     onDelayChange={onDelayChange}
                     onMaxScansChange={onMaxScansChange}
                     onChannelScanRepeatChange={onChannelScanRepeatChange}
@@ -101,11 +113,20 @@ export default {
     ),
     mapSidePanelDispatch: (dispatch, props) => ({
         ...props,
-        onDelayChange: delay => dispatch(RssiActions.setDelay(delay)),
-        onMaxScansChange: maxScans => dispatch(RssiActions.setMaxScans(maxScans)),
-        onChannelScanRepeatChange: scanRepeat => dispatch(
-            RssiActions.setScanRepeatTimes(scanRepeat),
-        ),
+        writeDelay: () => dispatch(RssiActions.writeDelay()),
+        writeScanRepeat: () => dispatch(RssiActions.writeScanRepeat()),
+        onDelayChange: delay => dispatch({
+            type: 'RSSI_CHANGE_DELAY',
+            delay,
+        }),
+        onMaxScansChange: maxScans => dispatch({
+            type: 'RSSI_CHANGE_MAX_SCANS',
+            maxScans,
+        }),
+        onChannelScanRepeatChange: scanRepeat => dispatch({
+            type: 'RSSI_CHANGE_SCAN_REPEAT',
+            scanRepeat,
+        }),
         onAnimationDurationChange: animationDuration => dispatch({
             type: 'RSSI_CHANGE_ANIMATION_DURATION',
             animationDuration,
@@ -119,8 +140,12 @@ export default {
         }),
         onToggleLED: () => dispatch(RssiActions.toggleLED()),
     }),
-    mapSidePanelState: (state, props) => ({
-        disabled: state.app.port === null,
+    mapSidePanelState: ({ app }, props) => ({
+        disabled: app.port === null,
+        delay: app.delay,
+        scanRepeat: app.scanRepeat,
+        maxScans: app.maxScans,
+        animationDuration: app.animationDuration,
         ...props,
     }),
     mapDeviceSelectorState: (state, props) => ({

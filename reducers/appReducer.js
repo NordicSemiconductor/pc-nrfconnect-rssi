@@ -37,6 +37,9 @@
 const initialState = {
     data: [],
     dataMax: [],
+    delay: 10,
+    scanRepeat: 1,
+    maxScans: 30,
     animationDuration: 500,
     separateFrequencies: false,
     port: null,
@@ -49,6 +52,21 @@ export default function reduceApp(state = initialState, action) {
                 ...state,
                 data: action.data,
                 dataMax: action.dataMax,
+            };
+        case 'RSSI_CHANGE_DELAY':
+            return {
+                ...state,
+                delay: action.delay,
+            };
+        case 'RSSI_CHANGE_MAX_SCANS':
+            return {
+                ...state,
+                maxScans: action.maxScans,
+            };
+        case 'RSSI_CHANGE_SCAN_REPEAT':
+            return {
+                ...state,
+                scanRepeat: action.scanRepeat,
             };
         case 'RSSI_CHANGE_ANIMATION_DURATION':
             return {
