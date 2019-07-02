@@ -36,12 +36,20 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactBootstrapSlider from 'react-bootstrap-slider';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+import Slider from 'react-rangeslider';
+import 'react-rangeslider/lib/index.css';
+
 const ControlPanel = props => {
     const {
+        delay,
+        scanRepeat,
+        maxScans,
+        animationDuration,
+        writeDelay,
+        writeScanRepeat,
         onDelayChange,
         onMaxScansChange,
         onChannelScanRepeatChange,
@@ -51,48 +59,46 @@ const ControlPanel = props => {
         onToggleLED,
         disabled,
     } = props;
-    const sliderDisabled = disabled ? 'disabled' : null;
     return (
         <Form>
-            Sweep Delay (ms)<br />
-            <ReactBootstrapSlider
-                value={10}
-                slideStop={event => onDelayChange(event.target.value)}
+            <Form.Label>Sweep Delay (ms)</Form.Label>
+            <Slider
+                value={delay}
+                title={delay}
                 max={1000}
                 min={5}
-                ticks={[5, 1000]}
-                ticks_labels={['5', '1000']}
-                disabled={sliderDisabled}
+                onChangeComplete={writeDelay}
+                onChange={value => onDelayChange(value)}
+                labels={{ 5: '5', [delay]: `${delay}`, 1000: '1000' }}
+                tooltip={false}
             />
-            # of sweeps to display maximum value
-            <ReactBootstrapSlider
-                value={30}
-                slideStop={event => onMaxScansChange(event.target.value)}
+            <Form.Label># of sweeps to display maximum value</Form.Label>
+            <Slider
+                value={maxScans}
                 max={100}
                 min={1}
-                ticks={[1, 100]}
-                ticks_labels={['1', '100']}
-                disabled={sliderDisabled}
+                onChange={value => onMaxScansChange(value)}
+                labels={{ 1: '1', [maxScans]: `${maxScans}`, 100: '100' }}
+                tooltip={false}
             />
-            Channel scan repeat
-            <ReactBootstrapSlider
-                value={1}
-                slideStop={event => onChannelScanRepeatChange(event.target.value)}
+            <Form.Label>Channel scan repeat</Form.Label>
+            <Slider
+                value={scanRepeat}
                 max={100}
                 min={1}
-                ticks={[1, 100]}
-                ticks_labels={['1', '100']}
-                disabled={sliderDisabled}
+                onChangeComplete={writeScanRepeat}
+                onChange={value => onChannelScanRepeatChange(value)}
+                labels={{ 1: '1', [scanRepeat]: `${scanRepeat}`, 100: '100' }}
+                tooltip={false}
             />
-            Animation duration (ms)
-            <ReactBootstrapSlider
-                value={500}
-                slideStop={event => onAnimationDurationChange(event.target.value)}
+            <Form.Label>Animation duration (ms)</Form.Label>
+            <Slider
+                value={animationDuration}
                 max={1000}
                 min={10}
-                ticks={[10, 1000]}
-                ticks_labels={['10', '1000']}
-                disabled={sliderDisabled}
+                onChange={value => onAnimationDurationChange(value)}
+                labels={{ 10: '10', [animationDuration]: `${animationDuration}`, 1000: '1000' }}
+                tooltip={false}
             />
             <Form.Group controlId="advCheck">
                 <Form.Check
@@ -116,6 +122,12 @@ const ControlPanel = props => {
 };
 
 ControlPanel.propTypes = {
+    delay: PropTypes.number.isRequired,
+    scanRepeat: PropTypes.number.isRequired,
+    maxScans: PropTypes.number.isRequired,
+    animationDuration: PropTypes.number.isRequired,
+    writeDelay: PropTypes.func.isRequired,
+    writeScanRepeat: PropTypes.func.isRequired,
     onDelayChange: PropTypes.func.isRequired,
     onMaxScansChange: PropTypes.func.isRequired,
     onChannelScanRepeatChange: PropTypes.func.isRequired,
