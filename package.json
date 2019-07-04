@@ -1,6 +1,6 @@
 {
   "name": "pc-nrfconnect-rssi",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Demo application for nRF528xx SoC",
   "displayName": "RSSI Viewer",
   "repository": {
@@ -35,11 +35,11 @@
     "chart.js": "2.7.3",
     "jquery": "3.4.0",
     "pc-nrfconnect-devdep": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-devdep.git#semver:^3.0.0",
-    "react-bootstrap-slider": "2.2.2",
+    "react-rangeslider": "2.2.0",
     "react-chartjs-2": "2.7.4"
   },
   "dependencies": {},
   "engines": {
-    "nrfconnect": "^2.4.0"
+    "nrfconnect": "^3.0.0"
   }
 }

@@ -37,9 +37,8 @@
 import { logger } from 'nrfconnect/core';
 import SerialPort from 'serialport';
 
-let port;
+let port = null;
 
-let maxScans = 30;
 const theRssiData = [];
 const theRssiDataMax = [];
 
@@ -75,9 +74,11 @@ function rssiData() {
 
 function writeAndDrain(cmd) {
     return new Promise(resolve => {
-        port.write(cmd, () => {
-            port.drain(resolve);
-        });
+        if (port) {
+            port.write(cmd, () => {
+                port.drain(resolve);
+            });
+        }
     });
 }
 
@@ -91,16 +92,12 @@ async function stopReading() {
     resetRssiData();
 }
 
-export function setDelay(delay) {
-    return () => writeAndDrain(`set delay ${delay}\r`);
+export function writeDelay() {
+    return (dispatch, getState) => writeAndDrain(`set delay ${getState().app.delay}\r`);
 }
 
-export function setScanRepeatTimes(repeatTimes) {
-    return () => writeAndDrain(`set repeat ${repeatTimes}\r`);
-}
-
-export function setMaxScans(scans) {
-    maxScans = scans;
+export function writeScanRepeat() {
+    return (dispatch, getState) => writeAndDrain(`set repeat ${getState().app.scanRepeat}\r`);
 }
 
 export function scanAdvertisementChannels(enable) {
@@ -115,7 +112,7 @@ export function toggleLED() {
 }
 
 function openWhenClosed(serialPort) {
-    return dispatch => {
+    return (dispatch, getState) => {
         port = new SerialPort(serialPort.comName, {
             baudRate: 115200,
         }, () => {
@@ -124,9 +121,8 @@ function openWhenClosed(serialPort) {
 
             (async () => {
                 await scanAdvertisementChannels(false)();
-                await setDelay(100)();
-                await setScanRepeatTimes(1)();
-                await setMaxScans(30);
+                await dispatch(writeDelay());
+                await dispatch(writeScanRepeat());
                 await startReading();
             })();
 
@@ -144,7 +140,7 @@ function openWhenClosed(serialPort) {
                     const [ch, d] = buf.splice(0, 2);
                     if (ch !== 0xff && d !== 0xff) {
                         theRssiData[ch].unshift(d);
-                        theRssiData[ch].splice(maxScans);
+                        theRssiData[ch].splice(getState().app.maxScans);
                         theRssiDataMax[ch] = Math.min(...(theRssiData[ch]));
                     }
                 }
@@ -167,6 +163,7 @@ export function close() {
         if (port && (typeof (port.isOpen) === 'function' ? port.isOpen() : port.isOpen)) {
             await stopReading();
             await new Promise(resolve => port.close(resolve));
+            port = null;
         } else {
             resetRssiData();
         }
