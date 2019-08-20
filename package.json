@@ -1,6 +1,6 @@
 {
   "name": "pc-nrfconnect-rssi",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Demo application for nRF528xx SoC",
   "displayName": "RSSI Viewer",
   "repository": {
@@ -21,6 +21,7 @@
     "dev": "nrfconnect-scripts build-watch",
     "webpack": "nrfconnect-scripts build-dev",
     "build": "nrfconnect-scripts build-prod",
+    "nordic-publish": "nrfconnect-scripts nordic-publish",
     "lint": "nrfconnect-scripts lint actions components reducers index.jsx",
     "lintfix": "nrfconnect-scripts lint --fix actions components reducers index.jsx",
     "test": "nrfconnect-scripts test",
@@ -30,15 +31,15 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
-    "bootstrap": "4.1.0",
-    "chart.js": "2.7.2",
-    "jquery": "3.3.1",
-    "pc-nrfconnect-devdep": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-devdep.git#semver:^1.2.2",
-    "react-bootstrap-slider": "2.1.4",
-    "react-chartjs-2": "2.7.0"
+    "bootstrap": "4.3.1",
+    "chart.js": "2.7.3",
+    "jquery": "3.4.0",
+    "pc-nrfconnect-devdep": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-devdep.git#semver:^3.0.0",
+    "react-rangeslider": "2.2.0",
+    "react-chartjs-2": "2.7.4"
   },
   "dependencies": {},
   "engines": {
-    "nrfconnect": "^2.4.0"
+    "nrfconnect": "^3.0.0"
   }
 }

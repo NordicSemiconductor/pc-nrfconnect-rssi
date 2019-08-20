@@ -43,7 +43,7 @@ import Chart from './components/Chart';
 import ControlPanel from './components/ControlPanel';
 import reduceApp from './reducers/appReducer';
 import * as RssiActions from './actions/rssiActions';
-import './resources/css/index.less';
+import './resources/css/index.scss';
 
 const yRange = {
     min: -110,
@@ -75,44 +75,80 @@ export default {
         )
     ),
     decorateSidePanel: SidePanel => (
-        props => (
+        ({
+            delay,
+            scanRepeat,
+            maxScans,
+            animationDuration,
+            writeDelay,
+            writeScanRepeat,
+            onDelayChange,
+            onMaxScansChange,
+            onChannelScanRepeatChange,
+            onAnimationDurationChange,
+            onScanAdvertisementsToggle,
+            onSeparateFrequencies,
+            onToggleLED,
+            disabled,
+        }) => (
             <SidePanel>
                 <ControlPanel
-                    onDelayChange={props.onDelayChange}
-                    onMaxScansChange={props.onMaxScansChange}
-                    onChannelScanRepeatChange={props.onChannelScanRepeatChange}
-                    onAnimationDurationChange={props.onAnimationDurationChange}
-                    onScanAdvertisementsToggle={props.onScanAdvertisementsToggle}
-                    onSeparateFrequencies={props.onSeparateFrequencies}
-                    onToggleLED={props.onToggleLED}
-                    disabled={props.disabled}
+                    delay={delay}
+                    scanRepeat={scanRepeat}
+                    maxScans={maxScans}
+                    animationDuration={animationDuration}
+                    writeDelay={writeDelay}
+                    writeScanRepeat={writeScanRepeat}
+                    onDelayChange={onDelayChange}
+                    onMaxScansChange={onMaxScansChange}
+                    onChannelScanRepeatChange={onChannelScanRepeatChange}
+                    onAnimationDurationChange={onAnimationDurationChange}
+                    onScanAdvertisementsToggle={onScanAdvertisementsToggle}
+                    onSeparateFrequencies={onSeparateFrequencies}
+                    onToggleLED={onToggleLED}
+                    disabled={disabled}
                 />
             </SidePanel>
         )
     ),
     mapSidePanelDispatch: (dispatch, props) => ({
         ...props,
-        onDelayChange: delay => dispatch(RssiActions.setDelay(delay)),
-        onMaxScansChange: maxScans => dispatch(RssiActions.setMaxScans(maxScans)),
-        onChannelScanRepeatChange: scanRepeat => dispatch(
-            RssiActions.setScanRepeatTimes(scanRepeat)),
+        writeDelay: () => dispatch(RssiActions.writeDelay()),
+        writeScanRepeat: () => dispatch(RssiActions.writeScanRepeat()),
+        onDelayChange: delay => dispatch({
+            type: 'RSSI_CHANGE_DELAY',
+            delay,
+        }),
+        onMaxScansChange: maxScans => dispatch({
+            type: 'RSSI_CHANGE_MAX_SCANS',
+            maxScans,
+        }),
+        onChannelScanRepeatChange: scanRepeat => dispatch({
+            type: 'RSSI_CHANGE_SCAN_REPEAT',
+            scanRepeat,
+        }),
         onAnimationDurationChange: animationDuration => dispatch({
             type: 'RSSI_CHANGE_ANIMATION_DURATION',
             animationDuration,
         }),
         onScanAdvertisementsToggle: scanAdvertisementChannels => dispatch(
-            RssiActions.scanAdvertisementChannels(scanAdvertisementChannels)),
+            RssiActions.scanAdvertisementChannels(scanAdvertisementChannels),
+        ),
         onSeparateFrequencies: separateFrequencies => dispatch({
             type: 'RSSI_SEPARATE_FREQUENCIES',
             separateFrequencies,
         }),
         onToggleLED: () => dispatch(RssiActions.toggleLED()),
     }),
-    mapSidePanelState: (state, props) => ({
-        disabled: state.app.port === null,
+    mapSidePanelState: ({ app }, props) => ({
+        disabled: app.port === null,
+        delay: app.delay,
+        scanRepeat: app.scanRepeat,
+        maxScans: app.maxScans,
+        animationDuration: app.animationDuration,
         ...props,
     }),
-    mapSerialPortSelectorState: (state, props) => ({
+    mapDeviceSelectorState: (state, props) => ({
         portIndicatorStatus: (state.app.port !== null) ? 'on' : 'off',
         ...props,
     }),
