@@ -39,10 +39,10 @@
 import React from 'react';
 import { logger, getAppDir } from 'nrfconnect/core';
 import path from 'path';
-import Chart from './components/Chart';
-import ControlPanel from './components/ControlPanel';
-import reduceApp from './reducers/appReducer';
-import * as RssiActions from './actions/rssiActions';
+import Chart from './lib/components/Chart';
+import ControlPanel from './lib/components/ControlPanel';
+import reduceApp from './lib/reducers/appReducer';
+import * as RssiActions from './lib/actions/rssiActions';
 import './resources/css/index.scss';
 
 const yRange = {
