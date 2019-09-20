@@ -16,7 +16,6 @@
     "dist/",
     "fw/*.hex",
     "resources/icon.*",
-    "icon.png",
     "LICENSE"
   ],
   "main": "dist/bundle.js",
