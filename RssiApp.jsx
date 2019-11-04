@@ -35,15 +35,24 @@
  */
 
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import app from './lib/reducers/appReducer';
-import RssiApp from './RssiApp';
+import { App, NavBar } from 'nrfconnect/shared';
 
-const store = createStore(combineReducers({ app }));
+import Chart from './Chart';
+import SidePanel from './SidePanel';
+import RssiDeviceSelect from './RssiDeviceSelect';
+
+const RssiNavBar = () => (
+    <NavBar
+        title="RSSI Viewer"
+        deviceSelect={<RssiDeviceSelect />}
+    />
+);
 
 export default () => (
-    <Provider store={store}>
-        <RssiApp />
-    </Provider>
+    <App
+        navBar={<RssiNavBar />}
+        sidePanel={<SidePanel />}
+    >
+        <Chart />
+    </App>
 );

@@ -35,15 +35,5 @@
  */
 
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import app from './lib/reducers/appReducer';
-import RssiApp from './RssiApp';
 
-const store = createStore(combineReducers({ app }));
-
-export default () => (
-    <Provider store={store}>
-        <RssiApp />
-    </Provider>
-);
+export default () => <span>FIXME app Chart</span>;
