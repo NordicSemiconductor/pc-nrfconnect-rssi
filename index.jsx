@@ -42,7 +42,7 @@ import thunk from 'redux-thunk';
 import { coreReducer as core } from 'nrfconnect/shared';
 
 import app from './lib/reducers/appReducer';
-import RssiApp from './RssiApp';
+import RssiApp from './lib/components/RssiApp';
 
 const rootReducer = combineReducers({ app, core });
 const middleware = composeWithDevTools(applyMiddleware(thunk));
