@@ -35,107 +35,135 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { bool, func, number } from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import Slider from 'react-rangeslider';
-import 'react-rangeslider/lib/index.css';
+import Rangeslider from 'react-rangeslider';
 
-const ControlPanel = props => {
+import 'react-rangeslider/lib/index.css';
+import '../../resources/css/index.scss';
+
+const Slider = ({
+    value,
+    min,
+    max,
+    onChange,
+    onChangeComplete,
+}) => (
+    <Rangeslider
+        value={value}
+        min={min}
+        max={max}
+        onChange={onChange}
+        onChangeComplete={onChangeComplete}
+        labels={{
+            [min]: min,
+            [value]: value,
+            [max]: max,
+        }}
+        tooltip={false}
+    />
+);
+Slider.propTypes = {
+    value: number.isRequired,
+    min: number.isRequired,
+    max: number.isRequired,
+    onChange: func.isRequired,
+    onChangeComplete: func, // eslint-disable-line react/require-default-props
+};
+
+const SidePanel = props => {
     const {
-        delay,
-        scanRepeat,
-        maxScans,
         animationDuration,
+        cangeAnimationDuration,
+        changeChannelScanRepeat,
+        changeDelay,
+        changeMaxScans,
+        delay,
+        disabled,
+        maxScans,
+        scanAdvertisementChannels,
+        scanRepeat,
+        setSeparateFrequencies,
+        toggleLED,
         writeDelay,
         writeScanRepeat,
-        onDelayChange,
-        onMaxScansChange,
-        onChannelScanRepeatChange,
-        onAnimationDurationChange,
-        onScanAdvertisementsToggle,
-        onSeparateFrequencies,
-        onToggleLED,
-        disabled,
     } = props;
     return (
         <Form>
             <Form.Label>Sweep Delay (ms)</Form.Label>
             <Slider
                 value={delay}
-                title={delay}
-                max={1000}
                 min={5}
+                max={1000}
+                onChange={changeDelay}
                 onChangeComplete={writeDelay}
-                onChange={value => onDelayChange(value)}
-                labels={{ 5: '5', [delay]: `${delay}`, 1000: '1000' }}
-                tooltip={false}
             />
+
             <Form.Label># of sweeps to display maximum value</Form.Label>
             <Slider
                 value={maxScans}
-                max={100}
                 min={1}
-                onChange={value => onMaxScansChange(value)}
-                labels={{ 1: '1', [maxScans]: `${maxScans}`, 100: '100' }}
-                tooltip={false}
+                max={100}
+                onChange={changeMaxScans}
             />
+
             <Form.Label>Channel scan repeat</Form.Label>
             <Slider
                 value={scanRepeat}
-                max={100}
                 min={1}
+                max={100}
+                onChange={changeChannelScanRepeat}
                 onChangeComplete={writeScanRepeat}
-                onChange={value => onChannelScanRepeatChange(value)}
-                labels={{ 1: '1', [scanRepeat]: `${scanRepeat}`, 100: '100' }}
-                tooltip={false}
             />
+
             <Form.Label>Animation duration (ms)</Form.Label>
             <Slider
                 value={animationDuration}
-                max={1000}
                 min={10}
-                onChange={value => onAnimationDurationChange(value)}
-                labels={{ 10: '10', [animationDuration]: `${animationDuration}`, 1000: '1000' }}
-                tooltip={false}
+                max={1000}
+                onChange={cangeAnimationDuration}
             />
+
             <Form.Group controlId="advCheck">
                 <Form.Check
                     disabled={disabled}
-                    onChange={event => onScanAdvertisementsToggle(event.target.checked)}
+                    onChange={event => scanAdvertisementChannels(event.target.checked)}
                     type="checkbox"
                     label="Advertisements only"
                 />
             </Form.Group>
+
             <Form.Group controlId="freqCheck">
                 <Form.Check
                     disabled={disabled}
-                    onChange={event => onSeparateFrequencies(event.target.checked)}
+                    onChange={event => setSeparateFrequencies(event.target.checked)}
                     type="checkbox"
                     label="Separate Frequencies"
                 />
             </Form.Group>
-            <Button disabled={disabled} onClick={onToggleLED}>Toggle LED</Button>
+
+            <Button disabled={disabled} onClick={toggleLED}>Toggle LED</Button>
         </Form>
     );
 };
 
-ControlPanel.propTypes = {
-    delay: PropTypes.number.isRequired,
-    scanRepeat: PropTypes.number.isRequired,
-    maxScans: PropTypes.number.isRequired,
-    animationDuration: PropTypes.number.isRequired,
-    writeDelay: PropTypes.func.isRequired,
-    writeScanRepeat: PropTypes.func.isRequired,
-    onDelayChange: PropTypes.func.isRequired,
-    onMaxScansChange: PropTypes.func.isRequired,
-    onChannelScanRepeatChange: PropTypes.func.isRequired,
-    onAnimationDurationChange: PropTypes.func.isRequired,
-    onScanAdvertisementsToggle: PropTypes.func.isRequired,
-    onSeparateFrequencies: PropTypes.func.isRequired,
-    onToggleLED: PropTypes.func.isRequired,
-    disabled: PropTypes.bool.isRequired,
+SidePanel.propTypes = {
+    animationDuration: number.isRequired,
+    cangeAnimationDuration: func.isRequired,
+    changeChannelScanRepeat: func.isRequired,
+    changeDelay: func.isRequired,
+    changeMaxScans: func.isRequired,
+    delay: number.isRequired,
+    disabled: bool.isRequired,
+    maxScans: number.isRequired,
+    scanAdvertisementChannels: func.isRequired,
+    scanRepeat: number.isRequired,
+    setSeparateFrequencies: func.isRequired,
+    toggleLED: func.isRequired,
+    writeDelay: func.isRequired,
+    writeScanRepeat: func.isRequired,
 };
 
-export default ControlPanel;
+export default SidePanel;
