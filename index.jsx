@@ -39,12 +39,12 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import { coreReducer as core } from 'nrfconnect/shared';
+import { coreReducers } from 'nrfconnect/shared';
 
 import app from './lib/reducers/appReducer';
 import RssiApp from './lib/components/RssiApp';
 
-const rootReducer = combineReducers({ app, core });
+const rootReducer = combineReducers({ app, ...coreReducers });
 const middleware = composeWithDevTools(applyMiddleware(thunk));
 
 export default () => (

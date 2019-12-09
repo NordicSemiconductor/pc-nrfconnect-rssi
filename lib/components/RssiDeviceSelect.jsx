@@ -35,8 +35,7 @@
  */
 
 import { connect } from 'react-redux';
-import { logger } from 'nrfconnect/core';
-import { DeviceSelector, getAppFile } from 'nrfconnect/shared';
+import { DeviceSelector, getAppFile, logger } from 'nrfconnect/shared';
 
 import * as RssiActions from '../actions/rssiActions';
 
