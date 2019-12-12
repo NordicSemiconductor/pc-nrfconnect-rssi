@@ -37,7 +37,7 @@
     "bootstrap": "4.3.1",
     "chart.js": "2.7.3",
     "jquery": "3.4.0",
-    "pc-nrfconnect-devdep": "github:NordicSemiconductor/pc-nrfconnect-devdep#v3.5.0",
+    "pc-nrfconnect-devdep": "github:NordicSemiconductor/pc-nrfconnect-devdep#v3.6.0",
     "react-chartjs-2": "2.7.4",
     "react-rangeslider": "2.2.0"
   },

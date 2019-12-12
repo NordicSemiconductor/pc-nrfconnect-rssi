@@ -35,7 +35,7 @@
  */
 
 import React from 'react';
-import { App, NavBar } from 'nrfconnect/shared';
+import { App, NavBar } from 'pc-nrfconnect-devdep';
 
 import Chart from './Chart';
 import SidePanel from './SidePanel';
