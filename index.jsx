@@ -39,7 +39,7 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import { coreReducers } from 'pc-nrfconnect-devdep';
+import { coreReducers } from 'pc-nrfconnect-shared';
 
 import app from './lib/reducers/appReducer';
 import RssiApp from './lib/components/RssiApp';
