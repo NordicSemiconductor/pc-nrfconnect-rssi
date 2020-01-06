@@ -35,61 +35,38 @@
  */
 
 import React from 'react';
-import { bool, func, number } from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import Rangeslider from 'react-rangeslider';
+import {
+    changeAnimationDuration,
+    changeChannelScanRepeat,
+    changeDelay,
+    changeMaxScans,
+    scanAdvertisementChannels,
+    setSeparateFrequencies,
+    toggleLED,
+    writeDelay,
+    writeScanRepeat,
+} from '../actions';
+
+import Slider from './Slider';
 
 import 'react-rangeslider/lib/index.css';
 import './index.scss';
 
-const Slider = ({
-    value,
-    min,
-    max,
-    onChange,
-    onChangeComplete,
-}) => (
-    <Rangeslider
-        value={value}
-        min={min}
-        max={max}
-        onChange={onChange}
-        onChangeComplete={onChangeComplete}
-        labels={{
-            [min]: min,
-            [value]: value,
-            [max]: max,
-        }}
-        tooltip={false}
-    />
-);
-Slider.propTypes = {
-    value: number.isRequired,
-    min: number.isRequired,
-    max: number.isRequired,
-    onChange: func.isRequired,
-    onChangeComplete: func, // eslint-disable-line react/require-default-props
-};
-
-const SidePanel = props => {
+const SidePanel = () => {
+    const dispatch = useDispatch();
     const {
         animationDuration,
-        cangeAnimationDuration,
-        changeChannelScanRepeat,
-        changeDelay,
-        changeMaxScans,
         delay,
-        disabled,
         maxScans,
-        scanAdvertisementChannels,
+        port,
         scanRepeat,
-        setSeparateFrequencies,
-        toggleLED,
-        writeDelay,
-        writeScanRepeat,
-    } = props;
+    } = useSelector(state => state.app);
+    const disabled = port === null;
+
     return (
         <Form>
             <Form.Label>Sweep Delay (ms)</Form.Label>
@@ -123,7 +100,7 @@ const SidePanel = props => {
                 value={animationDuration}
                 min={10}
                 max={1000}
-                onChange={cangeAnimationDuration}
+                onChange={changeAnimationDuration}
             />
 
             <Form.Group controlId="advCheck">
@@ -138,7 +115,7 @@ const SidePanel = props => {
             <Form.Group controlId="freqCheck">
                 <Form.Check
                     disabled={disabled}
-                    onChange={event => setSeparateFrequencies(event.target.checked)}
+                    onChange={event => dispatch(setSeparateFrequencies(event.target.checked))}
                     type="checkbox"
                     label="Separate Frequencies"
                 />
@@ -147,23 +124,6 @@ const SidePanel = props => {
             <Button disabled={disabled} onClick={toggleLED}>Toggle LED</Button>
         </Form>
     );
-};
-
-SidePanel.propTypes = {
-    animationDuration: number.isRequired,
-    cangeAnimationDuration: func.isRequired,
-    changeChannelScanRepeat: func.isRequired,
-    changeDelay: func.isRequired,
-    changeMaxScans: func.isRequired,
-    delay: number.isRequired,
-    disabled: bool.isRequired,
-    maxScans: number.isRequired,
-    scanAdvertisementChannels: func.isRequired,
-    scanRepeat: number.isRequired,
-    setSeparateFrequencies: func.isRequired,
-    toggleLED: func.isRequired,
-    writeDelay: func.isRequired,
-    writeScanRepeat: func.isRequired,
 };
 
 export default SidePanel;

@@ -39,149 +39,116 @@ import SerialPort from 'serialport';
 
 let port = null;
 
-const theRssiData = [];
-const theRssiDataMax = [];
+const initialRssiData = () => new Array(81).fill().map(() => []);
 
-function resetRssiData() {
-    theRssiData.splice(0);
-    theRssiDataMax.splice(0);
-    for (let i = 0; i <= 80; i += 1) {
-        theRssiData.push([]);
-    }
-}
-resetRssiData();
+let rssiData = initialRssiData();
+let rssiDataMax = [];
 
-function serialPortOpenedAction(portName) {
-    return {
-        type: 'RSSI_SERIAL_OPENED',
-        portName,
-    };
-}
+const resetRssiData = () => {
+    rssiData = initialRssiData();
+    rssiDataMax = [];
+};
 
-function serialPortClosedAction() {
-    return {
-        type: 'RSSI_SERIAL_CLOSED',
-    };
-}
+const serialPortOpenedAction = portName => ({ type: 'RSSI_SERIAL_OPENED', portName });
+const serialPortClosedAction = () => ({ type: 'RSSI_SERIAL_CLOSED' });
+export const changeDelay = delay => ({ type: 'RSSI_CHANGE_DELAY', delay });
+export const changeMaxScans = maxScans => ({ type: 'RSSI_CHANGE_MAX_SCANS', maxScans });
+export const changeChannelScanRepeat = scanRepeat => ({ type: 'RSSI_CHANGE_SCAN_REPEAT', scanRepeat });
+export const changeAnimationDuration = animationDuration => ({ type: 'RSSI_CHANGE_ANIMATION_DURATION', animationDuration });
+export const setSeparateFrequencies = separateFrequencies => ({ type: 'RSSI_SEPARATE_FREQUENCIES', separateFrequencies });
 
-function rssiData() {
-    return {
-        type: 'RSSI_DATA',
-        data: theRssiData.map(scan => scan[0]),
-        dataMax: theRssiDataMax,
-    };
-}
+const setRssiData = () => ({
+    type: 'RSSI_DATA',
+    data: rssiData.map(scan => scan[0]),
+    dataMax: rssiDataMax,
+});
 
-function writeAndDrain(cmd) {
-    return new Promise(resolve => {
-        if (port) {
+const writeAndDrain = async cmd => {
+    if (port) {
+        await new Promise(resolve => {
             port.write(cmd, () => {
                 port.drain(resolve);
             });
-        }
-    });
-}
+        });
+    }
+};
 
-function startReading() {
+const startReading = async () => {
     resetRssiData();
-    return writeAndDrain('start\r');
-}
+    await writeAndDrain('start\r');
+};
 
-async function stopReading() {
+const stopReading = async () => {
     await writeAndDrain('stop\r');
     resetRssiData();
-}
+};
 
-export function writeDelay() {
-    return (dispatch, getState) => writeAndDrain(`set delay ${getState().app.delay}\r`);
-}
+export const writeDelay = delay => writeAndDrain(`set delay ${delay}\r`);
+export const writeScanRepeat = scanRepeat => writeAndDrain(`set repeat ${scanRepeat}\r`);
+export const toggleLED = () => writeAndDrain('led\r');
 
-export function writeScanRepeat() {
-    return (dispatch, getState) => writeAndDrain(`set repeat ${getState().app.scanRepeat}\r`);
-}
+export const scanAdvertisementChannels = async enable => {
+    await writeAndDrain(`scan adv ${enable ? 'true' : 'false'}\r`);
+    resetRssiData();
+};
 
-export function changeDelay(delay) { return { type: 'RSSI_CHANGE_DELAY', delay }; }
-export function changeMaxScans(maxScans) { return { type: 'RSSI_CHANGE_MAX_SCANS', maxScans }; }
-export function changeChannelScanRepeat(scanRepeat) { return { type: 'RSSI_CHANGE_SCAN_REPEAT', scanRepeat }; }
-export function cangeAnimationDuration(animationDuration) { return { type: 'RSSI_CHANGE_ANIMATION_DURATION', animationDuration }; }
+const openWhenClosed = serialPort => (dispatch, getState) => {
+    port = new SerialPort(serialPort.path, {
+        baudRate: 115200,
+    }, () => {
+        logger.info(`${serialPort.path} is open`);
+        dispatch(serialPortOpenedAction(serialPort.path));
 
-export function scanAdvertisementChannels(enable) {
-    return async () => {
-        await writeAndDrain(`scan adv ${enable ? 'true' : 'false'}\r`);
+        (async () => {
+            await scanAdvertisementChannels(false);
+            await writeDelay(getState().app.delay);
+            await writeScanRepeat(getState().app.scanRepeat);
+            await startReading();
+        })();
+
+        let throttleUpdates = false;
+
+        const buf = [];
+        port.on('data', data => {
+            buf.splice(buf.length, 0, ...data);
+            if (buf.length > 246) {
+                buf.splice(0, buf.length - 246);
+            }
+            while (buf.length > 3) {
+                while (buf.splice(0, 1)[0] !== 0xff);
+
+                const [ch, d] = buf.splice(0, 2);
+                if (ch !== 0xff && d !== 0xff) {
+                    rssiData[ch].unshift(d);
+                    rssiData[ch].splice(getState().app.maxScans);
+                    rssiDataMax[ch] = Math.min(...(rssiData[ch]));
+                }
+            }
+
+            if (throttleUpdates) { return; }
+
+            throttleUpdates = true;
+            requestAnimationFrame(() => {
+                throttleUpdates = false;
+                dispatch(setRssiData());
+            });
+        })
+            .on('error', console.log);
+    });
+};
+
+export const close = () => async dispatch => {
+    if (port && (typeof (port.isOpen) === 'function' ? port.isOpen() : port.isOpen)) {
+        await stopReading();
+        await new Promise(resolve => port.close(resolve));
+        port = null;
+    } else {
         resetRssiData();
-    };
-}
-
-export function setSeparateFrequencies(separateFrequencies) { return { type: 'RSSI_SEPARATE_FREQUENCIES', separateFrequencies }; }
-
-export function toggleLED() {
-    return () => writeAndDrain('led\r');
-}
-
-function openWhenClosed(serialPort) {
-    // Prefer to use the serialport 8 property or fall back to the serialport 7 property
-    const portPath = serialPort.path || serialPort.comName;
-
-    return (dispatch, getState) => {
-        port = new SerialPort(portPath, {
-            baudRate: 115200,
-        }, () => {
-            logger.info(`${portPath} is open`);
-            dispatch(serialPortOpenedAction(portPath));
-
-            (async () => {
-                await scanAdvertisementChannels(false)();
-                await dispatch(writeDelay());
-                await dispatch(writeScanRepeat());
-                await startReading();
-            })();
-
-            let throttleUpdates = false;
-
-            const buf = [];
-            port.on('data', data => {
-                buf.splice(buf.length, 0, ...data);
-                if (buf.length > 246) {
-                    buf.splice(0, buf.length - 246);
-                }
-                while (buf.length > 3) {
-                    while (buf.splice(0, 1)[0] !== 0xff);
-
-                    const [ch, d] = buf.splice(0, 2);
-                    if (ch !== 0xff && d !== 0xff) {
-                        theRssiData[ch].unshift(d);
-                        theRssiData[ch].splice(getState().app.maxScans);
-                        theRssiDataMax[ch] = Math.min(...(theRssiData[ch]));
-                    }
-                }
-
-                if (throttleUpdates) { return; }
-
-                throttleUpdates = true;
-                requestAnimationFrame(() => {
-                    throttleUpdates = false;
-                    dispatch(rssiData());
-                });
-            })
-                .on('error', console.log);
-        });
-    };
-}
-
-export function close() {
-    return async dispatch => {
-        if (port && (typeof (port.isOpen) === 'function' ? port.isOpen() : port.isOpen)) {
-            await stopReading();
-            await new Promise(resolve => port.close(resolve));
-            port = null;
-        } else {
-            resetRssiData();
-        }
-        dispatch(rssiData());
-        logger.info('Serial port is closed');
-        return dispatch(serialPortClosedAction());
-    };
-}
+    }
+    dispatch(setRssiData());
+    logger.info('Serial port is closed');
+    return dispatch(serialPortClosedAction());
+};
 
 export function open(serialPort) {
     return dispatch => dispatch(close())

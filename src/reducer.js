@@ -45,7 +45,7 @@ const initialState = {
     port: null,
 };
 
-export default function reduceApp(state = initialState, action) {
+export default (state = initialState, action) => {
     switch (action.type) {
         case 'RSSI_DATA':
             return {
@@ -89,6 +89,6 @@ export default function reduceApp(state = initialState, action) {
                 port: null,
             };
         default:
+            return state;
     }
-    return state;
-}
+};
