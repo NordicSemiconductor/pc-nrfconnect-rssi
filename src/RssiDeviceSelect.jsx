@@ -35,34 +35,42 @@
  */
 
 import { connect } from 'react-redux';
-import SidePanelView from './SidePanelView';
-import {
-    cangeAnimationDuration,
-    changeChannelScanRepeat,
-    changeDelay,
-    changeMaxScans,
-    scanAdvertisementChannels,
-    setSeparateFrequencies,
-    toggleLED,
-    writeDelay,
-    writeScanRepeat,
-} from '../actions/rssiActions';
+import { DeviceSelector, getAppFile, logger } from 'pc-nrfconnect-shared';
 
-const mapState = ({ app }) => ({
-    disabled: app.port === null,
-    ...app,
+import * as RssiActions from './actions';
+
+const deviceListing = {
+    nordicUsb: true,
+    serialport: true,
+    jlink: true,
+};
+const deviceSetup = {
+    dfu: {
+        pca10059: {
+            application: getAppFile('fw/rssi-10059.hex'),
+            semver: 'rssi_cdc_acm 2.0.0+dfuMay-22-2018-10-43-22',
+        },
+    },
+    jprog: {
+        nrf52: {
+            fw: getAppFile('fw/rssi-10040.hex'),
+            fwVersion: 'rssi-fw-1.0.0',
+            fwIdAddress: 0x2000,
+        },
+    },
+    needSerialport: true,
+};
+
+const mapState = state => ({
+    deviceListing,
+    deviceSetup,
+    portIndicatorStatus: (state.app.port !== null) ? 'on' : 'off',
 });
 
-const mapDispatch = ({
-    cangeAnimationDuration,
-    changeChannelScanRepeat,
-    changeDelay,
-    changeMaxScans,
-    scanAdvertisementChannels,
-    setSeparateFrequencies,
-    toggleLED,
-    writeDelay,
-    writeScanRepeat,
+const mapDispatch = dispatch => ({
+    onDeviceSelected: device => { logger.info(`Validating firmware for device with s/n ${device.serialNumber}`); },
+    onDeviceDeselected: () => { logger.info('Deselecting device'); dispatch(RssiActions.close()); },
+    onDeviceIsReady: device => { logger.info(`Opening device with s/n ${device.serialNumber}`); dispatch(RssiActions.open(device.serialport)); },
 });
 
-export default connect(mapState, mapDispatch)(SidePanelView);
+export default connect(mapState, mapDispatch)(DeviceSelector);

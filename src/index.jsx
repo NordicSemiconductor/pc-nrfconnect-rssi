@@ -34,43 +34,21 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { connect } from 'react-redux';
-import { DeviceSelector, getAppFile, logger } from 'pc-nrfconnect-shared';
+import React from 'react';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+import { coreReducers } from 'pc-nrfconnect-shared';
 
-import * as RssiActions from '../actions/rssiActions';
+import app from './reducer';
+import RssiApp from './RssiApp';
 
-const deviceListing = {
-    nordicUsb: true,
-    serialport: true,
-    jlink: true,
-};
-const deviceSetup = {
-    dfu: {
-        pca10059: {
-            application: getAppFile('fw/rssi-10059.hex'),
-            semver: 'rssi_cdc_acm 2.0.0+dfuMay-22-2018-10-43-22',
-        },
-    },
-    jprog: {
-        nrf52: {
-            fw: getAppFile('fw/rssi-10040.hex'),
-            fwVersion: 'rssi-fw-1.0.0',
-            fwIdAddress: 0x2000,
-        },
-    },
-    needSerialport: true,
-};
+const rootReducer = combineReducers({ app, ...coreReducers });
+const middleware = composeWithDevTools(applyMiddleware(thunk));
 
-const mapState = state => ({
-    deviceListing,
-    deviceSetup,
-    portIndicatorStatus: (state.app.port !== null) ? 'on' : 'off',
-});
-
-const mapDispatch = dispatch => ({
-    onDeviceSelected: device => { logger.info(`Validating firmware for device with s/n ${device.serialNumber}`); },
-    onDeviceDeselected: () => { logger.info('Deselecting device'); dispatch(RssiActions.close()); },
-    onDeviceIsReady: device => { logger.info(`Opening device with s/n ${device.serialNumber}`); dispatch(RssiActions.open(device.serialport)); },
-});
-
-export default connect(mapState, mapDispatch)(DeviceSelector);
+export default () => (
+    <Provider store={createStore(rootReducer, middleware)}>
+        <RssiApp />
+    </Provider>
+);

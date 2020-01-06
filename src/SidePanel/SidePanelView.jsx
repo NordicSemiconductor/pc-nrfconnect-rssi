@@ -42,7 +42,7 @@ import Form from 'react-bootstrap/Form';
 import Rangeslider from 'react-rangeslider';
 
 import 'react-rangeslider/lib/index.css';
-import '../../resources/css/index.scss';
+import './index.scss';
 
 const Slider = ({
     value,

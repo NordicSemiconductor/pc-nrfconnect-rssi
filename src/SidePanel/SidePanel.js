@@ -34,25 +34,35 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { App, NavBar } from 'pc-nrfconnect-shared';
+import { connect } from 'react-redux';
+import SidePanelView from './SidePanelView';
+import {
+    cangeAnimationDuration,
+    changeChannelScanRepeat,
+    changeDelay,
+    changeMaxScans,
+    scanAdvertisementChannels,
+    setSeparateFrequencies,
+    toggleLED,
+    writeDelay,
+    writeScanRepeat,
+} from '../actions';
 
-import Chart from './Chart';
-import SidePanel from './SidePanel';
-import RssiDeviceSelect from './RssiDeviceSelect';
+const mapState = ({ app }) => ({
+    disabled: app.port === null,
+    ...app,
+});
 
-const RssiNavBar = () => (
-    <NavBar
-        title="RSSI Viewer"
-        deviceSelect={<RssiDeviceSelect />}
-    />
-);
+const mapDispatch = ({
+    cangeAnimationDuration,
+    changeChannelScanRepeat,
+    changeDelay,
+    changeMaxScans,
+    scanAdvertisementChannels,
+    setSeparateFrequencies,
+    toggleLED,
+    writeDelay,
+    writeScanRepeat,
+});
 
-export default () => (
-    <App
-        navBar={<RssiNavBar />}
-        sidePanel={<SidePanel />}
-    >
-        <Chart />
-    </App>
-);
+export default connect(mapState, mapDispatch)(SidePanelView);
