@@ -35,20 +35,26 @@
  */
 
 import React from 'react';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
-import { Provider } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
-import { coreReducers } from 'pc-nrfconnect-shared';
+import { App, NavBar } from 'pc-nrfconnect-shared';
 
-import app from './reducer';
-import RssiApp from './RssiApp';
+import reducer from './reducer';
+import Chart from './Chart/Chart';
+import SidePanel from './SidePanel/SidePanel';
+import RssiDeviceSelect from './RssiDeviceSelect';
 
-const rootReducer = combineReducers({ app, ...coreReducers });
-const middleware = composeWithDevTools(applyMiddleware(thunk));
+const RssiNavBar = () => (
+    <NavBar
+        title="RSSI Viewer"
+        deviceSelect={<RssiDeviceSelect />}
+    />
+);
 
 export default () => (
-    <Provider store={createStore(rootReducer, middleware)}>
-        <RssiApp />
-    </Provider>
+    <App
+        appReducer={reducer}
+        navBar={<RssiNavBar />}
+        sidePanel={<SidePanel />}
+    >
+        <Chart />
+    </App>
 );
