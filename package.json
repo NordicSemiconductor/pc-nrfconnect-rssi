@@ -27,7 +27,7 @@
     "lint-init": "nrfconnect-scripts lint-init",
     "lint": "nrfconnect-scripts lint src",
     "lintfix": "nrfconnect-scripts lint --fix src",
-    "test": "nrfconnect-scripts test",
+    "test": "nrfconnect-scripts test --passWithNoTests",
     "test-watch": "nrfconnect-scripts test --watch",
     "clean": "npm run clean-dist && npm run clean-modules",
     "clean-dist": "rimraf dist",
