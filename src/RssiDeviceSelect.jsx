@@ -61,10 +61,9 @@ const deviceSetup = {
     needSerialport: true,
 };
 
-const mapState = state => ({
+const mapState = () => ({
     deviceListing,
     deviceSetup,
-    portIndicatorStatus: (state.app.port !== null) ? 'on' : 'off',
 });
 
 const mapDispatch = dispatch => ({
