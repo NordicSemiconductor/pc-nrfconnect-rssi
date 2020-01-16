@@ -35,26 +35,18 @@
  */
 
 import React from 'react';
-import { App, NavBar } from 'pc-nrfconnect-shared';
+import { App } from 'pc-nrfconnect-shared';
 
 import reducer from './reducer';
 import Chart from './Chart/Chart';
 import SidePanel from './SidePanel/SidePanel';
 import RssiDeviceSelect from './RssiDeviceSelect';
 
-const RssiNavBar = () => (
-    <NavBar
-        title="RSSI Viewer"
-        deviceSelect={<RssiDeviceSelect />}
-    />
-);
-
 export default () => (
     <App
         appReducer={reducer}
-        navBar={<RssiNavBar />}
+        deviceSelect={<RssiDeviceSelect />}
         sidePanel={<SidePanel />}
-    >
-        <Chart />
-    </App>
+        panes={[['RSSI Viewer', Chart]]}
+    />
 );
