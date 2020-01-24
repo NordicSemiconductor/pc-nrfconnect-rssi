@@ -34,35 +34,43 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import Form from 'react-bootstrap/Form';
+import React, { useCallback } from 'react';
+import { func, number, shape } from 'prop-types';
 
-import Delay from './Delay';
-import SampleCount from './SampleCount';
-import MaxCount from './MaxCount';
-import AnimationSpeed from './AnimationSpeed';
-import { SeparateFrequencies, AdvertisementOnly } from './Switches';
-import ToggleLed from './ToggleLed';
+import './inline-input.scss';
 
-import './sidepanel.scss';
+const contrainedToPercentage = (valueString, { min, max }) => {
+    const value = Number(valueString);
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <h2>Sweep scan</h2>
-        <Delay />
+    if (value < min || Number.isNaN(value)) return min;
+    if (value > max) return max;
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <AdvertisementOnly />
+    return value;
+};
 
-        <h2>Display options</h2>
-        <SeparateFrequencies />
+const InlineInput = ({ value, range, onChange }) => {
+    const forwardOnChange = useCallback(event => {
+        onChange(contrainedToPercentage(event.target.value, range));
+    }, [range, onChange]);
 
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
+    return (
+        <input
+            type="text"
+            className="inline-input"
+            style={{ width: `${2 + Math.floor(Math.log10(range.max))}ex` }}
+            value={value}
+            onChange={forwardOnChange}
+        />
+    );
+};
 
-export default SidePanel;
+InlineInput.propTypes = {
+    value: number.isRequired,
+    range: shape({
+        min: number.isRequired,
+        max: number.isRequired,
+    }).isRequired,
+    onChange: func.isRequired,
+};
+
+export default InlineInput;

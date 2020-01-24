@@ -34,35 +34,48 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { Slider } from 'pc-nrfconnect-shared';
 
-import Delay from './Delay';
-import SampleCount from './SampleCount';
-import MaxCount from './MaxCount';
-import AnimationSpeed from './AnimationSpeed';
-import { SeparateFrequencies, AdvertisementOnly } from './Switches';
-import ToggleLed from './ToggleLed';
+import { writeScanRepeat, changeChannelScanRepeat } from '../actions';
+import InlineInput from './InlineInput';
 
-import './sidepanel.scss';
+const range = { min: 1, max: 100 };
+const sliderId = 'sample-count-slider';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <h2>Sweep scan</h2>
-        <Delay />
+export default () => {
+    const dispatch = useDispatch();
+    const scanRepeat = useSelector(state => state.app.scanRepeat);
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <AdvertisementOnly />
+    const changeAndWriteScanRepeat = useCallback(newScanRepeat => {
+        dispatch(changeChannelScanRepeat(newScanRepeat));
+        writeScanRepeat(newScanRepeat);
+    }, [dispatch]);
+    const dispatchChangeScanRepeat = useCallback(
+        newScanRepeat => dispatch(changeChannelScanRepeat(newScanRepeat)),
+        [dispatch],
+    );
 
-        <h2>Display options</h2>
-        <SeparateFrequencies />
-
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
-
-export default SidePanel;
+    return (
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Sample each channel{' '}
+                <InlineInput
+                    value={scanRepeat}
+                    range={range}
+                    onChange={changeAndWriteScanRepeat}
+                />
+                {' '}times
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={[scanRepeat]}
+                range={range}
+                onChange={[dispatchChangeScanRepeat]}
+                onChangeComplete={() => writeScanRepeat(scanRepeat)}
+            />
+        </>
+    );
+};

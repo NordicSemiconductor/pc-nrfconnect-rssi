@@ -34,35 +34,48 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { Slider } from 'pc-nrfconnect-shared';
 
-import Delay from './Delay';
-import SampleCount from './SampleCount';
-import MaxCount from './MaxCount';
-import AnimationSpeed from './AnimationSpeed';
-import { SeparateFrequencies, AdvertisementOnly } from './Switches';
-import ToggleLed from './ToggleLed';
+import { changeDelay, writeDelay } from '../actions';
+import InlineInput from './InlineInput';
 
-import './sidepanel.scss';
+const range = { min: 5, max: 1000 };
+const sliderId = 'delay-slider';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <h2>Sweep scan</h2>
-        <Delay />
+export default () => {
+    const dispatch = useDispatch();
+    const delay = useSelector(state => state.app.delay);
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <AdvertisementOnly />
+    const changeAndWriteDelay = useCallback(newDelay => {
+        dispatch(changeDelay(newDelay));
+        writeDelay(newDelay);
+    }, [dispatch]);
+    const dispatchChangeDelay = useCallback(
+        newDelay => dispatch(changeDelay(newDelay)),
+        [dispatch],
+    );
 
-        <h2>Display options</h2>
-        <SeparateFrequencies />
-
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
-
-export default SidePanel;
+    return (
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Run scan every{' '}
+                <InlineInput
+                    value={delay}
+                    range={range}
+                    onChange={changeAndWriteDelay}
+                />
+                &nbsp;ms
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={[delay]}
+                range={range}
+                onChange={[dispatchChangeDelay]}
+                onChangeComplete={() => writeDelay(delay)}
+            />
+        </>
+    );
+};

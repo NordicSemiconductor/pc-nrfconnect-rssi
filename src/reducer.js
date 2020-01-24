@@ -42,6 +42,7 @@ const initialState = {
     maxScans: 30,
     animationDuration: 500,
     separateFrequencies: false,
+    scanAdvChannelsOnly: false,
     port: null,
 };
 
@@ -77,6 +78,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 separateFrequencies: action.separateFrequencies,
+            };
+        case 'RSSI_SCAN_ADV_CHANNELS_ONLY':
+            return {
+                ...state,
+                scanAdvChannelsOnly: action.scanAdvChannelsOnly,
             };
         case 'RSSI_SERIAL_OPENED':
             return {

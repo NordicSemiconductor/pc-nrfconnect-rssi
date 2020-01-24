@@ -34,35 +34,43 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { Slider } from 'pc-nrfconnect-shared';
 
-import Delay from './Delay';
-import SampleCount from './SampleCount';
-import MaxCount from './MaxCount';
-import AnimationSpeed from './AnimationSpeed';
-import { SeparateFrequencies, AdvertisementOnly } from './Switches';
-import ToggleLed from './ToggleLed';
+import { changeMaxScans } from '../actions';
+import InlineInput from './InlineInput';
 
-import './sidepanel.scss';
+const range = { min: 1, max: 100 };
+const sliderId = 'max-scans-slider';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <h2>Sweep scan</h2>
-        <Delay />
+export default () => {
+    const dispatch = useDispatch();
+    const maxScans = useSelector(state => state.app.maxScans);
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <AdvertisementOnly />
+    const dispatchChangeMaxScans = useCallback(
+        newMaxScans => dispatch(changeMaxScans(newMaxScans)),
+        [dispatch],
+    );
 
-        <h2>Display options</h2>
-        <SeparateFrequencies />
-
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
-
-export default SidePanel;
+    return (
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Show maximum for the last{' '}
+                <InlineInput
+                    value={maxScans}
+                    range={range}
+                    onChange={dispatchChangeMaxScans}
+                />
+                {' '}scans
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={[maxScans]}
+                range={range}
+                onChange={[dispatchChangeMaxScans]}
+            />
+        </>
+    );
+};

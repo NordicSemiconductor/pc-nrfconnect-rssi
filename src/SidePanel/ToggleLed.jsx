@@ -35,34 +35,21 @@
  */
 
 import React from 'react';
-import Form from 'react-bootstrap/Form';
+import { useSelector } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 
-import Delay from './Delay';
-import SampleCount from './SampleCount';
-import MaxCount from './MaxCount';
-import AnimationSpeed from './AnimationSpeed';
-import { SeparateFrequencies, AdvertisementOnly } from './Switches';
-import ToggleLed from './ToggleLed';
+import { toggleLED } from '../actions';
 
-import './sidepanel.scss';
+export default () => {
+    const port = useSelector(state => state.app.port);
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <h2>Sweep scan</h2>
-        <Delay />
-
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <AdvertisementOnly />
-
-        <h2>Display options</h2>
-        <SeparateFrequencies />
-
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
-
-export default SidePanel;
+    return (
+        <Button
+            variant="secondary"
+            disabled={port == null}
+            onClick={toggleLED}
+        >
+                Toggle LED
+        </Button>
+    );
+};

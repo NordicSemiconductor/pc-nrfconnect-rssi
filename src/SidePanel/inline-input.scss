@@ -1,0 +1,15 @@
+@import "~pc-nrfconnect-shared/src/variables";
+
+.inline-input {
+    padding: 0px;
+
+    text-align: right;
+
+    border: 0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: $gray-200;
+
+    color: $gray-600;
+    background: transparent;
+}

@@ -35,34 +35,44 @@
  */
 
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 
-import Delay from './Delay';
-import SampleCount from './SampleCount';
-import MaxCount from './MaxCount';
-import AnimationSpeed from './AnimationSpeed';
-import { SeparateFrequencies, AdvertisementOnly } from './Switches';
-import ToggleLed from './ToggleLed';
+import {
+    setSeparateFrequencies,
+    setScanAdvChannelsOnly,
+    writeScanAdvChannelsOnly,
+} from '../actions';
 
-import './sidepanel.scss';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <h2>Sweep scan</h2>
-        <Delay />
+export const AdvertisementOnly = () => {
+    const dispatch = useDispatch();
+    const callScanAdvChannelsOnly = event => {
+        const newScanAdvChannelsOnly = event.target.checked;
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <AdvertisementOnly />
+        dispatch(setScanAdvChannelsOnly(newScanAdvChannelsOnly));
+        writeScanAdvChannelsOnly(newScanAdvChannelsOnly);
+    };
 
-        <h2>Display options</h2>
-        <SeparateFrequencies />
+    return (
+        <Form.Group controlId="advCheck">
+            <Form.Switch
+                onChange={callScanAdvChannelsOnly}
+                label="Advertisements only"
+            />
+        </Form.Group>
+    );
+};
 
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
+export const SeparateFrequencies = () => {
+    const dispatch = useDispatch();
 
-export default SidePanel;
+    return (
+        <Form.Group controlId="freqCheck">
+            <Form.Switch
+                onChange={event => dispatch(setSeparateFrequencies(event.target.checked))}
+                label="Separate Frequencies"
+            />
+        </Form.Group>
+    );
+};

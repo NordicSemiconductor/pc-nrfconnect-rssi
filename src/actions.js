@@ -56,6 +56,7 @@ export const changeMaxScans = maxScans => ({ type: 'RSSI_CHANGE_MAX_SCANS', maxS
 export const changeChannelScanRepeat = scanRepeat => ({ type: 'RSSI_CHANGE_SCAN_REPEAT', scanRepeat });
 export const changeAnimationDuration = animationDuration => ({ type: 'RSSI_CHANGE_ANIMATION_DURATION', animationDuration });
 export const setSeparateFrequencies = separateFrequencies => ({ type: 'RSSI_SEPARATE_FREQUENCIES', separateFrequencies });
+export const setScanAdvChannelsOnly = scanAdvChannelsOnly => ({ type: 'RSSI_SCAN_ADV_CHANNELS_ONLY', scanAdvChannelsOnly });
 
 const setRssiData = () => ({
     type: 'RSSI_DATA',
@@ -87,7 +88,7 @@ export const writeDelay = delay => writeAndDrain(`set delay ${delay}\r`);
 export const writeScanRepeat = scanRepeat => writeAndDrain(`set repeat ${scanRepeat}\r`);
 export const toggleLED = () => writeAndDrain('led\r');
 
-export const scanAdvertisementChannels = async enable => {
+export const writeScanAdvChannelsOnly = async enable => {
     await writeAndDrain(`scan adv ${enable ? 'true' : 'false'}\r`);
     resetRssiData();
 };
@@ -100,7 +101,7 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
         dispatch(serialPortOpenedAction(serialPort.path));
 
         (async () => {
-            await scanAdvertisementChannels(false);
+            await writeScanAdvChannelsOnly(getState().app.scanAdvChannelsOnly);
             await writeDelay(getState().app.delay);
             await writeScanRepeat(getState().app.scanRepeat);
             await startReading();
