@@ -34,32 +34,57 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { func, number, shape } from 'prop-types';
 
 import './inline-input.scss';
 
-const contrainedToPercentage = (valueString, { min, max }) => {
-    const value = Number(valueString);
+const isInRange = (value, { min, max }) => {
+    const valueAsNumber = Number(value);
+    return valueAsNumber >= min && valueAsNumber <= max;
+};
 
-    if (value < min || Number.isNaN(value)) return min;
-    if (value > max) return max;
+const useValidatedState = (initial, validator) => {
+    const validatedState = value => ({ value, valid: validator(value) });
 
-    return value;
+    const [value, setValue] = useState(validatedState(initial));
+
+    return [
+        value,
+        newValue => setValue(validatedState(newValue)),
+    ];
+};
+
+const useSynchronisationIfChangedFromOutside = (value, setInput) => {
+    const ref = useRef(value);
+    useEffect(() => {
+        if (ref.current !== value) {
+            setInput(value);
+            ref.current = value;
+        }
+    });
+    return ref.current;
 };
 
 const InlineInput = ({ value, range, onChange }) => {
-    const forwardOnChange = useCallback(event => {
-        onChange(contrainedToPercentage(event.target.value, range));
-    }, [range, onChange]);
+    const [input, setInput] = useValidatedState(value, newValue => isInRange(newValue, range));
+    useSynchronisationIfChangedFromOutside(value, setInput);
+
+    const onChangeIfValid = event => {
+        const newValue = event.target.value;
+        setInput(newValue);
+        if (isInRange(newValue, range)) {
+            onChange(Number(newValue));
+        }
+    };
 
     return (
         <input
             type="text"
-            className="inline-input"
+            className={`inline-input ${input.valid ? '' : 'invalid'}`}
             style={{ width: `${2 + Math.floor(Math.log10(range.max))}ex` }}
-            value={value}
-            onChange={forwardOnChange}
+            value={input.value}
+            onChange={onChangeIfValid}
         />
     );
 };

@@ -12,4 +12,12 @@
 
     color: $gray-600;
     background: transparent;
+
+    &.invalid {
+        border-bottom-color: $brand-danger;
+
+        &:focus {
+            outline-color: $brand-danger !important;
+        }
+    }
 }
