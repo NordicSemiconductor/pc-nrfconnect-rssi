@@ -41,12 +41,12 @@ import Button from 'react-bootstrap/Button';
 import { toggleLED } from '../actions';
 
 export default () => {
-    const port = useSelector(state => state.app.port);
+    const isDisconnected = useSelector(state => state.app.port) == null;
 
     return (
         <Button
             variant="secondary"
-            disabled={port == null}
+            disabled={isDisconnected}
             onClick={toggleLED}
         >
                 Toggle LED

@@ -35,37 +35,37 @@
  */
 
 import React from 'react';
-import Form from 'react-bootstrap/Form';
+import { useSelector, useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 
-import ControlButtons from './ControlButtons';
-import Delay from './Delay';
-import MaxCount from './MaxCount';
-import SampleCount from './SampleCount';
-import AnimationSpeed from './AnimationSpeed';
-import { SeparateFrequencies, AdvertisementOnly } from './Switches';
-import ToggleLed from './ToggleLed';
+import { resetRssiData, setRssiData, togglePause } from '../actions';
 
-import './sidepanel.scss';
+import './control-buttons.scss';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <ControlButtons />
+export default () => {
+    const isDisconnected = useSelector(state => state.app.port) == null;
+    const isPaused = useSelector(state => state.app.isPaused);
+    const dispatch = useDispatch();
 
-        <h2>Sweep scan</h2>
-        <Delay />
-
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <AdvertisementOnly />
-
-        <h2>Display options</h2>
-        <SeparateFrequencies />
-
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
-
-export default SidePanel;
+    return (
+        <div className="control-buttons">
+            <Button
+                variant="secondary"
+                disabled={isDisconnected}
+                onClick={() => {
+                    resetRssiData();
+                    dispatch(setRssiData());
+                }}
+            >
+                    Reset
+            </Button>
+            <Button
+                variant="secondary"
+                disabled={isDisconnected}
+                onClick={() => dispatch(togglePause)}
+            >
+                {isPaused ? 'Start' : 'Pause'}
+            </Button>
+        </div>
+    );
+};

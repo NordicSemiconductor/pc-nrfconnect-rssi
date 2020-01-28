@@ -35,6 +35,7 @@
  */
 
 const initialState = {
+    isPaused: false,
     data: [],
     dataMax: [],
     delay: 10,
@@ -48,6 +49,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case 'RSSI_PAUSE':
+            return {
+                ...state,
+                isPaused: action.isPaused,
+            };
         case 'RSSI_DATA':
             return {
                 ...state,

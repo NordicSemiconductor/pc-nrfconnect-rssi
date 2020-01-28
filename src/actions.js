@@ -44,7 +44,7 @@ const initialRssiData = () => new Array(81).fill().map(() => []);
 let rssiData = initialRssiData();
 let rssiDataMax = [];
 
-const resetRssiData = () => {
+export const resetRssiData = () => {
     rssiData = initialRssiData();
     rssiDataMax = [];
 };
@@ -58,7 +58,7 @@ export const changeAnimationDuration = animationDuration => ({ type: 'RSSI_CHANG
 export const setSeparateFrequencies = separateFrequencies => ({ type: 'RSSI_SEPARATE_FREQUENCIES', separateFrequencies });
 export const setScanAdvChannelsOnly = scanAdvChannelsOnly => ({ type: 'RSSI_SCAN_ADV_CHANNELS_ONLY', scanAdvChannelsOnly });
 
-const setRssiData = () => ({
+export const setRssiData = () => ({
     type: 'RSSI_DATA',
     data: rssiData.map(scan => scan[0]),
     dataMax: rssiDataMax,
@@ -74,23 +74,33 @@ const writeAndDrain = async cmd => {
     }
 };
 
-const startReading = async () => {
-    resetRssiData();
-    await writeAndDrain('start\r');
-};
-
-const stopReading = async () => {
-    await writeAndDrain('stop\r');
-    resetRssiData();
-};
-
 export const writeDelay = delay => writeAndDrain(`set delay ${delay}\r`);
 export const writeScanRepeat = scanRepeat => writeAndDrain(`set repeat ${scanRepeat}\r`);
 export const toggleLED = () => writeAndDrain('led\r');
 
 export const writeScanAdvChannelsOnly = async enable => {
     await writeAndDrain(`scan adv ${enable ? 'true' : 'false'}\r`);
-    resetRssiData();
+};
+
+export const startReading = async appState => {
+    await writeScanAdvChannelsOnly(appState.scanAdvChannelsOnly);
+    await writeDelay(appState.delay);
+    await writeScanRepeat(appState.scanRepeat);
+
+    await writeAndDrain('start\r');
+};
+
+export const stopReading = () => writeAndDrain('stop\r');
+
+export const togglePause = (dispatch, getState) => {
+    const appState = getState().app;
+    dispatch(({ type: 'RSSI_PAUSE', isPaused: !appState.isPaused }));
+
+    if (appState.isPaused) {
+        startReading(appState);
+    } else {
+        stopReading();
+    }
 };
 
 const openWhenClosed = serialPort => (dispatch, getState) => {
@@ -100,12 +110,8 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
         logger.info(`${serialPort.path} is open`);
         dispatch(serialPortOpenedAction(serialPort.path));
 
-        (async () => {
-            await writeScanAdvChannelsOnly(getState().app.scanAdvChannelsOnly);
-            await writeDelay(getState().app.delay);
-            await writeScanRepeat(getState().app.scanRepeat);
-            await startReading();
-        })();
+        resetRssiData();
+        startReading(getState().app);
 
         let throttleUpdates = false;
 
@@ -141,6 +147,7 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
 export const close = () => async dispatch => {
     if (port && (typeof (port.isOpen) === 'function' ? port.isOpen() : port.isOpen)) {
         await stopReading();
+        resetRssiData();
         await new Promise(resolve => port.close(resolve));
         port = null;
     } else {

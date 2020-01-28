@@ -42,6 +42,7 @@ import {
     setSeparateFrequencies,
     setScanAdvChannelsOnly,
     writeScanAdvChannelsOnly,
+    resetRssiData,
 } from '../actions';
 
 
@@ -52,6 +53,7 @@ export const AdvertisementOnly = () => {
 
         dispatch(setScanAdvChannelsOnly(newScanAdvChannelsOnly));
         writeScanAdvChannelsOnly(newScanAdvChannelsOnly);
+        resetRssiData();
     };
 
     return (
