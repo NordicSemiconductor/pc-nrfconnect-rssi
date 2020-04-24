@@ -36,6 +36,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Main } from 'pc-nrfconnect-shared';
 import { defaults, Line } from 'react-chartjs-2';
 
 defaults.global.tooltips.enabled = false;
@@ -135,7 +136,11 @@ const Chart = props => {
         },
     };
 
-    return <Line data={chartData} options={chartOptions} />;
+    return (
+        <Main>
+            <Line data={chartData} options={chartOptions} />
+        </Main>
+    );
 };
 
 Chart.propTypes = {
