@@ -37,7 +37,7 @@
     "bootstrap": "4.3.1",
     "chart.js": "2.7.3",
     "jquery": "3.4.0",
-    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.4.0",
+    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#7126697",
     "react-chartjs-2": "2.7.4"
   },
   "dependencies": {}

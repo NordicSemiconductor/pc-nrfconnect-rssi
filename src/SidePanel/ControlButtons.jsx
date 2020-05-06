@@ -57,7 +57,7 @@ export default () => {
                     dispatch(setRssiData());
                 }}
             >
-                    Reset
+                Reset
             </Button>
             <Button
                 variant="secondary"
