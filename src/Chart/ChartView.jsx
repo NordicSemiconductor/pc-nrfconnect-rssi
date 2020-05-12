@@ -35,130 +35,168 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { arrayOf, number } from 'prop-types';
 import { Main } from 'pc-nrfconnect-shared';
-import { defaults, Line } from 'react-chartjs-2';
+import { defaults, Bar, Chart } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+import './chart.scss';
 
 defaults.global.tooltips.enabled = false;
 defaults.global.legend.display = false;
 defaults.global.animation.duration = 500;
 
-const labels = {
-    continuous: {
-        index: Array.from(Array(83).keys()),
-        ticks: v => ((v % 2) === 1 ? 2400 + ((v - 1)) : ''),
-    },
-    separated: {
-        index: Array.from(Array(163).keys()),
-        ticks: v => ((v % 4) === 1 ? 2400 + ((v - 1) / 2) : ''),
-    },
-};
-const gridColors = [];
-for (let i = 0; i < 82; i += 1) {
-    gridColors.push('rgba(0, 0, 0, 0.05)');
-    gridColors.push('rgba(0, 0, 0, 0)');
-}
-const kMinRSSIValue = -127;
-const arrayConverter = (arr, separate) => {
-    const a = [kMinRSSIValue];
-    arr.forEach(v => {
-        a.push(v);
-        if (separate) {
-            a.push(kMinRSSIValue);
-        }
-    });
-    a.push(kMinRSSIValue);
-    return a;
-};
+Chart.plugins.register(ChartDataLabels);
 
-const Chart = props => {
-    const {
-        rssi, rssiMax, animationDuration, yMin, yMax, separateFrequencies,
-    } = props;
-    const sep = separateFrequencies ? 'separated' : 'continuous';
-    const rssiData = arrayConverter(rssi, separateFrequencies);
-    const rssiMaxData = arrayConverter(rssiMax, separateFrequencies);
-    const chartData = {
-        labels: labels[sep].index,
-        datasets: [{
-            label: 'rssi',
-            borderColor: 'rgba(79, 140, 196, 1)',
-            backgroundColor: 'rgba(79, 140, 196, 0.3)',
-            borderWidth: 1,
-            fill: true,
-            data: rssiData,
-            xAxisID: 'x-freq-1',
-            pointRadius: 0,
-        }, {
-            label: 'rssiMax',
-            borderColor: 'rgba(179, 40, 96, 0.3)',
-            borderWidth: 1,
-            fill: false,
-            data: rssiMaxData,
-            xAxisID: 'x-freq-1',
-            pointRadius: 0,
-        }],
-    };
+const bleChannels = Array.from(Array(37), (_, x) => x);
+bleChannels.unshift(37);
+bleChannels.splice(12, 0, 38);
+bleChannels.push(39);
 
-    const chartOptions = {
-        animation: { duration: animationDuration },
-        scales: {
-            xAxes: [{
-                id: 'x-freq-1',
-                type: 'category',
-                ticks: {
-                    callback: labels[sep].ticks,
-                    minRotation: 90,
-                    autoSkipPadding: 5,
+const labelColor = 'rgba(156, 174, 182, 1)';
+
+const interlace = arr => arr.map(v => [v.toString().padStart(2, '0'), undefined]).flat();
+const bleChannelTicks = interlace(bleChannels);
+bleChannelTicks.unshift(undefined, undefined);
+
+const rssiColors = Array.from(Array(81), () => 'rgba(0, 51, 160, 1)');
+[2, 26, 80].forEach(k => { rssiColors[k] = 'rgba(76, 175, 80, 1)'; });
+
+const rssiMaxColors = Array.from(Array(81), () => 'rgba(117, 144, 200, 1)');
+[2, 26, 80].forEach(k => { rssiMaxColors[k] = 'rgba(155, 206, 159, 1)'; });
+
+const labels = Array.from(Array(81).keys());
+
+const ChartView = ({
+    rssi, rssiMax, animationDuration, yMin, yMax,
+}) => (
+    <Main>
+        <Bar
+            data={{
+                labels,
+                datasets: [{
+                    label: 'rssi',
+                    backgroundColor: rssiColors,
+                    borderWidth: 0,
+                    data: rssi,
+                    datalabels: {
+                        display: false,
+                    },
+                }, {
+                    label: 'rssiMax',
+                    backgroundColor: rssiMaxColors,
+                    borderWidth: 0,
+                    data: rssiMax,
+                    datalabels: {
+                        color: rssiColors,
+                        anchor: 'end',
+                        align: 'end',
+                        formatter: v => ((v > (-80 - yMin)) ? ((20 - v) - yMin) : ''),
+                        offset: -3,
+                        font: { size: 9 },
+                    },
+                }, {
+                    label: 'bgBars',
+                    backgroundColor: 'rgba(236, 239, 241, 1)',
+                    borderWidth: 0,
+                    data: Array(81).fill(-yMin),
+                    datalabels: {
+                        display: false,
+                    },
+                }],
+            }}
+            options={{
+                animation: { duration: animationDuration },
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        type: 'category',
+                        position: 'top',
+                        offset: true,
+                        ticks: {
+                            callback: v => bleChannelTicks[v],
+                            minRotation: 0,
+                            maxRotation: 0,
+                            labelOffset: 0,
+                            autoSkipPadding: 5,
+                            fontColor: labelColor,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'BLE channel',
+                            fontColor: labelColor,
+                            fontSize: 14,
+                            lineHeight: 1,
+                            padding: { top: 16 },
+                        },
+                        gridLines: {
+                            offsetGridLines: true,
+                            display: false,
+                            drawBorder: false,
+                            fontColor: labelColor,
+                        },
+                        stacked: true,
+                    }, {
+                        type: 'category',
+                        position: 'bottom',
+                        offset: true,
+                        ticks: {
+                            callback: v => ((v % 2) === 0 ? 2400 + v : ''),
+                            minRotation: 90,
+                            labelOffset: 0,
+                            autoSkipPadding: 5,
+                            fontColor: labelColor,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'MHz',
+                            fontColor: labelColor,
+                            fontSize: 14,
+                            lineHeight: 0,
+                            padding: { bottom: 24 },
+                        },
+                        gridLines: {
+                            offsetGridLines: true,
+                            display: false,
+                            drawBorder: false,
+                            fontColor: labelColor,
+                        },
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        type: 'linear',
+                        min: -yMax,
+                        max: -yMin,
+                        ticks: {
+                            callback: v => yMax + v + yMin,
+                            min: -yMax,
+                            max: -yMin,
+                            fontColor: labelColor,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'dBm',
+                            fontColor: labelColor,
+                            fontSize: 14,
+                            lineHeight: 1,
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false,
+                        },
+                    }],
                 },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'MHz',
-                },
-                gridLines: {
-                    color: gridColors,
-                },
-            }],
-            yAxes: [{
-                type: 'linear',
-                min: -yMax,
-                max: -yMin,
-                ticks: {
-                    callback: v => yMax + v + yMin,
-                    min: -yMax,
-                    max: -yMin,
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'RSSI',
-                },
-            }],
-        },
-    };
+            }}
+        />
+    </Main>
+);
 
-    return (
-        <Main>
-            <Line data={chartData} options={chartOptions} />
-        </Main>
-    );
+ChartView.propTypes = {
+    rssi: arrayOf(Number).isRequired,
+    rssiMax: arrayOf(Number).isRequired,
+    animationDuration: number.isRequired,
+    yMin: number.isRequired,
+    yMax: number.isRequired,
 };
 
-Chart.propTypes = {
-    rssi: PropTypes.arrayOf(Number),
-    rssiMax: PropTypes.arrayOf(Number),
-    animationDuration: PropTypes.number,
-    yMin: PropTypes.number,
-    yMax: PropTypes.number,
-    separateFrequencies: PropTypes.bool,
-};
-
-Chart.defaultProps = {
-    rssi: [],
-    rssiMax: [],
-    animationDuration: 500,
-    yMin: -110,
-    yMax: -20,
-    separateFrequencies: false,
-};
-
-export default Chart;
+export default ChartView;
