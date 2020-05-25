@@ -53,21 +53,25 @@ bleChannels.unshift(37);
 bleChannels.splice(12, 0, 38);
 bleChannels.push(39);
 
-const gray = 'rgb(156, 174, 182)';
-const lightGray = 'rgb(236, 239, 241)';
-const blue = 'rgb(0, 51, 160)';
-const green = 'rgb(76, 175, 80)';
-const blueLighter = 'rgb(117, 144, 200)';
-const greenLighter = 'rgb(155, 206, 159)';
+// Official Nordic colors, taken from https://github.com/NordicSemiconductor/pc-nrfconnect-shared/blob/9bb1f72849/src/variables.scss
+
+const blueSlate = '#0033a0';
+const green = '#4caf50';
+
+const blueSlateLighter = '#7c98d3'; // result of using color.scale($blue-slate, $lightness: 50%, $saturation: -50%) in sass
+const greenLighter = '#b1cbb3'; // result of using color.scale($green, $lightness: 50%, $saturation: -50%) in sass
+
+const gray50 = '#eceff1';
+const gray300 = '#90a4ae';
 
 const color = {
-    label: gray,
+    label: gray300,
     bar: {
-        normal: blue,
-        normalMax: blueLighter,
+        normal: blueSlate,
+        normalMax: blueSlateLighter,
         advertisement: green,
         advertisementMax: greenLighter,
-        background: lightGray,
+        background: gray50,
     },
 };
 
