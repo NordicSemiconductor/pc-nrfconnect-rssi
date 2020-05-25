@@ -53,17 +53,33 @@ bleChannels.unshift(37);
 bleChannels.splice(12, 0, 38);
 bleChannels.push(39);
 
-const labelColor = 'rgb(156, 174, 182)';
+const gray = 'rgb(156, 174, 182)';
+const lightGray = 'rgb(236, 239, 241)';
+const blue = 'rgb(0, 51, 160)';
+const green = 'rgb(76, 175, 80)';
+const blueLighter = 'rgb(117, 144, 200)';
+const greenLighter = 'rgb(155, 206, 159)';
+
+const color = {
+    label: gray,
+    bar: {
+        normal: blue,
+        normalMax: blueLighter,
+        advertisement: green,
+        advertisementMax: greenLighter,
+        background: lightGray,
+    },
+};
 
 const interlace = arr => arr.map(v => [v.toString().padStart(2, '0'), undefined]).flat();
 const bleChannelTicks = interlace(bleChannels);
 bleChannelTicks.unshift(undefined, undefined);
 
-const rssiColors = Array.from(Array(81), () => 'rgb(0, 51, 160)');
-[2, 26, 80].forEach(k => { rssiColors[k] = 'rgb(76, 175, 80)'; });
+const rssiColors = Array.from(Array(81), () => color.bar.normal);
+[2, 26, 80].forEach(k => { rssiColors[k] = color.bar.advertisement; });
 
-const rssiMaxColors = Array.from(Array(81), () => 'rgb(117, 144, 200)');
-[2, 26, 80].forEach(k => { rssiMaxColors[k] = 'rgb(155, 206, 159)'; });
+const rssiMaxColors = Array.from(Array(81), () => color.bar.normalMax);
+[2, 26, 80].forEach(k => { rssiMaxColors[k] = color.bar.advertisementMax; });
 
 const labels = Array.from(Array(81).keys());
 
@@ -97,7 +113,7 @@ const ChartView = ({
                     },
                 }, {
                     label: 'bgBars',
-                    backgroundColor: 'rgb(236, 239, 241)',
+                    backgroundColor: color.bar.background,
                     borderWidth: 0,
                     data: Array(81).fill(-yMin),
                     datalabels: {
@@ -119,12 +135,12 @@ const ChartView = ({
                             maxRotation: 0,
                             labelOffset: 0,
                             autoSkipPadding: 5,
-                            fontColor: labelColor,
+                            fontColor: color.label,
                         },
                         scaleLabel: {
                             display: true,
                             labelString: 'BLE channel',
-                            fontColor: labelColor,
+                            fontColor: color.label,
                             fontSize: 14,
                             lineHeight: 1,
                             padding: { top: 16 },
@@ -133,7 +149,7 @@ const ChartView = ({
                             offsetGridLines: true,
                             display: false,
                             drawBorder: false,
-                            fontColor: labelColor,
+                            fontColor: color.label,
                         },
                         stacked: true,
                     }, {
@@ -145,12 +161,12 @@ const ChartView = ({
                             minRotation: 90,
                             labelOffset: 0,
                             autoSkipPadding: 5,
-                            fontColor: labelColor,
+                            fontColor: color.label,
                         },
                         scaleLabel: {
                             display: true,
                             labelString: 'MHz',
-                            fontColor: labelColor,
+                            fontColor: color.label,
                             fontSize: 14,
                             lineHeight: 0,
                             padding: { bottom: 24 },
@@ -159,7 +175,7 @@ const ChartView = ({
                             offsetGridLines: true,
                             display: false,
                             drawBorder: false,
-                            fontColor: labelColor,
+                            fontColor: color.label,
                         },
                         stacked: true,
                     }],
@@ -171,12 +187,12 @@ const ChartView = ({
                             callback: v => yMax + v + yMin,
                             min: -yMax,
                             max: -yMin,
-                            fontColor: labelColor,
+                            fontColor: color.label,
                         },
                         scaleLabel: {
                             display: true,
                             labelString: 'dBm',
-                            fontColor: labelColor,
+                            fontColor: color.label,
                             fontSize: 14,
                             lineHeight: 1,
                         },
