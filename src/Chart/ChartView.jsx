@@ -53,17 +53,17 @@ bleChannels.unshift(37);
 bleChannels.splice(12, 0, 38);
 bleChannels.push(39);
 
-const labelColor = 'rgba(156, 174, 182, 1)';
+const labelColor = 'rgb(156, 174, 182)';
 
 const interlace = arr => arr.map(v => [v.toString().padStart(2, '0'), undefined]).flat();
 const bleChannelTicks = interlace(bleChannels);
 bleChannelTicks.unshift(undefined, undefined);
 
-const rssiColors = Array.from(Array(81), () => 'rgba(0, 51, 160, 1)');
-[2, 26, 80].forEach(k => { rssiColors[k] = 'rgba(76, 175, 80, 1)'; });
+const rssiColors = Array.from(Array(81), () => 'rgb(0, 51, 160)');
+[2, 26, 80].forEach(k => { rssiColors[k] = 'rgb(76, 175, 80)'; });
 
-const rssiMaxColors = Array.from(Array(81), () => 'rgba(117, 144, 200, 1)');
-[2, 26, 80].forEach(k => { rssiMaxColors[k] = 'rgba(155, 206, 159, 1)'; });
+const rssiMaxColors = Array.from(Array(81), () => 'rgb(117, 144, 200)');
+[2, 26, 80].forEach(k => { rssiMaxColors[k] = 'rgb(155, 206, 159)'; });
 
 const labels = Array.from(Array(81).keys());
 
@@ -97,7 +97,7 @@ const ChartView = ({
                     },
                 }, {
                     label: 'bgBars',
-                    backgroundColor: 'rgba(236, 239, 241, 1)',
+                    backgroundColor: 'rgb(236, 239, 241)',
                     borderWidth: 0,
                     data: Array(81).fill(-yMin),
                     datalabels: {
