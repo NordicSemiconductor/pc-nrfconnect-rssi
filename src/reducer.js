@@ -42,7 +42,6 @@ const initialState = {
     scanRepeat: 1,
     maxScans: 30,
     animationDuration: 500,
-    separateFrequencies: false,
     scanAdvChannelsOnly: false,
     port: null,
 };
@@ -79,11 +78,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 animationDuration: action.animationDuration,
-            };
-        case 'RSSI_SEPARATE_FREQUENCIES':
-            return {
-                ...state,
-                separateFrequencies: action.separateFrequencies,
             };
         case 'RSSI_SCAN_ADV_CHANNELS_ONLY':
             return {
