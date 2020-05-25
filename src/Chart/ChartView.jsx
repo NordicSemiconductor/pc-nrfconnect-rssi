@@ -37,14 +37,10 @@
 import React from 'react';
 import { arrayOf, number } from 'prop-types';
 import { Main } from 'pc-nrfconnect-shared';
-import { defaults, Bar, Chart } from 'react-chartjs-2';
+import { Bar, Chart } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import './chart.scss';
-
-defaults.global.tooltips.enabled = false;
-defaults.global.legend.display = false;
-defaults.global.animation.duration = 500;
 
 Chart.plugins.register(ChartDataLabels);
 
@@ -128,6 +124,8 @@ const ChartView = ({
             options={{
                 animation: { duration: animationDuration },
                 maintainAspectRatio: false,
+                legend: { display: false },
+                tooltips: { enabled: false },
                 scales: {
                     xAxes: [{
                         type: 'category',
