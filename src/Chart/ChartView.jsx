@@ -35,130 +35,186 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import { arrayOf, number } from 'prop-types';
 import { Main } from 'pc-nrfconnect-shared';
-import { defaults, Line } from 'react-chartjs-2';
+import { Bar, Chart } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-defaults.global.tooltips.enabled = false;
-defaults.global.legend.display = false;
-defaults.global.animation.duration = 500;
+import './chart.scss';
 
-const labels = {
-    continuous: {
-        index: Array.from(Array(83).keys()),
-        ticks: v => ((v % 2) === 1 ? 2400 + ((v - 1)) : ''),
+Chart.plugins.register(ChartDataLabels);
+
+const bleChannels = Array.from(Array(37), (_, x) => x);
+bleChannels.unshift(37);
+bleChannels.splice(12, 0, 38);
+bleChannels.push(39);
+
+// Official Nordic colors, taken from https://github.com/NordicSemiconductor/pc-nrfconnect-shared/blob/9bb1f72849/src/variables.scss
+
+const blueSlate = '#0033a0';
+const green = '#4caf50';
+
+const blueSlateLighter = '#7c98d3'; // result of using color.scale($blue-slate, $lightness: 50%, $saturation: -50%) in sass
+const greenLighter = '#b1cbb3'; // result of using color.scale($green, $lightness: 50%, $saturation: -50%) in sass
+
+const gray50 = '#eceff1';
+const gray300 = '#90a4ae';
+
+const color = {
+    label: gray300,
+    bar: {
+        normal: blueSlate,
+        normalMax: blueSlateLighter,
+        advertisement: green,
+        advertisementMax: greenLighter,
+        background: gray50,
     },
-    separated: {
-        index: Array.from(Array(163).keys()),
-        ticks: v => ((v % 4) === 1 ? 2400 + ((v - 1) / 2) : ''),
-    },
-};
-const gridColors = [];
-for (let i = 0; i < 82; i += 1) {
-    gridColors.push('rgba(0, 0, 0, 0.05)');
-    gridColors.push('rgba(0, 0, 0, 0)');
-}
-const kMinRSSIValue = -127;
-const arrayConverter = (arr, separate) => {
-    const a = [kMinRSSIValue];
-    arr.forEach(v => {
-        a.push(v);
-        if (separate) {
-            a.push(kMinRSSIValue);
-        }
-    });
-    a.push(kMinRSSIValue);
-    return a;
 };
 
-const Chart = props => {
-    const {
-        rssi, rssiMax, animationDuration, yMin, yMax, separateFrequencies,
-    } = props;
-    const sep = separateFrequencies ? 'separated' : 'continuous';
-    const rssiData = arrayConverter(rssi, separateFrequencies);
-    const rssiMaxData = arrayConverter(rssiMax, separateFrequencies);
-    const chartData = {
-        labels: labels[sep].index,
-        datasets: [{
-            label: 'rssi',
-            borderColor: 'rgba(79, 140, 196, 1)',
-            backgroundColor: 'rgba(79, 140, 196, 0.3)',
-            borderWidth: 1,
-            fill: true,
-            data: rssiData,
-            xAxisID: 'x-freq-1',
-            pointRadius: 0,
-        }, {
-            label: 'rssiMax',
-            borderColor: 'rgba(179, 40, 96, 0.3)',
-            borderWidth: 1,
-            fill: false,
-            data: rssiMaxData,
-            xAxisID: 'x-freq-1',
-            pointRadius: 0,
-        }],
-    };
+const interlace = arr => arr.map(v => [v.toString().padStart(2, '0'), undefined]).flat();
+const bleChannelTicks = interlace(bleChannels);
+bleChannelTicks.unshift(undefined, undefined);
 
-    const chartOptions = {
-        animation: { duration: animationDuration },
-        scales: {
-            xAxes: [{
-                id: 'x-freq-1',
-                type: 'category',
-                ticks: {
-                    callback: labels[sep].ticks,
-                    minRotation: 90,
-                    autoSkipPadding: 5,
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'MHz',
-                },
-                gridLines: {
-                    color: gridColors,
-                },
-            }],
-            yAxes: [{
-                type: 'linear',
-                min: -yMax,
-                max: -yMin,
-                ticks: {
-                    callback: v => yMax + v + yMin,
-                    min: -yMax,
-                    max: -yMin,
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'RSSI',
-                },
-            }],
-        },
-    };
+const rssiColors = Array.from(Array(81), () => color.bar.normal);
+[2, 26, 80].forEach(k => { rssiColors[k] = color.bar.advertisement; });
 
-    return (
-        <Main>
-            <Line data={chartData} options={chartOptions} />
-        </Main>
-    );
+const rssiMaxColors = Array.from(Array(81), () => color.bar.normalMax);
+[2, 26, 80].forEach(k => { rssiMaxColors[k] = color.bar.advertisementMax; });
+
+const labels = Array.from(Array(81).keys());
+
+const ChartView = ({
+    rssi, rssiMax, animationDuration, yMin, yMax,
+}) => (
+    <Main>
+        <Bar
+            data={{
+                labels,
+                datasets: [{
+                    label: 'rssi',
+                    backgroundColor: rssiColors,
+                    borderWidth: 0,
+                    data: rssi,
+                    datalabels: {
+                        display: false,
+                    },
+                }, {
+                    label: 'rssiMax',
+                    backgroundColor: rssiMaxColors,
+                    borderWidth: 0,
+                    data: rssiMax,
+                    datalabels: {
+                        color: rssiColors,
+                        anchor: 'end',
+                        align: 'end',
+                        formatter: v => ((v > (-80 - yMin)) ? ((20 - v) - yMin) : ''),
+                        offset: -3,
+                        font: { size: 9 },
+                    },
+                }, {
+                    label: 'bgBars',
+                    backgroundColor: color.bar.background,
+                    borderWidth: 0,
+                    data: Array(81).fill(-yMin),
+                    datalabels: {
+                        display: false,
+                    },
+                }],
+            }}
+            options={{
+                animation: { duration: animationDuration },
+                maintainAspectRatio: false,
+                legend: { display: false },
+                tooltips: { enabled: false },
+                scales: {
+                    xAxes: [{
+                        type: 'category',
+                        position: 'top',
+                        offset: true,
+                        ticks: {
+                            callback: v => bleChannelTicks[v],
+                            minRotation: 0,
+                            maxRotation: 0,
+                            labelOffset: 0,
+                            autoSkipPadding: 5,
+                            fontColor: color.label,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'BLE channel',
+                            fontColor: color.label,
+                            fontSize: 14,
+                            lineHeight: 1,
+                            padding: { top: 16 },
+                        },
+                        gridLines: {
+                            offsetGridLines: true,
+                            display: false,
+                            drawBorder: false,
+                            fontColor: color.label,
+                        },
+                        stacked: true,
+                    }, {
+                        type: 'category',
+                        position: 'bottom',
+                        offset: true,
+                        ticks: {
+                            callback: v => ((v % 2) === 0 ? 2400 + v : ''),
+                            minRotation: 90,
+                            labelOffset: 0,
+                            autoSkipPadding: 5,
+                            fontColor: color.label,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'MHz',
+                            fontColor: color.label,
+                            fontSize: 14,
+                            lineHeight: 0,
+                            padding: { bottom: 24 },
+                        },
+                        gridLines: {
+                            offsetGridLines: true,
+                            display: false,
+                            drawBorder: false,
+                            fontColor: color.label,
+                        },
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        type: 'linear',
+                        min: -yMax,
+                        max: -yMin,
+                        ticks: {
+                            callback: v => yMax + v + yMin,
+                            min: -yMax,
+                            max: -yMin,
+                            fontColor: color.label,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'dBm',
+                            fontColor: color.label,
+                            fontSize: 14,
+                            lineHeight: 1,
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false,
+                        },
+                    }],
+                },
+            }}
+        />
+    </Main>
+);
+
+ChartView.propTypes = {
+    rssi: arrayOf(Number).isRequired,
+    rssiMax: arrayOf(Number).isRequired,
+    animationDuration: number.isRequired,
+    yMin: number.isRequired,
+    yMax: number.isRequired,
 };
 
-Chart.propTypes = {
-    rssi: PropTypes.arrayOf(Number),
-    rssiMax: PropTypes.arrayOf(Number),
-    animationDuration: PropTypes.number,
-    yMin: PropTypes.number,
-    yMax: PropTypes.number,
-    separateFrequencies: PropTypes.bool,
-};
-
-Chart.defaultProps = {
-    rssi: [],
-    rssiMax: [],
-    animationDuration: 500,
-    yMin: -110,
-    yMax: -20,
-    separateFrequencies: false,
-};
-
-export default Chart;
+export default ChartView;

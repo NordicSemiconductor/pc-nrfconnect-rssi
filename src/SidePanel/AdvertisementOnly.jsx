@@ -39,14 +39,13 @@ import { useDispatch } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 
 import {
-    setSeparateFrequencies,
     setScanAdvChannelsOnly,
     writeScanAdvChannelsOnly,
     resetRssiData,
 } from '../actions';
 
 
-export const AdvertisementOnly = () => {
+export default () => {
     const dispatch = useDispatch();
     const callScanAdvChannelsOnly = event => {
         const newScanAdvChannelsOnly = event.target.checked;
@@ -61,19 +60,6 @@ export const AdvertisementOnly = () => {
             <Form.Switch
                 onChange={callScanAdvChannelsOnly}
                 label="Advertisements only"
-            />
-        </Form.Group>
-    );
-};
-
-export const SeparateFrequencies = () => {
-    const dispatch = useDispatch();
-
-    return (
-        <Form.Group controlId="freqCheck">
-            <Form.Switch
-                onChange={event => dispatch(setSeparateFrequencies(event.target.checked))}
-                label="Separate Frequencies"
             />
         </Form.Group>
     );

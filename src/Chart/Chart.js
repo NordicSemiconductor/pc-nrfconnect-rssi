@@ -50,7 +50,6 @@ const mapState = ({ app }) => ({
     rssi: app.data.map(adjustY),
     rssiMax: app.dataMax.map(adjustY),
     animationDuration: app.animationDuration,
-    separateFrequencies: app.separateFrequencies,
 });
 
 export default connect(mapState)(ChartView);

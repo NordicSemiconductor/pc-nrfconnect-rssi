@@ -42,7 +42,7 @@ import Delay from './Delay';
 import MaxCount from './MaxCount';
 import SampleCount from './SampleCount';
 import AnimationSpeed from './AnimationSpeed';
-import { SeparateFrequencies, AdvertisementOnly } from './Switches';
+import AdvertisementOnly from './AdvertisementOnly';
 import ToggleLed from './ToggleLed';
 
 import './sidepanel.scss';
@@ -59,9 +59,6 @@ const SidePanel = () => (
         <SampleCount />
         <AnimationSpeed />
         <AdvertisementOnly />
-
-        <h2>Display options</h2>
-        <SeparateFrequencies />
 
         <h2>Device</h2>
         <ToggleLed />

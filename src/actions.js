@@ -55,7 +55,6 @@ export const changeDelay = delay => ({ type: 'RSSI_CHANGE_DELAY', delay });
 export const changeMaxScans = maxScans => ({ type: 'RSSI_CHANGE_MAX_SCANS', maxScans });
 export const changeChannelScanRepeat = scanRepeat => ({ type: 'RSSI_CHANGE_SCAN_REPEAT', scanRepeat });
 export const changeAnimationDuration = animationDuration => ({ type: 'RSSI_CHANGE_ANIMATION_DURATION', animationDuration });
-export const setSeparateFrequencies = separateFrequencies => ({ type: 'RSSI_SEPARATE_FREQUENCIES', separateFrequencies });
 export const setScanAdvChannelsOnly = scanAdvChannelsOnly => ({ type: 'RSSI_SCAN_ADV_CHANNELS_ONLY', scanAdvChannelsOnly });
 
 export const setRssiData = () => ({
