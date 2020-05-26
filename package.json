@@ -38,8 +38,10 @@
     "chart.js": "2.7.3",
     "chartjs-plugin-datalabels": "0.7.0",
     "jquery": "3.4.0",
-    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#7126697",
-    "react-chartjs-2": "2.7.4"
+    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.8.0",
+    "react": "16.13.1",
+    "react-chartjs-2": "2.7.4",
+    "react-redux": "7.2.0"
   },
   "dependencies": {}
 }
