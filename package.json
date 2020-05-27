@@ -38,7 +38,7 @@
     "chartjs-plugin-datalabels": "0.7.0",
     "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.8.0",
     "react": "16.13.1",
-    "react-chartjs-2": "2.7.4",
+    "react-chartjs-2": "2.9.0",
     "react-redux": "7.2.0"
   },
   "dependencies": {}
