@@ -40,8 +40,6 @@ import { Main } from 'pc-nrfconnect-shared';
 import { Bar, Chart } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-import './chart.scss';
-
 Chart.plugins.register(ChartDataLabels);
 
 const bleChannels = Array.from(Array(37), (_, x) => x);
@@ -144,8 +142,6 @@ const ChartView = ({
                             labelString: 'BLE channel',
                             fontColor: color.label,
                             fontSize: 14,
-                            lineHeight: 1,
-                            padding: { top: 16 },
                         },
                         gridLines: {
                             offsetGridLines: true,
@@ -170,8 +166,7 @@ const ChartView = ({
                             labelString: 'MHz',
                             fontColor: color.label,
                             fontSize: 14,
-                            lineHeight: 0,
-                            padding: { bottom: 24 },
+                            padding: { top: 10 },
                         },
                         gridLines: {
                             offsetGridLines: true,
@@ -196,7 +191,6 @@ const ChartView = ({
                             labelString: 'dBm',
                             fontColor: color.label,
                             fontSize: 14,
-                            lineHeight: 1,
                         },
                         gridLines: {
                             display: false,
