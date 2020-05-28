@@ -34,61 +34,68 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const initialState = {
-    data: [],
-    dataMax: [],
-    delay: 10,
-    scanRepeat: 1,
-    maxScans: 30,
-    animationDuration: 500,
-    separateFrequencies: false,
-    port: null,
+import React, { useEffect, useRef, useState } from 'react';
+import { func, number, shape } from 'prop-types';
+
+import './inline-input.scss';
+
+const isInRange = (value, { min, max }) => {
+    const valueAsNumber = Number(value);
+    return valueAsNumber >= min && valueAsNumber <= max;
 };
 
-export default function reduceApp(state = initialState, action) {
-    switch (action.type) {
-        case 'RSSI_DATA':
-            return {
-                ...state,
-                data: action.data,
-                dataMax: action.dataMax,
-            };
-        case 'RSSI_CHANGE_DELAY':
-            return {
-                ...state,
-                delay: action.delay,
-            };
-        case 'RSSI_CHANGE_MAX_SCANS':
-            return {
-                ...state,
-                maxScans: action.maxScans,
-            };
-        case 'RSSI_CHANGE_SCAN_REPEAT':
-            return {
-                ...state,
-                scanRepeat: action.scanRepeat,
-            };
-        case 'RSSI_CHANGE_ANIMATION_DURATION':
-            return {
-                ...state,
-                animationDuration: action.animationDuration,
-            };
-        case 'RSSI_SEPARATE_FREQUENCIES':
-            return {
-                ...state,
-                separateFrequencies: action.separateFrequencies,
-            };
-        case 'RSSI_SERIAL_OPENED':
-            return {
-                ...state,
-                port: action.portName,
-            };
-        case 'RSSI_SERIAL_CLOSED':
-            return {
-                ...state,
-                port: null,
-            };
-        default:
-    }
-    return state;
-}
+const useValidatedState = (initial, validator) => {
+    const validatedState = value => ({ value, valid: validator(value) });
+
+    const [value, setValue] = useState(validatedState(initial));
+
+    return [
+        value,
+        newValue => setValue(validatedState(newValue)),
+    ];
+};
+
+const useSynchronisationIfChangedFromOutside = (value, setInput) => {
+    const ref = useRef(value);
+    useEffect(() => {
+        if (ref.current !== value) {
+            setInput(value);
+            ref.current = value;
+        }
+    });
+    return ref.current;
+};
+
+const InlineInput = ({ value, range, onChange }) => {
+    const [input, setInput] = useValidatedState(value, newValue => isInRange(newValue, range));
+    useSynchronisationIfChangedFromOutside(value, setInput);
+
+    const onChangeIfValid = event => {
+        const newValue = event.target.value;
+        setInput(newValue);
+        if (isInRange(newValue, range)) {
+            onChange(Number(newValue));
+        }
+    };
+
+    return (
+        <input
+            type="text"
+            className={`inline-input ${input.valid ? '' : 'invalid'}`}
+            style={{ width: `${2 + Math.floor(Math.log10(range.max))}ex` }}
+            value={input.value}
+            onChange={onChangeIfValid}
+        />
+    );
+};
+
+InlineInput.propTypes = {
+    value: number.isRequired,
+    range: shape({
+        min: number.isRequired,
+        max: number.isRequired,
+    }).isRequired,
+    onChange: func.isRequired,
+};
+
+export default InlineInput;
