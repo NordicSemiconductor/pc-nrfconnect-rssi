@@ -37,10 +37,9 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { Slider } from 'pc-nrfconnect-shared';
+import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { changeMaxScans } from '../actions';
-import InlineInput from './InlineInput';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'max-scans-slider';
@@ -58,7 +57,7 @@ export default () => {
         <>
             <Form.Label htmlFor={sliderId}>
                 Show maximum for the last{' '}
-                <InlineInput
+                <NumberInlineInput
                     value={maxScans}
                     range={range}
                     onChange={dispatchChangeMaxScans}
