@@ -37,18 +37,9 @@
 import { connect } from 'react-redux';
 import ChartView from './ChartView';
 
-const yRange = {
-    min: -110,
-    max: -20,
-};
-
-const adjustY = y => -(yRange.min + yRange.max) - y;
-
 const mapState = ({ app }) => ({
-    yMin: yRange.min,
-    yMax: yRange.max,
-    rssi: app.data.map(adjustY),
-    rssiMax: app.dataMax.map(adjustY),
+    rssi: app.data,
+    rssiMax: app.dataMax,
     animationDuration: app.animationDuration,
 });
 

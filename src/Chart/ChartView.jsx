@@ -49,6 +49,11 @@ const bleChannels = [
     '34', '35', '36', '39',
 ];
 
+const yRange = {
+    min: 110,
+    max: 20,
+};
+
 // Official Nordic colors, taken from https://github.com/NordicSemiconductor/pc-nrfconnect-shared/blob/9bb1f72849/src/variables.scss
 const blueSlate = '#0033a0';
 const green = '#4caf50';
@@ -81,9 +86,9 @@ const labels = Array(40);
 
 const selectBLEValues = allData => allData.slice(2).filter((_, index) => index % 2 === 0);
 
-const ChartView = ({
-    rssi, rssiMax, animationDuration, yMin, yMax,
-}) => (
+const convertInYRange = v => yRange.min + yRange.max - v;
+
+const ChartView = ({ rssi, rssiMax, animationDuration }) => (
     <Main>
         <Bar
             data={{
@@ -92,18 +97,18 @@ const ChartView = ({
                     label: 'rssi',
                     backgroundColor: rssiColors,
                     borderWidth: 0,
-                    data: selectBLEValues(rssi),
+                    data: selectBLEValues(rssi).map(convertInYRange),
                     datalabels: { display: false },
                 }, {
                     label: 'rssiMax',
                     backgroundColor: rssiMaxColors,
                     borderWidth: 0,
-                    data: selectBLEValues(rssiMax),
+                    data: selectBLEValues(rssiMax).map(convertInYRange),
                     datalabels: {
                         color: rssiColors,
                         anchor: 'end',
                         align: 'end',
-                        formatter: v => ((v > (-80 - yMin)) ? ((20 - v) - yMin) : ''),
+                        formatter: convertInYRange,
                         offset: -3,
                         font: { size: 9 },
                     },
@@ -111,7 +116,7 @@ const ChartView = ({
                     label: 'bgBars',
                     backgroundColor: color.bar.background,
                     borderWidth: 0,
-                    data: Array(81).fill(-yMin),
+                    data: Array(81).fill(yRange.min),
                     datalabels: { display: false },
                 }],
             }}
@@ -174,12 +179,12 @@ const ChartView = ({
                     }],
                     yAxes: [{
                         type: 'linear',
-                        min: -yMax,
-                        max: -yMin,
+                        min: yRange.max,
+                        max: yRange.min,
                         ticks: {
-                            callback: v => yMax + v + yMin,
-                            min: -yMax,
-                            max: -yMin,
+                            callback: v => v - yRange.max - yRange.min,
+                            min: yRange.max,
+                            max: yRange.min,
                             fontColor: color.label,
                         },
                         scaleLabel: {
@@ -203,8 +208,6 @@ ChartView.propTypes = {
     rssi: arrayOf(Number).isRequired,
     rssiMax: arrayOf(Number).isRequired,
     animationDuration: number.isRequired,
-    yMin: number.isRequired,
-    yMax: number.isRequired,
 };
 
 export default ChartView;
