@@ -98,3 +98,7 @@ export default (state = initialState, action) => {
             return state;
     }
 };
+
+export const getRssi = state => state.app.data;
+export const getRssiMax = state => state.app.dataMax;
+export const getAnimationDuration = state => state.app.animationDuration;
