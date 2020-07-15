@@ -48,7 +48,6 @@ bleChannels.splice(12, 0, 38);
 bleChannels.push(39);
 
 // Official Nordic colors, taken from https://github.com/NordicSemiconductor/pc-nrfconnect-shared/blob/9bb1f72849/src/variables.scss
-
 const blueSlate = '#0033a0';
 const green = '#4caf50';
 
@@ -69,17 +68,19 @@ const color = {
     },
 };
 
-const interlace = arr => arr.map(v => [v.toString().padStart(2, '0'), undefined]).flat();
+const interlace = arr => arr.map(v => v.toString().padStart(2, '0'));
 const bleChannelTicks = interlace(bleChannels);
-bleChannelTicks.unshift(undefined, undefined);
 
-const rssiColors = Array.from(Array(81), () => color.bar.normal);
-[2, 26, 80].forEach(k => { rssiColors[k] = color.bar.advertisement; });
+const rssiColors = Array(40).fill(color.bar.normal);
+const rssiMaxColors = Array(40).fill(color.bar.normalMax);
+[0, 12, 39].forEach(k => {
+    rssiColors[k] = color.bar.advertisement;
+    rssiMaxColors[k] = color.bar.advertisementMax;
+});
 
-const rssiMaxColors = Array.from(Array(81), () => color.bar.normalMax);
-[2, 26, 80].forEach(k => { rssiMaxColors[k] = color.bar.advertisementMax; });
+const labels = Array(40);
 
-const labels = Array.from(Array(81).keys());
+const selectBLEValues = allData => allData.slice(2).filter((_, index) => index % 2 === 0);
 
 const ChartView = ({
     rssi, rssiMax, animationDuration, yMin, yMax,
@@ -92,15 +93,13 @@ const ChartView = ({
                     label: 'rssi',
                     backgroundColor: rssiColors,
                     borderWidth: 0,
-                    data: rssi,
-                    datalabels: {
-                        display: false,
-                    },
+                    data: selectBLEValues(rssi),
+                    datalabels: { display: false },
                 }, {
                     label: 'rssiMax',
                     backgroundColor: rssiMaxColors,
                     borderWidth: 0,
-                    data: rssiMax,
+                    data: selectBLEValues(rssiMax),
                     datalabels: {
                         color: rssiColors,
                         anchor: 'end',
@@ -114,9 +113,7 @@ const ChartView = ({
                     backgroundColor: color.bar.background,
                     borderWidth: 0,
                     data: Array(81).fill(-yMin),
-                    datalabels: {
-                        display: false,
-                    },
+                    datalabels: { display: false },
                 }],
             }}
             options={{
@@ -130,7 +127,7 @@ const ChartView = ({
                         position: 'top',
                         offset: true,
                         ticks: {
-                            callback: v => bleChannelTicks[v],
+                            callback: (_, index) => bleChannelTicks[index],
                             minRotation: 0,
                             maxRotation: 0,
                             labelOffset: 0,
@@ -155,7 +152,7 @@ const ChartView = ({
                         position: 'bottom',
                         offset: true,
                         ticks: {
-                            callback: v => ((v % 2) === 0 ? 2400 + v : ''),
+                            callback: (_, index) => 2402 + 2 * index,
                             minRotation: 90,
                             labelOffset: 0,
                             autoSkipPadding: 5,
