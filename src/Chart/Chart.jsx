@@ -40,6 +40,7 @@ import { Bar, Chart } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useSelector } from 'react-redux';
 import { getRssi, getRssiMax, getAnimationDuration } from '../reducer';
+import { color, yRange } from './config';
 
 Chart.plugins.register(ChartDataLabels);
 
@@ -49,32 +50,6 @@ const bleChannels = [
     '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33',
     '34', '35', '36', '39',
 ];
-
-const yRange = {
-    min: 110,
-    max: 20,
-};
-
-// Official Nordic colors, taken from https://github.com/NordicSemiconductor/pc-nrfconnect-shared/blob/9bb1f72849/src/variables.scss
-const blueSlate = '#0033a0';
-const green = '#4caf50';
-
-const blueSlateLighter = '#7c98d3'; // result of using color.scale($blue-slate, $lightness: 50%, $saturation: -50%) in sass
-const greenLighter = '#b1cbb3'; // result of using color.scale($green, $lightness: 50%, $saturation: -50%) in sass
-
-const gray50 = '#eceff1';
-const gray300 = '#90a4ae';
-
-const color = {
-    label: gray300,
-    bar: {
-        normal: blueSlate,
-        normalMax: blueSlateLighter,
-        advertisement: green,
-        advertisementMax: greenLighter,
-        background: gray50,
-    },
-};
 
 const rssiColors = Array(40).fill(color.bar.normal);
 const rssiMaxColors = Array(40).fill(color.bar.normalMax);
