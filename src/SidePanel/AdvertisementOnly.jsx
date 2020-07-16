@@ -44,7 +44,6 @@ import {
     resetRssiData,
 } from '../actions';
 
-
 export default () => {
     const dispatch = useDispatch();
     const callScanAdvChannelsOnly = event => {
