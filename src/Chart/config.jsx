@@ -34,22 +34,28 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { connect } from 'react-redux';
-import ChartView from './ChartView';
-
-const yRange = {
-    min: -110,
-    max: -20,
+export const yRange = {
+    min: 110,
+    max: 20,
 };
 
-const adjustY = y => -(yRange.min + yRange.max) - y;
+// Official Nordic colors, taken from https://github.com/NordicSemiconductor/pc-nrfconnect-shared/blob/9bb1f72849/src/variables.scss
+const blueSlate = '#0033a0';
+const green = '#4caf50';
+const blueSlateLighter = '#7c98d3'; // result of using color.scale($blue-slate, $lightness: 50%, $saturation: -50%) in sass
 
-const mapState = ({ app }) => ({
-    yMin: yRange.min,
-    yMax: yRange.max,
-    rssi: app.data.map(adjustY),
-    rssiMax: app.dataMax.map(adjustY),
-    animationDuration: app.animationDuration,
-});
+const greenLighter = '#b1cbb3'; // result of using color.scale($green, $lightness: 50%, $saturation: -50%) in sass
 
-export default connect(mapState)(ChartView);
+const gray50 = '#eceff1';
+const gray300 = '#90a4ae';
+
+export const color = {
+    label: gray300,
+    bar: {
+        normal: blueSlate,
+        normalMax: blueSlateLighter,
+        advertisement: green,
+        advertisementMax: greenLighter,
+        background: gray50,
+    },
+};
