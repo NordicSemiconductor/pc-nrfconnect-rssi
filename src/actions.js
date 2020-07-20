@@ -56,6 +56,7 @@ export const changeMaxScans = maxScans => ({ type: 'RSSI_CHANGE_MAX_SCANS', maxS
 export const changeChannelScanRepeat = scanRepeat => ({ type: 'RSSI_CHANGE_SCAN_REPEAT', scanRepeat });
 export const changeAnimationDuration = animationDuration => ({ type: 'RSSI_CHANGE_ANIMATION_DURATION', animationDuration });
 export const setScanAdvChannelsOnly = scanAdvChannelsOnly => ({ type: 'RSSI_SCAN_ADV_CHANNELS_ONLY', scanAdvChannelsOnly });
+export const setChannelRange = channelRange => ({ type: 'RSSI_CHANNEL_RANGE_SET', channelRange });
 
 export const setRssiData = () => ({
     type: 'RSSI_DATA',

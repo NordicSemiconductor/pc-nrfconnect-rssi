@@ -35,36 +35,49 @@
  */
 
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { Slider } from 'pc-nrfconnect-shared';
 
-import ControlButtons from './ControlButtons';
-import Delay from './Delay';
-import MaxCount from './MaxCount';
-import SampleCount from './SampleCount';
-import AnimationSpeed from './AnimationSpeed';
-import ChannelRange from './ChannelRange';
-import AdvertisementOnly from './AdvertisementOnly';
-import ToggleLed from './ToggleLed';
+import { setChannelRange } from '../actions';
+import { getChannelRange } from '../reducer';
+import InlineInput from './InlineInput';
 
-import './sidepanel.scss';
+const range = { min: 0, max: 39 };
+const sliderId = 'ble-channel-slider';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <ControlButtons />
+export default () => {
+    const dispatch = useDispatch();
+    const channelRange = useSelector(getChannelRange);
 
-        <h2>Sweep scan</h2>
-        <Delay />
+    const lower = Math.min(...channelRange);
+    const upper = Math.max(...channelRange);
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <ChannelRange />
-        <AdvertisementOnly />
-
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
-
-export default SidePanel;
+    return (
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Show BLE channels from{' '}
+                <InlineInput
+                    value={lower}
+                    range={{ min: range.min, max: upper }}
+                    onChange={newLower => dispatch(setChannelRange([newLower, upper]))}
+                />
+                {' '}to{' '}
+                <InlineInput
+                    value={upper}
+                    range={{ min: lower, max: range.max }}
+                    onChange={newUpper => dispatch(setChannelRange([lower, newUpper]))}
+                />
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={channelRange}
+                range={range}
+                onChange={[
+                    newValue => dispatch(setChannelRange([newValue, channelRange[1]])),
+                    newValue => dispatch(setChannelRange([channelRange[0], newValue])),
+                ]}
+            />
+        </>
+    );
+};

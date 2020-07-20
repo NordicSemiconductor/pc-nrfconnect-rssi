@@ -39,7 +39,12 @@ import { Main } from 'pc-nrfconnect-shared';
 import { Bar, Chart } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useSelector } from 'react-redux';
-import { getRssi, getRssiMax, getAnimationDuration } from '../reducer';
+import {
+    getRssi,
+    getRssiMax,
+    getAnimationDuration,
+    getChannelRangeSorted,
+} from '../reducer';
 import { color, yRange } from './config';
 
 import './chart.scss';
@@ -47,10 +52,8 @@ import './chart.scss';
 Chart.plugins.register(ChartDataLabels);
 
 const bleChannels = [
-    '37', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
-    '38', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21',
-    '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33',
-    '34', '35', '36', '39',
+    37, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 38, 11, 12, 13, 14, 15, 16, 17, 18,
+    19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 39,
 ];
 
 const rssiColors = Array(40).fill(color.bar.normal);
@@ -66,10 +69,21 @@ const selectBLEValues = allData => allData.slice(2).filter((_, index) => index %
 
 const convertInYRange = v => yRange.min + yRange.max - v;
 
+const isInRange = ([lower, upper], index) => index >= lower && index <= upper;
+
+const maskValuesOutsideRange = channelRange => (value, index) => (
+    isInRange(channelRange, bleChannels[index]) ? value : 0
+);
+
 export default () => {
     const rssi = useSelector(getRssi);
     const rssiMax = useSelector(getRssiMax);
     const animationDuration = useSelector(getAnimationDuration);
+    const channelRange = useSelector(getChannelRangeSorted);
+
+    const convertToScreenValue = rawRssi => selectBLEValues(rawRssi)
+        .map(convertInYRange)
+        .map(maskValuesOutsideRange(channelRange));
 
     return (
         <Main>
@@ -81,18 +95,18 @@ export default () => {
                             label: 'rssi',
                             backgroundColor: rssiColors,
                             borderWidth: 0,
-                            data: selectBLEValues(rssi).map(convertInYRange),
+                            data: convertToScreenValue(rssi),
                             datalabels: { display: false },
                         }, {
                             label: 'rssiMax',
                             backgroundColor: rssiMaxColors,
                             borderWidth: 0,
-                            data: selectBLEValues(rssiMax).map(convertInYRange),
+                            data: convertToScreenValue(rssiMax),
                             datalabels: {
                                 color: rssiColors,
                                 anchor: 'end',
                                 align: 'end',
-                                formatter: convertInYRange,
+                                formatter: v => (v === 0 ? '' : convertInYRange(v)),
                                 offset: -3,
                                 font: { size: 9 },
                             },
@@ -115,7 +129,7 @@ export default () => {
                                 position: 'top',
                                 offset: true,
                                 ticks: {
-                                    callback: (_, index) => bleChannels[index],
+                                    callback: (_, index) => String(bleChannels[index]).padStart(2, '0'),
                                     minRotation: 0,
                                     maxRotation: 0,
                                     labelOffset: 0,

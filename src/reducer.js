@@ -42,6 +42,7 @@ const initialState = {
     scanRepeat: 1,
     maxScans: 30,
     animationDuration: 500,
+    channelRange: [0, 39],
     scanAdvChannelsOnly: false,
     port: null,
 };
@@ -79,6 +80,11 @@ export default (state = initialState, action) => {
                 ...state,
                 animationDuration: action.animationDuration,
             };
+        case 'RSSI_CHANNEL_RANGE_SET':
+            return {
+                ...state,
+                channelRange: action.channelRange,
+            };
         case 'RSSI_SCAN_ADV_CHANNELS_ONLY':
             return {
                 ...state,
@@ -102,3 +108,5 @@ export default (state = initialState, action) => {
 export const getRssi = state => state.app.data;
 export const getRssiMax = state => state.app.dataMax;
 export const getAnimationDuration = state => state.app.animationDuration;
+export const getChannelRange = state => state.app.channelRange;
+export const getChannelRangeSorted = state => [...state.app.channelRange].sort((a, b) => a - b);
