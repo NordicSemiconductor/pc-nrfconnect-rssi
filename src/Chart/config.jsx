@@ -39,6 +39,8 @@ export const yRange = {
     max: 20,
 };
 
+export const maskedOut = yRange.max - 1;
+
 // Official Nordic colors, taken from https://github.com/NordicSemiconductor/pc-nrfconnect-shared/blob/9bb1f72849/src/variables.scss
 const blueSlate = '#0033a0';
 const green = '#4caf50';

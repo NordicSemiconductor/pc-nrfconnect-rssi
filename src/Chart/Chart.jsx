@@ -45,7 +45,7 @@ import {
     getAnimationDuration,
     getChannelRangeSorted,
 } from '../reducer';
-import { color, yRange } from './config';
+import { color, yRange, maskedOut } from './config';
 
 import './chart.scss';
 
@@ -67,7 +67,7 @@ const convertInYRange = v => yRange.min + yRange.max - v;
 const isInRange = ([lower, upper], index) => index >= lower && index <= upper;
 
 const maskValuesOutsideRange = channelRange => (value, index) => (
-    isInRange(channelRange, bleChannels[index]) ? value : 0
+    isInRange(channelRange, bleChannels[index]) ? value : maskedOut
 );
 
 export default () => {
@@ -101,7 +101,7 @@ export default () => {
                                 color: rssiColors,
                                 anchor: 'end',
                                 align: 'end',
-                                formatter: v => (v === 0 ? '' : convertInYRange(v)),
+                                formatter: v => (v === maskedOut ? '' : convertInYRange(v)),
                                 offset: -3,
                                 font: { size: 9 },
                             },
