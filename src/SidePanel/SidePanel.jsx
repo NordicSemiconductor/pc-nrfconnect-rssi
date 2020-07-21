@@ -44,7 +44,6 @@ import SampleCount from './SampleCount';
 import AnimationSpeed from './AnimationSpeed';
 import ChannelRange from './ChannelRange';
 import LevelRange from './LevelRange';
-import AdvertisementOnly from './AdvertisementOnly';
 import ToggleLed from './ToggleLed';
 
 import './sidepanel.scss';
@@ -62,7 +61,6 @@ const SidePanel = () => (
         <AnimationSpeed />
         <ChannelRange />
         <LevelRange />
-        <AdvertisementOnly />
 
         <h2>Device</h2>
         <ToggleLed />

@@ -51,7 +51,6 @@ const initialState = {
     animationDuration: 500,
     channelRange: [bleChannelRange.lower, bleChannelRange.upper],
     levelRange: [initialLevelRange.lower, initialLevelRange.upper],
-    scanAdvChannelsOnly: false,
     port: null,
 };
 
@@ -97,11 +96,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 levelRange: action.levelRange,
-            };
-        case 'RSSI_SCAN_ADV_CHANNELS_ONLY':
-            return {
-                ...state,
-                scanAdvChannelsOnly: action.scanAdvChannelsOnly,
             };
         case 'RSSI_SERIAL_OPENED':
             return {
