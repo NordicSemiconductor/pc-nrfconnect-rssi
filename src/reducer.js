@@ -34,6 +34,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { range as bleRange } from './bleChannels';
+
 const initialState = {
     isPaused: false,
     data: [],
@@ -42,7 +44,7 @@ const initialState = {
     scanRepeat: 1,
     maxScans: 30,
     animationDuration: 500,
-    channelRange: [0, 39],
+    channelRange: [bleRange.lower, bleRange.upper],
     scanAdvChannelsOnly: false,
     port: null,
 };

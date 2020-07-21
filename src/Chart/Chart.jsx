@@ -45,25 +45,21 @@ import {
     getAnimationDuration,
     getChannelRangeSorted,
 } from '../reducer';
+import { channels as bleChannels, isAdvertisement } from '../bleChannels';
 import { color, yRange } from './config';
 
 import './chart.scss';
 
 Chart.plugins.register(ChartDataLabels);
 
-const bleChannels = [
-    37, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 38, 11, 12, 13, 14, 15, 16, 17, 18,
-    19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 39,
-];
+const rssiColors = bleChannels.map(
+    channel => (isAdvertisement(channel) ? color.bar.advertisement : color.bar.normal),
+);
+const rssiMaxColors = bleChannels.map(
+    channel => (isAdvertisement(channel) ? color.bar.advertisementMax : color.bar.normalMax),
+);
 
-const rssiColors = Array(40).fill(color.bar.normal);
-const rssiMaxColors = Array(40).fill(color.bar.normalMax);
-[0, 12, 39].forEach(k => {
-    rssiColors[k] = color.bar.advertisement;
-    rssiMaxColors[k] = color.bar.advertisementMax;
-});
-
-const labels = Array(40);
+const labels = bleChannels;
 
 const selectBLEValues = allData => allData.slice(2).filter((_, index) => index % 2 === 0);
 

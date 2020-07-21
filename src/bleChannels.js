@@ -34,50 +34,14 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import { Slider } from 'pc-nrfconnect-shared';
+export const channels = [
+    37, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 38, 11, 12, 13, 14, 15, 16, 17, 18,
+    19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 39,
+];
 
-import { range as bleRange } from '../bleChannels';
-import { setChannelRange } from '../actions';
-import { getChannelRange } from '../reducer';
-import InlineInput from './InlineInput';
-
-const sliderId = 'ble-channel-slider';
-
-export default () => {
-    const dispatch = useDispatch();
-    const channelRange = useSelector(getChannelRange);
-
-    const lower = Math.min(...channelRange);
-    const upper = Math.max(...channelRange);
-
-    return (
-        <>
-            <Form.Label htmlFor={sliderId}>
-                Show BLE channels from{' '}
-                <InlineInput
-                    value={lower}
-                    range={{ min: bleRange.lower, max: upper }}
-                    onChange={newLower => dispatch(setChannelRange([newLower, upper]))}
-                />
-                {' '}to{' '}
-                <InlineInput
-                    value={upper}
-                    range={{ min: lower, max: bleRange.upper }}
-                    onChange={newUpper => dispatch(setChannelRange([lower, newUpper]))}
-                />
-            </Form.Label>
-            <Slider
-                id={sliderId}
-                values={channelRange}
-                range={{ min: bleRange.lower, max: bleRange.upper }}
-                onChange={[
-                    newValue => dispatch(setChannelRange([newValue, channelRange[1]])),
-                    newValue => dispatch(setChannelRange([channelRange[0], newValue])),
-                ]}
-            />
-        </>
-    );
+export const range = {
+    lower: Math.min(...channels),
+    upper: Math.max(...channels),
 };
+
+export const isAdvertisement = channel => channel >= 37;
