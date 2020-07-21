@@ -34,7 +34,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { range as bleRange } from './bleChannels';
+import { bleChannelRange } from 'pc-nrfconnect-shared';
 
 const initialState = {
     isPaused: false,
@@ -44,7 +44,7 @@ const initialState = {
     scanRepeat: 1,
     maxScans: 30,
     animationDuration: 500,
-    channelRange: [bleRange.lower, bleRange.upper],
+    channelRange: [bleChannelRange.lower, bleChannelRange.upper],
     scanAdvChannelsOnly: false,
     port: null,
 };

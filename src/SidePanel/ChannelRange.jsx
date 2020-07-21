@@ -37,9 +37,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { Slider } from 'pc-nrfconnect-shared';
+import { Slider, bleChannelRange } from 'pc-nrfconnect-shared';
 
-import { range as bleRange } from '../bleChannels';
 import { setChannelRange } from '../actions';
 import { getChannelRange } from '../reducer';
 import InlineInput from './InlineInput';
@@ -59,20 +58,20 @@ export default () => {
                 Show BLE channels from{' '}
                 <InlineInput
                     value={lower}
-                    range={{ min: bleRange.lower, max: upper }}
+                    range={{ min: bleChannelRange.lower, max: upper }}
                     onChange={newLower => dispatch(setChannelRange([newLower, upper]))}
                 />
                 {' '}to{' '}
                 <InlineInput
                     value={upper}
-                    range={{ min: lower, max: bleRange.upper }}
+                    range={{ min: lower, max: bleChannelRange.upper }}
                     onChange={newUpper => dispatch(setChannelRange([lower, newUpper]))}
                 />
             </Form.Label>
             <Slider
                 id={sliderId}
                 values={channelRange}
-                range={{ min: bleRange.lower, max: bleRange.upper }}
+                range={{ min: bleChannelRange.lower, max: bleChannelRange.upper }}
                 onChange={[
                     newValue => dispatch(setChannelRange([newValue, channelRange[1]])),
                     newValue => dispatch(setChannelRange([channelRange[0], newValue])),
