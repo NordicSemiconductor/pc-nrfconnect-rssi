@@ -39,19 +39,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
 import { resetRssiData, setRssiData, togglePause } from '../actions';
+import { getIsPaused, getIsConnected } from '../reducer';
 
 import './control-buttons.scss';
 
 export default () => {
-    const isDisconnected = useSelector(state => state.app.port) == null;
-    const isPaused = useSelector(state => state.app.isPaused);
+    const isConnected = useSelector(getIsConnected);
+    const isPaused = useSelector(getIsPaused);
     const dispatch = useDispatch();
 
     return (
         <div className="control-buttons">
             <Button
                 variant="secondary"
-                disabled={isDisconnected}
+                disabled={!isConnected}
                 onClick={() => {
                     resetRssiData();
                     dispatch(setRssiData());
@@ -61,7 +62,7 @@ export default () => {
             </Button>
             <Button
                 variant="secondary"
-                disabled={isDisconnected}
+                disabled={!isConnected}
                 onClick={() => dispatch(togglePause)}
             >
                 {isPaused ? 'Start' : 'Pause'}

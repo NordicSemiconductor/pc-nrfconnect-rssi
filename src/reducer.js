@@ -107,8 +107,14 @@ export default (state = initialState, action) => {
     }
 };
 
+export const getIsConnected = state => state.app.port != null;
+export const getIsPaused = state => state.app.isPaused;
+
 export const getRssi = state => state.app.data;
 export const getRssiMax = state => state.app.dataMax;
 export const getAnimationDuration = state => state.app.animationDuration;
 export const getChannelRange = state => state.app.channelRange;
 export const getChannelRangeSorted = state => [...state.app.channelRange].sort((a, b) => a - b);
+export const getDelay = state => state.app.delay;
+export const getMaxScans = state => state.app.maxScans;
+export const getScanRepeat = state => state.app.scanRepeat;

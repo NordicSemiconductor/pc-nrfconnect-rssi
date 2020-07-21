@@ -40,13 +40,14 @@ import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { writeScanRepeat, changeChannelScanRepeat } from '../actions';
+import { getScanRepeat } from '../reducer';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'sample-count-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const scanRepeat = useSelector(state => state.app.scanRepeat);
+    const scanRepeat = useSelector(getScanRepeat);
 
     const changeAndWriteScanRepeat = useCallback(newScanRepeat => {
         dispatch(changeChannelScanRepeat(newScanRepeat));
