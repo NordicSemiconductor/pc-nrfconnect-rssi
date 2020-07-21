@@ -35,38 +35,49 @@
  */
 
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { Slider } from 'pc-nrfconnect-shared';
 
-import ControlButtons from './ControlButtons';
-import Delay from './Delay';
-import MaxCount from './MaxCount';
-import SampleCount from './SampleCount';
-import AnimationSpeed from './AnimationSpeed';
-import ChannelRange from './ChannelRange';
-import LevelRange from './LevelRange';
-import AdvertisementOnly from './AdvertisementOnly';
-import ToggleLed from './ToggleLed';
+import { setLevelRange } from '../actions';
+import { getLevelRange, initialLevelRange } from '../reducer';
+import InlineInput from './InlineInput';
 
-import './sidepanel.scss';
+const sliderId = 'ble-level-slider';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <ControlButtons />
+export default () => {
+    const dispatch = useDispatch();
+    const levelRange = useSelector(getLevelRange);
 
-        <h2>Sweep scan</h2>
-        <Delay />
+    const lower = Math.min(...levelRange);
+    const upper = Math.max(...levelRange);
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-        <ChannelRange />
-        <LevelRange />
-        <AdvertisementOnly />
-
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
-
-export default SidePanel;
+    return (
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Show signal levels from{' '}
+                <InlineInput
+                    value={lower}
+                    range={{ min: initialLevelRange.lower, max: upper }}
+                    onChange={newLower => dispatch(setLevelRange([newLower, upper]))}
+                />
+                {' '}to{' '}
+                <InlineInput
+                    value={upper}
+                    range={{ min: lower, max: initialLevelRange.upper }}
+                    onChange={newUpper => dispatch(setLevelRange([lower, newUpper]))}
+                />
+                {' '}dBm
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={levelRange}
+                range={{ min: initialLevelRange.lower, max: initialLevelRange.upper }}
+                onChange={[
+                    newValue => dispatch(setLevelRange([newValue, levelRange[1]])),
+                    newValue => dispatch(setLevelRange([levelRange[0], newValue])),
+                ]}
+            />
+        </>
+    );
+};

@@ -36,6 +36,11 @@
 
 import { bleChannelRange } from 'pc-nrfconnect-shared';
 
+export const initialLevelRange = {
+    lower: 20,
+    upper: 110,
+};
+
 const initialState = {
     isPaused: false,
     data: [],
@@ -45,6 +50,7 @@ const initialState = {
     maxScans: 30,
     animationDuration: 500,
     channelRange: [bleChannelRange.lower, bleChannelRange.upper],
+    levelRange: [initialLevelRange.lower, initialLevelRange.upper],
     scanAdvChannelsOnly: false,
     port: null,
 };
@@ -87,6 +93,11 @@ export default (state = initialState, action) => {
                 ...state,
                 channelRange: action.channelRange,
             };
+        case 'RSSI_LEVEL_RANGE_SET':
+            return {
+                ...state,
+                levelRange: action.levelRange,
+            };
         case 'RSSI_SCAN_ADV_CHANNELS_ONLY':
             return {
                 ...state,
@@ -113,8 +124,12 @@ export const getIsPaused = state => state.app.isPaused;
 export const getRssi = state => state.app.data;
 export const getRssiMax = state => state.app.dataMax;
 export const getAnimationDuration = state => state.app.animationDuration;
-export const getChannelRange = state => state.app.channelRange;
-export const getChannelRangeSorted = state => [...state.app.channelRange].sort((a, b) => a - b);
 export const getDelay = state => state.app.delay;
 export const getMaxScans = state => state.app.maxScans;
 export const getScanRepeat = state => state.app.scanRepeat;
+
+export const getChannelRange = state => state.app.channelRange;
+export const getChannelRangeSorted = state => [...state.app.channelRange].sort((a, b) => a - b);
+
+export const getLevelRange = state => state.app.levelRange;
+export const getLevelRangeSorted = state => [...state.app.levelRange].sort((a, b) => a - b);

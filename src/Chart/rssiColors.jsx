@@ -36,14 +36,7 @@
 
 import { colors } from 'pc-nrfconnect-shared';
 
-export const yRange = {
-    min: 110,
-    max: 20,
-};
-
-export const maskedOut = yRange.max - 1;
-
-export const color = {
+export default {
     label: colors.gray300,
     bar: {
         normal: colors.blueSlate,

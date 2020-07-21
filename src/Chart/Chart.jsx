@@ -44,8 +44,9 @@ import {
     getRssiMax,
     getAnimationDuration,
     getChannelRangeSorted,
+    getLevelRangeSorted,
 } from '../reducer';
-import { color, yRange, maskedOut } from './config';
+import color from './rssiColors';
 
 import './chart.scss';
 
@@ -62,23 +63,30 @@ const labels = bleChannels;
 
 const selectBLEValues = allData => allData.slice(2).filter((_, index) => index % 2 === 0);
 
-const convertInYRange = v => yRange.min + yRange.max - v;
-
 const isInRange = ([lower, upper], index) => index >= lower && index <= upper;
-
-const maskValuesOutsideRange = channelRange => (value, index) => (
-    isInRange(channelRange, bleChannels[index]) ? value : maskedOut
-);
 
 export default () => {
     const rssi = useSelector(getRssi);
     const rssiMax = useSelector(getRssiMax);
     const animationDuration = useSelector(getAnimationDuration);
     const channelRange = useSelector(getChannelRangeSorted);
+    const [levelMin, levelMax] = useSelector(getLevelRangeSorted);
+
+    const convertInLevel = v => levelMin + levelMax - v;
+    const limitToLevelRange = v => {
+        if (v < levelMin) return levelMin;
+        if (v > levelMax) return levelMax;
+        return v;
+    };
+
+    const maskValuesOutsideChannelRange = (value, index) => (
+        isInRange(channelRange, bleChannels[index]) ? value : levelMin - 1
+    );
 
     const convertToScreenValue = rawRssi => selectBLEValues(rawRssi)
-        .map(convertInYRange)
-        .map(maskValuesOutsideRange(channelRange));
+        .map(convertInLevel)
+        .map(limitToLevelRange)
+        .map(maskValuesOutsideChannelRange);
 
     return (
         <Main>
@@ -101,7 +109,7 @@ export default () => {
                                 color: rssiColors,
                                 anchor: 'end',
                                 align: 'end',
-                                formatter: v => (v === maskedOut ? '' : convertInYRange(v)),
+                                formatter: v => ((v <= levelMin || v >= levelMax) ? '' : convertInLevel(v)),
                                 offset: -3,
                                 font: { size: 9 },
                             },
@@ -109,7 +117,7 @@ export default () => {
                             label: 'bgBars',
                             backgroundColor: color.bar.background,
                             borderWidth: 0,
-                            data: Array(81).fill(yRange.min),
+                            data: Array(81).fill(levelMax),
                             datalabels: { display: false },
                         }],
                     }}
@@ -172,12 +180,12 @@ export default () => {
                             }],
                             yAxes: [{
                                 type: 'linear',
-                                min: yRange.max,
-                                max: yRange.min,
+                                min: levelMin,
+                                max: levelMax,
                                 ticks: {
-                                    callback: v => v - yRange.max - yRange.min,
-                                    min: yRange.max,
-                                    max: yRange.min,
+                                    callback: v => v - levelMin - levelMax,
+                                    min: levelMin,
+                                    max: levelMax,
                                     fontColor: color.label,
                                 },
                                 scaleLabel: {
