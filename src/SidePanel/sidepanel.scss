@@ -10,6 +10,7 @@
         text-transform: uppercase;
         font-size: 10px;
         font-weight: normal;
+        letter-spacing: 0.5ex;
 
         color: $gray-400;
     }
@@ -17,5 +18,11 @@
     .form-label,.form-group {
         margin-top: 1ex;
         margin-bottom: 0ex;
+    }
+
+    .number-inline-input {
+        font-size: 14px;
+
+        &:focus { background-color: $white; }
     }
 }

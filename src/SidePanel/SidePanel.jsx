@@ -59,6 +59,8 @@ const SidePanel = () => (
         <MaxCount />
         <SampleCount />
         <AnimationSpeed />
+
+        <h2>Filters</h2>
         <ChannelRange />
         <LevelRange />
 
