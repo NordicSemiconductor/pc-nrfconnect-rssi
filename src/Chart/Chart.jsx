@@ -42,6 +42,8 @@ import { useSelector } from 'react-redux';
 import { getRssi, getRssiMax, getAnimationDuration } from '../reducer';
 import { color, yRange } from './config';
 
+import './chart.scss';
+
 Chart.plugins.register(ChartDataLabels);
 
 const bleChannels = [
@@ -71,117 +73,119 @@ export default () => {
 
     return (
         <Main>
-            <Bar
-                data={{
-                    labels,
-                    datasets: [{
-                        label: 'rssi',
-                        backgroundColor: rssiColors,
-                        borderWidth: 0,
-                        data: selectBLEValues(rssi).map(convertInYRange),
-                        datalabels: { display: false },
-                    }, {
-                        label: 'rssiMax',
-                        backgroundColor: rssiMaxColors,
-                        borderWidth: 0,
-                        data: selectBLEValues(rssiMax).map(convertInYRange),
-                        datalabels: {
-                            color: rssiColors,
-                            anchor: 'end',
-                            align: 'end',
-                            formatter: convertInYRange,
-                            offset: -3,
-                            font: { size: 9 },
-                        },
-                    }, {
-                        label: 'bgBars',
-                        backgroundColor: color.bar.background,
-                        borderWidth: 0,
-                        data: Array(81).fill(yRange.min),
-                        datalabels: { display: false },
-                    }],
-                }}
-                options={{
-                    animation: { duration: animationDuration },
-                    maintainAspectRatio: false,
-                    legend: { display: false },
-                    tooltips: { enabled: false },
-                    scales: {
-                        xAxes: [{
-                            type: 'category',
-                            position: 'top',
-                            offset: true,
-                            ticks: {
-                                callback: (_, index) => bleChannels[index],
-                                minRotation: 0,
-                                maxRotation: 0,
-                                labelOffset: 0,
-                                autoSkipPadding: 5,
-                                fontColor: color.label,
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'BLE channel',
-                                fontColor: color.label,
-                                fontSize: 14,
-                            },
-                            gridLines: {
-                                offsetGridLines: true,
-                                display: false,
-                                drawBorder: false,
-                                fontColor: color.label,
-                            },
-                            stacked: true,
+            <div className="chart-container">
+                <Bar
+                    data={{
+                        labels,
+                        datasets: [{
+                            label: 'rssi',
+                            backgroundColor: rssiColors,
+                            borderWidth: 0,
+                            data: selectBLEValues(rssi).map(convertInYRange),
+                            datalabels: { display: false },
                         }, {
-                            type: 'category',
-                            position: 'bottom',
-                            offset: true,
-                            ticks: {
-                                callback: (_, index) => 2402 + 2 * index,
-                                minRotation: 90,
-                                labelOffset: 0,
-                                autoSkipPadding: 5,
-                                fontColor: color.label,
+                            label: 'rssiMax',
+                            backgroundColor: rssiMaxColors,
+                            borderWidth: 0,
+                            data: selectBLEValues(rssiMax).map(convertInYRange),
+                            datalabels: {
+                                color: rssiColors,
+                                anchor: 'end',
+                                align: 'end',
+                                formatter: convertInYRange,
+                                offset: -3,
+                                font: { size: 9 },
                             },
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'MHz',
-                                fontColor: color.label,
-                                fontSize: 14,
-                                padding: { top: 10 },
-                            },
-                            gridLines: {
-                                offsetGridLines: true,
-                                display: false,
-                                drawBorder: false,
-                                fontColor: color.label,
-                            },
-                            stacked: true,
+                        }, {
+                            label: 'bgBars',
+                            backgroundColor: color.bar.background,
+                            borderWidth: 0,
+                            data: Array(81).fill(yRange.min),
+                            datalabels: { display: false },
                         }],
-                        yAxes: [{
-                            type: 'linear',
-                            min: yRange.max,
-                            max: yRange.min,
-                            ticks: {
-                                callback: v => v - yRange.max - yRange.min,
+                    }}
+                    options={{
+                        animation: { duration: animationDuration },
+                        maintainAspectRatio: false,
+                        legend: { display: false },
+                        tooltips: { enabled: false },
+                        scales: {
+                            xAxes: [{
+                                type: 'category',
+                                position: 'top',
+                                offset: true,
+                                ticks: {
+                                    callback: (_, index) => bleChannels[index],
+                                    minRotation: 0,
+                                    maxRotation: 0,
+                                    labelOffset: 0,
+                                    autoSkipPadding: 5,
+                                    fontColor: color.label,
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'BLE channel',
+                                    fontColor: color.label,
+                                    fontSize: 14,
+                                },
+                                gridLines: {
+                                    offsetGridLines: true,
+                                    display: false,
+                                    drawBorder: false,
+                                    fontColor: color.label,
+                                },
+                                stacked: true,
+                            }, {
+                                type: 'category',
+                                position: 'bottom',
+                                offset: true,
+                                ticks: {
+                                    callback: (_, index) => 2402 + 2 * index,
+                                    minRotation: 90,
+                                    labelOffset: 0,
+                                    autoSkipPadding: 5,
+                                    fontColor: color.label,
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'MHz',
+                                    fontColor: color.label,
+                                    fontSize: 14,
+                                    padding: { top: 10 },
+                                },
+                                gridLines: {
+                                    offsetGridLines: true,
+                                    display: false,
+                                    drawBorder: false,
+                                    fontColor: color.label,
+                                },
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                type: 'linear',
                                 min: yRange.max,
                                 max: yRange.min,
-                                fontColor: color.label,
-                            },
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'dBm',
-                                fontColor: color.label,
-                                fontSize: 14,
-                            },
-                            gridLines: {
-                                display: false,
-                                drawBorder: false,
-                            },
-                        }],
-                    },
-                }}
-            />
+                                ticks: {
+                                    callback: v => v - yRange.max - yRange.min,
+                                    min: yRange.max,
+                                    max: yRange.min,
+                                    fontColor: color.label,
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'dBm',
+                                    fontColor: color.label,
+                                    fontSize: 14,
+                                },
+                                gridLines: {
+                                    display: false,
+                                    drawBorder: false,
+                                },
+                            }],
+                        },
+                    }}
+                />
+            </div>
         </Main>
     );
 };
