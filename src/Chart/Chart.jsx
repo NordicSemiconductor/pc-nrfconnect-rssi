@@ -35,7 +35,7 @@
  */
 
 import React from 'react';
-import { Main, bleChannels, isAdvertisementChannel } from 'pc-nrfconnect-shared';
+import { Main, bleChannels } from 'pc-nrfconnect-shared';
 import { Bar, Chart } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useSelector } from 'react-redux';
@@ -52,12 +52,14 @@ import './chart.scss';
 
 Chart.plugins.register(ChartDataLabels);
 
-const rssiColors = bleChannels.map(
-    channel => (isAdvertisementChannel(channel) ? color.bar.advertisement : color.bar.normal),
-);
-const rssiMaxColors = bleChannels.map(
-    channel => (isAdvertisementChannel(channel) ? color.bar.advertisementMax : color.bar.normalMax),
-);
+const rssiColors = bleChannels.map(channel => (
+    bleChannels.isAdvertisement(channel)
+        ? color.bar.advertisement
+        : color.bar.normal));
+const rssiMaxColors = bleChannels.map(channel => (
+    bleChannels.isAdvertisement(channel)
+        ? color.bar.advertisementMax
+        : color.bar.normalMax));
 
 const labels = bleChannels;
 

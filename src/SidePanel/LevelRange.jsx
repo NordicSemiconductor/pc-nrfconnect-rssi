@@ -37,11 +37,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { Slider } from 'pc-nrfconnect-shared';
+import { Slider, NumberInlineInput } from 'pc-nrfconnect-shared';
 
 import { setLevelRange } from '../actions';
 import { getLevelRange, initialLevelRange } from '../reducer';
-import InlineInput from './InlineInput';
 
 const sliderId = 'ble-level-slider';
 
@@ -56,13 +55,13 @@ export default () => {
         <>
             <Form.Label htmlFor={sliderId}>
                 Show signal levels from{' '}
-                <InlineInput
+                <NumberInlineInput
                     value={lower}
                     range={{ min: initialLevelRange.lower, max: upper }}
                     onChange={newLower => dispatch(setLevelRange([newLower, upper]))}
                 />
                 {' '}to{' '}
-                <InlineInput
+                <NumberInlineInput
                     value={upper}
                     range={{ min: lower, max: initialLevelRange.upper }}
                     onChange={newUpper => dispatch(setLevelRange([lower, newUpper]))}

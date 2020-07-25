@@ -34,7 +34,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { bleChannelRange } from 'pc-nrfconnect-shared';
+import { bleChannels } from 'pc-nrfconnect-shared';
 
 export const initialLevelRange = {
     lower: 20,
@@ -49,7 +49,7 @@ const initialState = {
     scanRepeat: 1,
     maxScans: 30,
     animationDuration: 500,
-    channelRange: [bleChannelRange.lower, bleChannelRange.upper],
+    channelRange: [bleChannels.min, bleChannels.max],
     levelRange: [initialLevelRange.lower, initialLevelRange.upper],
     port: null,
 };
