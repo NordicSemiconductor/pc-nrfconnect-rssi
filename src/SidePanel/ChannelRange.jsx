@@ -48,23 +48,23 @@ export default () => {
     const dispatch = useDispatch();
     const channelRange = useSelector(getChannelRange);
 
-    const lower = Math.min(...channelRange);
-    const upper = Math.max(...channelRange);
+    const min = Math.min(...channelRange);
+    const max = Math.max(...channelRange);
 
     return (
         <>
             <Form.Label htmlFor={sliderId}>
                 Show BLE channels from{' '}
                 <NumberInlineInput
-                    value={lower}
-                    range={{ min: bleChannels.min, max: upper }}
-                    onChange={newLower => dispatch(setChannelRange([newLower, upper]))}
+                    value={min}
+                    range={{ min: bleChannels.min, max }}
+                    onChange={newMin => dispatch(setChannelRange([newMin, max]))}
                 />
                 {' '}to{' '}
                 <NumberInlineInput
-                    value={upper}
-                    range={{ min: lower, max: bleChannels.max }}
-                    onChange={newUpper => dispatch(setChannelRange([lower, newUpper]))}
+                    value={max}
+                    range={{ min, max: bleChannels.max }}
+                    onChange={newMax => dispatch(setChannelRange([min, newMax]))}
                 />
             </Form.Label>
             <Slider

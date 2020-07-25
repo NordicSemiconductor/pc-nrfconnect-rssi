@@ -37,8 +37,8 @@
 import { bleChannels } from 'pc-nrfconnect-shared';
 
 export const initialLevelRange = {
-    lower: 20,
-    upper: 110,
+    min: 20,
+    max: 110,
 };
 
 const initialState = {
@@ -50,7 +50,7 @@ const initialState = {
     maxScans: 30,
     animationDuration: 500,
     channelRange: [bleChannels.min, bleChannels.max],
-    levelRange: [initialLevelRange.lower, initialLevelRange.upper],
+    levelRange: [initialLevelRange.min, initialLevelRange.max],
     port: null,
 };
 

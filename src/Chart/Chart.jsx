@@ -65,7 +65,7 @@ const labels = bleChannels;
 
 const selectBLEValues = allData => allData.slice(2).filter((_, index) => index % 2 === 0);
 
-const isInRange = ([lower, upper], index) => index >= lower && index <= upper;
+const isInRange = ([min, max], index) => index >= min && index <= max;
 
 export default () => {
     const rssi = useSelector(getRssi);

@@ -48,30 +48,30 @@ export default () => {
     const dispatch = useDispatch();
     const levelRange = useSelector(getLevelRange);
 
-    const lower = Math.min(...levelRange);
-    const upper = Math.max(...levelRange);
+    const min = Math.min(...levelRange);
+    const max = Math.max(...levelRange);
 
     return (
         <>
             <Form.Label htmlFor={sliderId}>
                 Show signal levels from{' '}
                 <NumberInlineInput
-                    value={lower}
-                    range={{ min: initialLevelRange.lower, max: upper }}
-                    onChange={newLower => dispatch(setLevelRange([newLower, upper]))}
+                    value={min}
+                    range={{ min: initialLevelRange.min, max }}
+                    onChange={newMin => dispatch(setLevelRange([newMin, max]))}
                 />
                 {' '}to{' '}
                 <NumberInlineInput
-                    value={upper}
-                    range={{ min: lower, max: initialLevelRange.upper }}
-                    onChange={newUpper => dispatch(setLevelRange([lower, newUpper]))}
+                    value={max}
+                    range={{ min, max: initialLevelRange.max }}
+                    onChange={newMax => dispatch(setLevelRange([min, newMax]))}
                 />
                 {' '}dBm
             </Form.Label>
             <Slider
                 id={sliderId}
                 values={levelRange}
-                range={{ min: initialLevelRange.lower, max: initialLevelRange.upper }}
+                range={{ min: initialLevelRange.min, max: initialLevelRange.max }}
                 onChange={[
                     newValue => dispatch(setLevelRange([newValue, levelRange[1]])),
                     newValue => dispatch(setLevelRange([levelRange[0], newValue])),
