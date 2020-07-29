@@ -34,28 +34,15 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const yRange = {
-    min: 110,
-    max: 20,
-};
+import { colors } from 'pc-nrfconnect-shared';
 
-// Official Nordic colors, taken from https://github.com/NordicSemiconductor/pc-nrfconnect-shared/blob/9bb1f72849/src/variables.scss
-const blueSlate = '#0033a0';
-const green = '#4caf50';
-const blueSlateLighter = '#7c98d3'; // result of using color.scale($blue-slate, $lightness: 50%, $saturation: -50%) in sass
-
-const greenLighter = '#b1cbb3'; // result of using color.scale($green, $lightness: 50%, $saturation: -50%) in sass
-
-const gray50 = '#eceff1';
-const gray300 = '#90a4ae';
-
-export const color = {
-    label: gray300,
+export default {
+    label: colors.gray300,
     bar: {
-        normal: blueSlate,
-        normalMax: blueSlateLighter,
-        advertisement: green,
-        advertisementMax: greenLighter,
-        background: gray50,
+        normal: colors.blueSlate,
+        normalMax: colors.blueSlateLighter,
+        advertisement: colors.green,
+        advertisementMax: colors.greenLighter,
+        background: colors.gray50,
     },
 };

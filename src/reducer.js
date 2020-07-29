@@ -34,6 +34,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import { bleChannels } from 'pc-nrfconnect-shared';
+
+export const initialLevelRange = {
+    min: 20,
+    max: 110,
+};
+
 const initialState = {
     isPaused: false,
     data: [],
@@ -42,7 +49,8 @@ const initialState = {
     scanRepeat: 1,
     maxScans: 30,
     animationDuration: 500,
-    scanAdvChannelsOnly: false,
+    channelRange: [bleChannels.min, bleChannels.max],
+    levelRange: [initialLevelRange.min, initialLevelRange.max],
     port: null,
 };
 
@@ -79,10 +87,15 @@ export default (state = initialState, action) => {
                 ...state,
                 animationDuration: action.animationDuration,
             };
-        case 'RSSI_SCAN_ADV_CHANNELS_ONLY':
+        case 'RSSI_CHANNEL_RANGE_SET':
             return {
                 ...state,
-                scanAdvChannelsOnly: action.scanAdvChannelsOnly,
+                channelRange: action.channelRange,
+            };
+        case 'RSSI_LEVEL_RANGE_SET':
+            return {
+                ...state,
+                levelRange: action.levelRange,
             };
         case 'RSSI_SERIAL_OPENED':
             return {
@@ -99,6 +112,18 @@ export default (state = initialState, action) => {
     }
 };
 
+export const getIsConnected = state => state.app.port != null;
+export const getIsPaused = state => state.app.isPaused;
+
 export const getRssi = state => state.app.data;
 export const getRssiMax = state => state.app.dataMax;
 export const getAnimationDuration = state => state.app.animationDuration;
+export const getDelay = state => state.app.delay;
+export const getMaxScans = state => state.app.maxScans;
+export const getScanRepeat = state => state.app.scanRepeat;
+
+export const getChannelRange = state => state.app.channelRange;
+export const getChannelRangeSorted = state => [...state.app.channelRange].sort((a, b) => a - b);
+
+export const getLevelRange = state => state.app.levelRange;
+export const getLevelRangeSorted = state => [...state.app.levelRange].sort((a, b) => a - b);

@@ -40,13 +40,14 @@ import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { changeDelay, writeDelay } from '../actions';
+import { getDelay } from '../reducer';
 
 const range = { min: 5, max: 1000 };
 const sliderId = 'delay-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const delay = useSelector(state => state.app.delay);
+    const delay = useSelector(getDelay);
 
     const changeAndWriteDelay = useCallback(newDelay => {
         dispatch(changeDelay(newDelay));

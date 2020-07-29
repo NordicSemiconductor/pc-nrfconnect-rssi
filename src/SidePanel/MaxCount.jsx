@@ -40,13 +40,14 @@ import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { changeMaxScans } from '../actions';
+import { getMaxScans } from '../reducer';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'max-scans-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const maxScans = useSelector(state => state.app.maxScans);
+    const maxScans = useSelector(getMaxScans);
 
     const dispatchChangeMaxScans = useCallback(
         newMaxScans => dispatch(changeMaxScans(newMaxScans)),

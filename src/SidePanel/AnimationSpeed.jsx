@@ -40,13 +40,14 @@ import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { changeAnimationDuration } from '../actions';
+import { getAnimationDuration } from '../reducer';
 
 const range = { min: 10, max: 1000 };
 const sliderId = 'animation-duration-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const animationDuration = useSelector(state => state.app.animationDuration);
+    const animationDuration = useSelector(getAnimationDuration);
 
     const dispatchChangeAnimationDuration = useCallback(
         newAnimationDuration => dispatch(changeAnimationDuration(newAnimationDuration)),

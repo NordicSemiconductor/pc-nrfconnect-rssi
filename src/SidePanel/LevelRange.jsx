@@ -35,31 +35,48 @@
  */
 
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { Slider, NumberInlineInput } from 'pc-nrfconnect-shared';
 
-import {
-    setScanAdvChannelsOnly,
-    writeScanAdvChannelsOnly,
-    resetRssiData,
-} from '../actions';
+import { setLevelRange } from '../actions';
+import { getLevelRange, initialLevelRange } from '../reducer';
+
+const sliderId = 'ble-level-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const callScanAdvChannelsOnly = event => {
-        const newScanAdvChannelsOnly = event.target.checked;
+    const levelRange = useSelector(getLevelRange);
 
-        dispatch(setScanAdvChannelsOnly(newScanAdvChannelsOnly));
-        writeScanAdvChannelsOnly(newScanAdvChannelsOnly);
-        resetRssiData();
-    };
+    const min = Math.min(...levelRange);
+    const max = Math.max(...levelRange);
 
     return (
-        <Form.Group controlId="advCheck">
-            <Form.Switch
-                onChange={callScanAdvChannelsOnly}
-                label="Advertisements only"
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Show signal levels from{' '}
+                <NumberInlineInput
+                    value={min}
+                    range={{ min: initialLevelRange.min, max }}
+                    onChange={newMin => dispatch(setLevelRange([newMin, max]))}
+                />
+                {' '}to{' '}
+                <NumberInlineInput
+                    value={max}
+                    range={{ min, max: initialLevelRange.max }}
+                    onChange={newMax => dispatch(setLevelRange([min, newMax]))}
+                />
+                {' '}dBm
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={levelRange}
+                range={{ min: initialLevelRange.min, max: initialLevelRange.max }}
+                onChange={[
+                    newValue => dispatch(setLevelRange([newValue, levelRange[1]])),
+                    newValue => dispatch(setLevelRange([levelRange[0], newValue])),
+                ]}
             />
-        </Form.Group>
+        </>
     );
 };

@@ -55,7 +55,8 @@ export const changeDelay = delay => ({ type: 'RSSI_CHANGE_DELAY', delay });
 export const changeMaxScans = maxScans => ({ type: 'RSSI_CHANGE_MAX_SCANS', maxScans });
 export const changeChannelScanRepeat = scanRepeat => ({ type: 'RSSI_CHANGE_SCAN_REPEAT', scanRepeat });
 export const changeAnimationDuration = animationDuration => ({ type: 'RSSI_CHANGE_ANIMATION_DURATION', animationDuration });
-export const setScanAdvChannelsOnly = scanAdvChannelsOnly => ({ type: 'RSSI_SCAN_ADV_CHANNELS_ONLY', scanAdvChannelsOnly });
+export const setChannelRange = channelRange => ({ type: 'RSSI_CHANNEL_RANGE_SET', channelRange });
+export const setLevelRange = levelRange => ({ type: 'RSSI_LEVEL_RANGE_SET', levelRange });
 
 export const setRssiData = () => ({
     type: 'RSSI_DATA',
@@ -77,12 +78,7 @@ export const writeDelay = delay => writeAndDrain(`set delay ${delay}\r`);
 export const writeScanRepeat = scanRepeat => writeAndDrain(`set repeat ${scanRepeat}\r`);
 export const toggleLED = () => writeAndDrain('led\r');
 
-export const writeScanAdvChannelsOnly = async enable => {
-    await writeAndDrain(`scan adv ${enable ? 'true' : 'false'}\r`);
-};
-
 export const startReading = async appState => {
-    await writeScanAdvChannelsOnly(appState.scanAdvChannelsOnly);
     await writeDelay(appState.delay);
     await writeScanRepeat(appState.scanRepeat);
 

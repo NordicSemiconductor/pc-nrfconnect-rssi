@@ -39,14 +39,15 @@ import { useSelector } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
 import { toggleLED } from '../actions';
+import { getIsConnected } from '../reducer';
 
 export default () => {
-    const isDisconnected = useSelector(state => state.app.port) == null;
+    const isConnected = useSelector(getIsConnected);
 
     return (
         <Button
             variant="secondary"
-            disabled={isDisconnected}
+            disabled={!isConnected}
             onClick={toggleLED}
         >
             Toggle LED
