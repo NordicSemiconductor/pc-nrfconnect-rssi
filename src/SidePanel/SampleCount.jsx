@@ -37,10 +37,9 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { Slider } from 'pc-nrfconnect-shared';
+import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { writeScanRepeat, changeChannelScanRepeat } from '../actions';
-import InlineInput from './InlineInput';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'sample-count-slider';
@@ -62,7 +61,7 @@ export default () => {
         <>
             <Form.Label htmlFor={sliderId}>
                 Sample each channel{' '}
-                <InlineInput
+                <NumberInlineInput
                     value={scanRepeat}
                     range={range}
                     onChange={changeAndWriteScanRepeat}

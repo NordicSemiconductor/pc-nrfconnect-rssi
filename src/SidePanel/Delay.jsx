@@ -37,10 +37,9 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { Slider } from 'pc-nrfconnect-shared';
+import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { changeDelay, writeDelay } from '../actions';
-import InlineInput from './InlineInput';
 
 const range = { min: 5, max: 1000 };
 const sliderId = 'delay-slider';
@@ -62,7 +61,7 @@ export default () => {
         <>
             <Form.Label htmlFor={sliderId}>
                 Run scan every{' '}
-                <InlineInput
+                <NumberInlineInput
                     value={delay}
                     range={range}
                     onChange={changeAndWriteDelay}
