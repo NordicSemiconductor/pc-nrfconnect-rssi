@@ -51,20 +51,26 @@ export default () => {
     const min = Math.min(...levelRange);
     const max = Math.max(...levelRange);
 
+    const setNewLevelRangeIfUnequal = (value1, value2) => {
+        if (value1 !== value2) {
+            dispatch(setLevelRange([value1, value2]));
+        }
+    };
+
     return (
         <>
             <Form.Label htmlFor={sliderId}>
                 Show signal levels from{' '}
                 <NumberInlineInput
                     value={-min}
-                    range={{ min: -max, max: -initialLevelRange.min }}
-                    onChange={newMin => dispatch(setLevelRange([-newMin, max]))}
+                    range={{ min: -max + 1, max: -initialLevelRange.min }}
+                    onChange={newMin => setNewLevelRangeIfUnequal(-newMin, max)}
                 />
                 {' '}to{' '}
                 <NumberInlineInput
                     value={-max}
-                    range={{ min: -initialLevelRange.max, max: -min }}
-                    onChange={newMax => dispatch(setLevelRange([min, -newMax]))}
+                    range={{ min: -initialLevelRange.max, max: -min + 1 }}
+                    onChange={newMax => setNewLevelRangeIfUnequal(min, -newMax)}
                 />
                 {' '}dBm
             </Form.Label>
@@ -73,8 +79,8 @@ export default () => {
                 values={levelRange}
                 range={{ min: initialLevelRange.min, max: initialLevelRange.max }}
                 onChange={[
-                    newValue => dispatch(setLevelRange([newValue, levelRange[1]])),
-                    newValue => dispatch(setLevelRange([levelRange[0], newValue])),
+                    newValue => setNewLevelRangeIfUnequal(newValue, levelRange[1]),
+                    newValue => setNewLevelRangeIfUnequal(levelRange[0], newValue),
                 ]}
             />
         </>
