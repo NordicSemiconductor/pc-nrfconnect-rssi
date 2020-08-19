@@ -56,15 +56,15 @@ export default () => {
             <Form.Label htmlFor={sliderId}>
                 Show signal levels from{' '}
                 <NumberInlineInput
-                    value={min}
-                    range={{ min: initialLevelRange.min, max }}
-                    onChange={newMin => dispatch(setLevelRange([newMin, max]))}
+                    value={-min}
+                    range={{ min: -max, max: -initialLevelRange.min }}
+                    onChange={newMin => dispatch(setLevelRange([-newMin, max]))}
                 />
                 {' '}to{' '}
                 <NumberInlineInput
-                    value={max}
-                    range={{ min, max: initialLevelRange.max }}
-                    onChange={newMax => dispatch(setLevelRange([min, newMax]))}
+                    value={-max}
+                    range={{ min: -initialLevelRange.max, max: -min }}
+                    onChange={newMax => dispatch(setLevelRange([min, -newMax]))}
                 />
                 {' '}dBm
             </Form.Label>
