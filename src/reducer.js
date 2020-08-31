@@ -101,6 +101,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 port: action.portName,
+                isPaused: false,
             };
         case 'RSSI_SERIAL_CLOSED':
             return {
