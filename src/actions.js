@@ -148,7 +148,6 @@ export const close = () => async dispatch => {
     } else {
         resetRssiData();
     }
-    dispatch(setRssiData());
     logger.info('Serial port is closed');
     return dispatch(serialPortClosedAction());
 };
