@@ -51,30 +51,36 @@ export default () => {
     const min = Math.min(...levelRange);
     const max = Math.max(...levelRange);
 
+    const setNewLevelRangeIfUnequal = (value1, value2) => {
+        if (value1 !== value2) {
+            dispatch(setLevelRange([value1, value2]));
+        }
+    };
+
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                Show signal levels from{' '}
+                Signal levels from{' '}
                 <NumberInlineInput
-                    value={min}
-                    range={{ min: initialLevelRange.min, max }}
-                    onChange={newMin => dispatch(setLevelRange([newMin, max]))}
+                    value={-max}
+                    range={{ min: -initialLevelRange.max, max: -min + 1 }}
+                    onChange={newMax => setNewLevelRangeIfUnequal(min, -newMax)}
                 />
                 {' '}to{' '}
                 <NumberInlineInput
-                    value={max}
-                    range={{ min, max: initialLevelRange.max }}
-                    onChange={newMax => dispatch(setLevelRange([min, newMax]))}
+                    value={-min}
+                    range={{ min: -max + 1, max: -initialLevelRange.min }}
+                    onChange={newMin => setNewLevelRangeIfUnequal(-newMin, max)}
                 />
                 {' '}dBm
             </Form.Label>
             <Slider
                 id={sliderId}
-                values={levelRange}
-                range={{ min: initialLevelRange.min, max: initialLevelRange.max }}
+                values={levelRange.map(v => -v)}
+                range={{ min: -initialLevelRange.max, max: -initialLevelRange.min }}
                 onChange={[
-                    newValue => dispatch(setLevelRange([newValue, levelRange[1]])),
-                    newValue => dispatch(setLevelRange([levelRange[0], newValue])),
+                    newValue => setNewLevelRangeIfUnequal(-newValue, levelRange[1]),
+                    newValue => setNewLevelRangeIfUnequal(levelRange[0], -newValue),
                 ]}
             />
         </>

@@ -6,6 +6,7 @@
 
     h2 {
         margin-top: 6ex;
+        margin-bottom: 3ex;
 
         text-transform: uppercase;
         font-size: 10px;
@@ -15,9 +16,13 @@
         color: $gray-400;
     }
 
-    .form-label,.form-group {
+    h2 + .form-label {
+        margin-top: 0;
+    }
+
+    .form-label {
         margin-top: 1ex;
-        margin-bottom: 0ex;
+        margin-bottom: 0;
     }
 
     .number-inline-input {

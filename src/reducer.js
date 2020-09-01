@@ -62,6 +62,9 @@ export default (state = initialState, action) => {
                 isPaused: action.isPaused,
             };
         case 'RSSI_DATA':
+            if (state.isPaused) {
+                return state;
+            }
             return {
                 ...state,
                 data: action.data,
@@ -101,11 +104,15 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 port: action.portName,
+                isPaused: false,
             };
         case 'RSSI_SERIAL_CLOSED':
             return {
                 ...state,
                 port: null,
+                isPaused: true,
+                data: [],
+                dataMax: [],
             };
         default:
             return state;
