@@ -13,6 +13,7 @@ steps:
     npm run lint
     npm run build
     npm pack
+  displayName: 'Build and pack'
 - bash: |
       set -o errexit -o pipefail
       cp *.tgz "$(Build.ArtifactStagingDirectory)"
