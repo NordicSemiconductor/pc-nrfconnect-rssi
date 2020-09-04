@@ -1,6 +1,7 @@
 trigger:
 - master
 - release/*
+- demo
 pool:
   vmImage: 'Ubuntu-18.04'
 steps:
