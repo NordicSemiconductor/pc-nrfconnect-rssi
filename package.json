@@ -19,6 +19,7 @@
     "LICENSE"
   ],
   "main": "dist/bundle.js",
+  "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js",
   "scripts": {
     "dev": "nrfconnect-scripts build-watch",
     "webpack": "nrfconnect-scripts build-dev",
@@ -36,7 +37,7 @@
   "devDependencies": {
     "chart.js": "2.9.3",
     "chartjs-plugin-datalabels": "0.7.0",
-    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.8.14",
+    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.8.16",
     "react": "16.13.1",
     "react-chartjs-2": "2.9.0",
     "react-redux": "7.2.0"

@@ -58,13 +58,17 @@ export default () => {
                 <NumberInlineInput
                     value={min}
                     range={{ min: bleChannels.min, max }}
-                    onChange={newMin => dispatch(setChannelRange([newMin, max]))}
-                />
-                {' '}to{' '}
+                    onChange={newMin =>
+                        dispatch(setChannelRange([newMin, max]))
+                    }
+                />{' '}
+                to{' '}
                 <NumberInlineInput
                     value={max}
                     range={{ min, max: bleChannels.max }}
-                    onChange={newMax => dispatch(setChannelRange([min, newMax]))}
+                    onChange={newMax =>
+                        dispatch(setChannelRange([min, newMax]))
+                    }
                 />
             </Form.Label>
             <Slider
@@ -72,8 +76,10 @@ export default () => {
                 values={channelRange}
                 range={{ min: bleChannels.min, max: bleChannels.max }}
                 onChange={[
-                    newValue => dispatch(setChannelRange([newValue, channelRange[1]])),
-                    newValue => dispatch(setChannelRange([channelRange[0], newValue])),
+                    newValue =>
+                        dispatch(setChannelRange([newValue, channelRange[1]])),
+                    newValue =>
+                        dispatch(setChannelRange([channelRange[0], newValue])),
                 ]}
             />
         </>

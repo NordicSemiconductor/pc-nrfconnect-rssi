@@ -49,13 +49,16 @@ export default () => {
     const dispatch = useDispatch();
     const scanRepeat = useSelector(getScanRepeat);
 
-    const changeAndWriteScanRepeat = useCallback(newScanRepeat => {
-        dispatch(changeChannelScanRepeat(newScanRepeat));
-        writeScanRepeat(newScanRepeat);
-    }, [dispatch]);
+    const changeAndWriteScanRepeat = useCallback(
+        newScanRepeat => {
+            dispatch(changeChannelScanRepeat(newScanRepeat));
+            writeScanRepeat(newScanRepeat);
+        },
+        [dispatch]
+    );
     const dispatchChangeScanRepeat = useCallback(
         newScanRepeat => dispatch(changeChannelScanRepeat(newScanRepeat)),
-        [dispatch],
+        [dispatch]
     );
 
     return (
@@ -66,8 +69,8 @@ export default () => {
                     value={scanRepeat}
                     range={range}
                     onChange={changeAndWriteScanRepeat}
-                />
-                {' '}times
+                />{' '}
+                times
             </Form.Label>
             <Slider
                 id={sliderId}

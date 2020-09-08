@@ -49,14 +49,37 @@ export const resetRssiData = () => {
     rssiDataMax = [];
 };
 
-const serialPortOpenedAction = portName => ({ type: 'RSSI_SERIAL_OPENED', portName });
-const serialPortClosedAction = () => ({ type: 'RSSI_SERIAL_CLOSED' });
-export const changeDelay = delay => ({ type: 'RSSI_CHANGE_DELAY', delay });
-export const changeMaxScans = maxScans => ({ type: 'RSSI_CHANGE_MAX_SCANS', maxScans });
-export const changeChannelScanRepeat = scanRepeat => ({ type: 'RSSI_CHANGE_SCAN_REPEAT', scanRepeat });
-export const changeAnimationDuration = animationDuration => ({ type: 'RSSI_CHANGE_ANIMATION_DURATION', animationDuration });
-export const setChannelRange = channelRange => ({ type: 'RSSI_CHANNEL_RANGE_SET', channelRange });
-export const setLevelRange = levelRange => ({ type: 'RSSI_LEVEL_RANGE_SET', levelRange });
+const serialPortOpenedAction = portName => ({
+    type: 'RSSI_SERIAL_OPENED',
+    portName,
+});
+const serialPortClosedAction = () => ({
+    type: 'RSSI_SERIAL_CLOSED',
+});
+export const changeDelay = delay => ({
+    type: 'RSSI_CHANGE_DELAY',
+    delay,
+});
+export const changeMaxScans = maxScans => ({
+    type: 'RSSI_CHANGE_MAX_SCANS',
+    maxScans,
+});
+export const changeChannelScanRepeat = scanRepeat => ({
+    type: 'RSSI_CHANGE_SCAN_REPEAT',
+    scanRepeat,
+});
+export const changeAnimationDuration = animationDuration => ({
+    type: 'RSSI_CHANGE_ANIMATION_DURATION',
+    animationDuration,
+});
+export const setChannelRange = channelRange => ({
+    type: 'RSSI_CHANNEL_RANGE_SET',
+    channelRange,
+});
+export const setLevelRange = levelRange => ({
+    type: 'RSSI_LEVEL_RANGE_SET',
+    levelRange,
+});
 
 export const setRssiData = () => ({
     type: 'RSSI_DATA',
@@ -75,7 +98,10 @@ const writeAndDrain = async cmd => {
 };
 
 export const writeDelay = delay => writeAndDrain(`set delay ${delay}\r`);
-export const writeScanRepeat = scanRepeat => writeAndDrain(`set repeat ${scanRepeat}\r`);
+
+export const writeScanRepeat = scanRepeat =>
+    writeAndDrain(`set repeat ${scanRepeat}\r`);
+
 export const toggleLED = () => writeAndDrain('led\r');
 
 export const startReading = async appState => {
@@ -89,7 +115,7 @@ export const stopReading = () => writeAndDrain('stop\r');
 
 export const togglePause = (dispatch, getState) => {
     const appState = getState().app;
-    dispatch(({ type: 'RSSI_PAUSE', isPaused: !appState.isPaused }));
+    dispatch({ type: 'RSSI_PAUSE', isPaused: !appState.isPaused });
 
     if (appState.isPaused) {
         startReading(appState);
@@ -99,9 +125,7 @@ export const togglePause = (dispatch, getState) => {
 };
 
 const openWhenClosed = serialPort => (dispatch, getState) => {
-    port = new SerialPort(serialPort.path, {
-        baudRate: 115200,
-    }, () => {
+    port = new SerialPort(serialPort.path, { baudRate: 115200 }, () => {
         logger.info(`${serialPort.path} is open`);
         dispatch(serialPortOpenedAction(serialPort.path));
 
@@ -123,24 +147,28 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
                 if (ch !== 0xff && d !== 0xff) {
                     rssiData[ch].unshift(d);
                     rssiData[ch].splice(getState().app.maxScans);
-                    rssiDataMax[ch] = Math.min(...(rssiData[ch]));
+                    rssiDataMax[ch] = Math.min(...rssiData[ch]);
                 }
             }
 
-            if (throttleUpdates) { return; }
+            if (throttleUpdates) {
+                return;
+            }
 
             throttleUpdates = true;
             requestAnimationFrame(() => {
                 throttleUpdates = false;
                 dispatch(setRssiData());
             });
-        })
-            .on('error', console.log);
+        }).on('error', console.log);
     });
 };
 
 export const close = () => async dispatch => {
-    if (port && (typeof (port.isOpen) === 'function' ? port.isOpen() : port.isOpen)) {
+    if (
+        port &&
+        (typeof port.isOpen === 'function' ? port.isOpen() : port.isOpen)
+    ) {
         await stopReading();
         resetRssiData();
         await new Promise(resolve => port.close(resolve));
@@ -153,6 +181,6 @@ export const close = () => async dispatch => {
 };
 
 export function open(serialPort) {
-    return dispatch => dispatch(close())
-        .then(() => dispatch(openWhenClosed(serialPort)));
+    return dispatch =>
+        dispatch(close()).then(() => dispatch(openWhenClosed(serialPort)));
 }

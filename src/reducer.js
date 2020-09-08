@@ -130,7 +130,9 @@ export const getMaxScans = state => state.app.maxScans;
 export const getScanRepeat = state => state.app.scanRepeat;
 
 export const getChannelRange = state => state.app.channelRange;
-export const getChannelRangeSorted = state => [...state.app.channelRange].sort((a, b) => a - b);
+export const getChannelRangeSorted = state =>
+    [...state.app.channelRange].sort((a, b) => a - b);
 
 export const getLevelRange = state => state.app.levelRange;
-export const getLevelRangeSorted = state => [...state.app.levelRange].sort((a, b) => a - b);
+export const getLevelRangeSorted = state =>
+    [...state.app.levelRange].sort((a, b) => a - b);

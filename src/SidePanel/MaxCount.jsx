@@ -51,7 +51,7 @@ export default () => {
 
     const dispatchChangeMaxScans = useCallback(
         newMaxScans => dispatch(changeMaxScans(newMaxScans)),
-        [dispatch],
+        [dispatch]
     );
 
     return (
@@ -62,8 +62,8 @@ export default () => {
                     value={maxScans}
                     range={range}
                     onChange={dispatchChangeMaxScans}
-                />
-                {' '}scans
+                />{' '}
+                scans
             </Form.Label>
             <Slider
                 id={sliderId}

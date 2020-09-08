@@ -65,22 +65,27 @@ export default () => {
                     value={-max}
                     range={{ min: -initialLevelRange.max, max: -min + 1 }}
                     onChange={newMax => setNewLevelRangeIfUnequal(min, -newMax)}
-                />
-                {' '}to{' '}
+                />{' '}
+                to{' '}
                 <NumberInlineInput
                     value={-min}
                     range={{ min: -max + 1, max: -initialLevelRange.min }}
                     onChange={newMin => setNewLevelRangeIfUnequal(-newMin, max)}
-                />
-                {' '}dBm
+                />{' '}
+                dBm
             </Form.Label>
             <Slider
                 id={sliderId}
                 values={levelRange.map(v => -v)}
-                range={{ min: -initialLevelRange.max, max: -initialLevelRange.min }}
+                range={{
+                    min: -initialLevelRange.max,
+                    max: -initialLevelRange.min,
+                }}
                 onChange={[
-                    newValue => setNewLevelRangeIfUnequal(-newValue, levelRange[1]),
-                    newValue => setNewLevelRangeIfUnequal(levelRange[0], -newValue),
+                    newValue =>
+                        setNewLevelRangeIfUnequal(-newValue, levelRange[1]),
+                    newValue =>
+                        setNewLevelRangeIfUnequal(levelRange[0], -newValue),
                 ]}
             />
         </>

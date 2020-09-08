@@ -49,13 +49,16 @@ export default () => {
     const dispatch = useDispatch();
     const delay = useSelector(getDelay);
 
-    const changeAndWriteDelay = useCallback(newDelay => {
-        dispatch(changeDelay(newDelay));
-        writeDelay(newDelay);
-    }, [dispatch]);
+    const changeAndWriteDelay = useCallback(
+        newDelay => {
+            dispatch(changeDelay(newDelay));
+            writeDelay(newDelay);
+        },
+        [dispatch]
+    );
     const dispatchChangeDelay = useCallback(
         newDelay => dispatch(changeDelay(newDelay)),
-        [dispatch],
+        [dispatch]
     );
 
     return (

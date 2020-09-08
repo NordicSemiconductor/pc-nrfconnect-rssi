@@ -50,8 +50,9 @@ export default () => {
     const animationDuration = useSelector(getAnimationDuration);
 
     const dispatchChangeAnimationDuration = useCallback(
-        newAnimationDuration => dispatch(changeAnimationDuration(newAnimationDuration)),
-        [dispatch],
+        newAnimationDuration =>
+            dispatch(changeAnimationDuration(newAnimationDuration)),
+        [dispatch]
     );
 
     return (

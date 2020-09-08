@@ -52,18 +52,22 @@ import './chart.scss';
 
 Chart.plugins.register(ChartDataLabels);
 
-const rssiColors = bleChannels.map(channel => (
+const rssiColors = bleChannels.map(channel =>
     bleChannels.isAdvertisement(channel)
         ? color.bar.advertisement
-        : color.bar.normal));
-const rssiMaxColors = bleChannels.map(channel => (
+        : color.bar.normal
+);
+
+const rssiMaxColors = bleChannels.map(channel =>
     bleChannels.isAdvertisement(channel)
         ? color.bar.advertisementMax
-        : color.bar.normalMax));
+        : color.bar.normalMax
+);
 
 const labels = bleChannels;
 
-const selectBLEValues = allData => allData.slice(2).filter((_, index) => index % 2 === 0);
+const selectBLEValues = allData =>
+    allData.slice(2).filter((_, index) => index % 2 === 0);
 
 const isInRange = ([min, max], index) => index >= min && index <= max;
 
@@ -81,14 +85,14 @@ export default () => {
         return v;
     };
 
-    const maskValuesOutsideChannelRange = (value, index) => (
-        isInRange(channelRange, bleChannels[index]) ? value : levelMin - 1
-    );
+    const maskValuesOutsideChannelRange = (value, index) =>
+        isInRange(channelRange, bleChannels[index]) ? value : levelMin - 1;
 
-    const convertToScreenValue = rawRssi => selectBLEValues(rawRssi)
-        .map(convertInLevel)
-        .map(limitToLevelRange)
-        .map(maskValuesOutsideChannelRange);
+    const convertToScreenValue = rawRssi =>
+        selectBLEValues(rawRssi)
+            .map(convertInLevel)
+            .map(limitToLevelRange)
+            .map(maskValuesOutsideChannelRange);
 
     return (
         <Main>
@@ -96,32 +100,39 @@ export default () => {
                 <Bar
                     data={{
                         labels,
-                        datasets: [{
-                            label: 'rssi',
-                            backgroundColor: rssiColors,
-                            borderWidth: 0,
-                            data: convertToScreenValue(rssi),
-                            datalabels: { display: false },
-                        }, {
-                            label: 'rssiMax',
-                            backgroundColor: rssiMaxColors,
-                            borderWidth: 0,
-                            data: convertToScreenValue(rssiMax),
-                            datalabels: {
-                                color: rssiColors,
-                                anchor: 'end',
-                                align: 'end',
-                                formatter: v => ((v <= levelMin || v >= levelMax) ? '' : convertInLevel(v)),
-                                offset: -3,
-                                font: { size: 9 },
+                        datasets: [
+                            {
+                                label: 'rssi',
+                                backgroundColor: rssiColors,
+                                borderWidth: 0,
+                                data: convertToScreenValue(rssi),
+                                datalabels: { display: false },
                             },
-                        }, {
-                            label: 'bgBars',
-                            backgroundColor: color.bar.background,
-                            borderWidth: 0,
-                            data: Array(81).fill(levelMax),
-                            datalabels: { display: false },
-                        }],
+                            {
+                                label: 'rssiMax',
+                                backgroundColor: rssiMaxColors,
+                                borderWidth: 0,
+                                data: convertToScreenValue(rssiMax),
+                                datalabels: {
+                                    color: rssiColors,
+                                    anchor: 'end',
+                                    align: 'end',
+                                    formatter: v =>
+                                        v <= levelMin || v >= levelMax
+                                            ? ''
+                                            : convertInLevel(v),
+                                    offset: -3,
+                                    font: { size: 9 },
+                                },
+                            },
+                            {
+                                label: 'bgBars',
+                                backgroundColor: color.bar.background,
+                                borderWidth: 0,
+                                data: Array(81).fill(levelMax),
+                                datalabels: { display: false },
+                            },
+                        ],
                     }}
                     options={{
                         animation: { duration: animationDuration },
@@ -129,78 +140,88 @@ export default () => {
                         legend: { display: false },
                         tooltips: { enabled: false },
                         scales: {
-                            xAxes: [{
-                                type: 'category',
-                                position: 'top',
-                                offset: true,
-                                ticks: {
-                                    callback: (_, index) => String(bleChannels[index]).padStart(2, '0'),
-                                    minRotation: 0,
-                                    maxRotation: 0,
-                                    labelOffset: 0,
-                                    autoSkipPadding: 5,
-                                    fontColor: color.label,
+                            xAxes: [
+                                {
+                                    type: 'category',
+                                    position: 'top',
+                                    offset: true,
+                                    ticks: {
+                                        callback: (_, index) =>
+                                            String(bleChannels[index]).padStart(
+                                                2,
+                                                '0'
+                                            ),
+                                        minRotation: 0,
+                                        maxRotation: 0,
+                                        labelOffset: 0,
+                                        autoSkipPadding: 5,
+                                        fontColor: color.label,
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'BLE channel',
+                                        fontColor: color.label,
+                                        fontSize: 14,
+                                    },
+                                    gridLines: {
+                                        offsetGridLines: true,
+                                        display: false,
+                                        drawBorder: false,
+                                        fontColor: color.label,
+                                    },
+                                    stacked: true,
                                 },
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'BLE channel',
-                                    fontColor: color.label,
-                                    fontSize: 14,
+                                {
+                                    type: 'category',
+                                    position: 'bottom',
+                                    offset: true,
+                                    ticks: {
+                                        callback: (_, index) =>
+                                            2402 + 2 * index,
+                                        minRotation: 90,
+                                        labelOffset: 0,
+                                        autoSkipPadding: 5,
+                                        fontColor: color.label,
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'MHz',
+                                        fontColor: color.label,
+                                        fontSize: 14,
+                                        padding: { top: 10 },
+                                    },
+                                    gridLines: {
+                                        offsetGridLines: true,
+                                        display: false,
+                                        drawBorder: false,
+                                        fontColor: color.label,
+                                    },
+                                    stacked: true,
                                 },
-                                gridLines: {
-                                    offsetGridLines: true,
-                                    display: false,
-                                    drawBorder: false,
-                                    fontColor: color.label,
-                                },
-                                stacked: true,
-                            }, {
-                                type: 'category',
-                                position: 'bottom',
-                                offset: true,
-                                ticks: {
-                                    callback: (_, index) => 2402 + 2 * index,
-                                    minRotation: 90,
-                                    labelOffset: 0,
-                                    autoSkipPadding: 5,
-                                    fontColor: color.label,
-                                },
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'MHz',
-                                    fontColor: color.label,
-                                    fontSize: 14,
-                                    padding: { top: 10 },
-                                },
-                                gridLines: {
-                                    offsetGridLines: true,
-                                    display: false,
-                                    drawBorder: false,
-                                    fontColor: color.label,
-                                },
-                                stacked: true,
-                            }],
-                            yAxes: [{
-                                type: 'linear',
-                                min: levelMin,
-                                max: levelMax,
-                                ticks: {
-                                    callback: v => v - levelMin - levelMax,
+                            ],
+                            yAxes: [
+                                {
+                                    type: 'linear',
                                     min: levelMin,
                                     max: levelMax,
-                                    fontColor: color.label,
+                                    ticks: {
+                                        callback: v => v - levelMin - levelMax,
+                                        min: levelMin,
+                                        max: levelMax,
+                                        fontColor: color.label,
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'dBm',
+                                        fontColor: color.label,
+                                        fontSize: 14,
+                                    },
+                                    gridLines: {
+                                        display: false,
+                                        drawBorder: false,
+                                    },
                                 },
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'dBm',
-                                    fontColor: color.label,
-                                    fontSize: 14,
-                                },
-                                gridLines: {
-                                    display: false,
-                                    drawBorder: false,
-                                },
-                            }],
+                            ],
                         },
                     }}
                 />

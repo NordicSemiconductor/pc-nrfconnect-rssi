@@ -45,11 +45,7 @@ export default () => {
     const isConnected = useSelector(getIsConnected);
 
     return (
-        <Button
-            variant="secondary"
-            disabled={!isConnected}
-            onClick={toggleLED}
-        >
+        <Button variant="secondary" disabled={!isConnected} onClick={toggleLED}>
             Toggle LED
         </Button>
     );

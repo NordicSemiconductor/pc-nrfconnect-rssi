@@ -67,9 +67,19 @@ const mapState = () => ({
 });
 
 const mapDispatch = dispatch => ({
-    onDeviceSelected: device => { logger.info(`Validating firmware for device with s/n ${device.serialNumber}`); },
-    onDeviceDeselected: () => { logger.info('Deselecting device'); dispatch(RssiActions.close()); },
-    onDeviceIsReady: device => { logger.info(`Opening device with s/n ${device.serialNumber}`); dispatch(RssiActions.open(device.serialport)); },
+    onDeviceSelected: device => {
+        logger.info(
+            `Validating firmware for device with s/n ${device.serialNumber}`
+        );
+    },
+    onDeviceDeselected: () => {
+        logger.info('Deselecting device');
+        dispatch(RssiActions.close());
+    },
+    onDeviceIsReady: device => {
+        logger.info(`Opening device with s/n ${device.serialNumber}`);
+        dispatch(RssiActions.open(device.serialport));
+    },
 });
 
 export default connect(mapState, mapDispatch)(DeviceSelector);
