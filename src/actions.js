@@ -135,8 +135,6 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
         resetRssiData();
         startReading(getState().app);
 
-        let throttleUpdates = false;
-
         const buf = [];
         port.on('data', data => {
             buf.splice(buf.length, 0, ...data);
@@ -154,15 +152,7 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
                 }
             }
 
-            if (throttleUpdates) {
-                return;
-            }
-
-            throttleUpdates = true;
-            requestAnimationFrame(() => {
-                throttleUpdates = false;
-                dispatch(setRssiData());
-            });
+            dispatch(setRssiData());
         }).on('error', console.log);
     });
 };
