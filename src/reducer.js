@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
         case 'RSSI_PAUSE':
             return {
                 ...state,
-                isPaused: action.isPaused,
+                isPaused: !state.isPaused,
             };
         case 'RSSI_DATA':
             if (state.isPaused) {

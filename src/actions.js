@@ -49,6 +49,9 @@ export const resetRssiData = () => {
     rssiDataMax = [];
 };
 
+const togglePauseAction = () => ({
+    type: 'RSSI_PAUSE',
+});
 const serialPortOpenedAction = portName => ({
     type: 'RSSI_SERIAL_OPENED',
     portName,
@@ -115,7 +118,7 @@ export const stopReading = () => writeAndDrain('stop\r');
 
 export const togglePause = (dispatch, getState) => {
     const appState = getState().app;
-    dispatch({ type: 'RSSI_PAUSE', isPaused: !appState.isPaused });
+    dispatch(togglePauseAction());
 
     if (appState.isPaused) {
         startReading(appState);
