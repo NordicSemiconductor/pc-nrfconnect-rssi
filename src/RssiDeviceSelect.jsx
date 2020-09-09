@@ -35,10 +35,18 @@
  */
 
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DeviceSelector, getAppFile, logger } from 'pc-nrfconnect-shared';
 
-import * as RssiActions from './actions';
+import {
+    clearRssiData,
+    serialPortClosedAction,
+    serialPortOpened,
+    setRssiData,
+    startReading,
+    stopReading,
+} from './actions';
+import { getDelay, getScanRepeat } from './reducer';
 
 const deviceListing = {
     nordicUsb: true,
@@ -70,15 +78,32 @@ const logSelectedDevice = device => {
 
 export default () => {
     const dispatch = useDispatch();
+    const delay = useSelector(getDelay);
+    const scanRepeat = useSelector(getScanRepeat);
 
-    const startReading = device => {
+    const startReadingFromDevice = device => {
         logger.info(`Opening device with s/n ${device.serialNumber}`);
-        dispatch(RssiActions.open(device.serialport));
+        dispatch(serialPortClosedAction());
+        dispatch(clearRssiData());
+
+        stopReading().then(() => {
+            startReading(
+                device.serialport,
+                delay,
+                scanRepeat,
+                portName => dispatch(serialPortOpened(portName)),
+                data => dispatch(setRssiData(data))
+            );
+        });
     };
 
-    const stopReading = () => {
+    const stopReadingFromDevice = () => {
         logger.info('Deselecting device');
-        dispatch(RssiActions.close());
+
+        stopReading().then(() => {
+            dispatch(serialPortClosedAction());
+            dispatch(clearRssiData());
+        });
     };
 
     return (
@@ -86,8 +111,8 @@ export default () => {
             deviceListing={deviceListing}
             deviceSetup={deviceSetup}
             onDeviceSelected={logSelectedDevice}
-            onDeviceIsReady={startReading}
-            onDeviceDeselected={stopReading}
+            onDeviceIsReady={startReadingFromDevice}
+            onDeviceDeselected={stopReadingFromDevice}
         />
     );
 };

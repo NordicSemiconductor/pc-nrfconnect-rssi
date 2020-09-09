@@ -36,18 +36,17 @@
 
 import { logger } from 'pc-nrfconnect-shared';
 import SerialPort from 'serialport';
-import { getScanRepeat, getDelay } from './reducer';
 
 let port = null;
 
 export const togglePauseAction = () => ({
     type: 'RSSI_PAUSE',
 });
-const serialPortOpenedAction = portName => ({
+export const serialPortOpened = portName => ({
     type: 'RSSI_SERIAL_OPENED',
     portName,
 });
-const serialPortClosedAction = () => ({
+export const serialPortClosedAction = () => ({
     type: 'RSSI_SERIAL_CLOSED',
 });
 export const changeDelay = delay => ({
@@ -101,52 +100,41 @@ export const writeScanRepeat = scanRepeat =>
 
 export const toggleLED = () => writeAndDrain('led\r');
 
-export const startReading = async (delay, scanRepeat) => {
+export const resumeReading = async (delay, scanRepeat) => {
     await writeDelay(delay);
     await writeScanRepeat(scanRepeat);
 
     await writeAndDrain('start\r');
 };
 
-export const stopReading = () => writeAndDrain('stop\r');
+export const pauseReading = () => writeAndDrain('stop\r');
 
-export const togglePause = (dispatch, isPaused, delay, scanRepeat) => {
-    dispatch(togglePauseAction());
-
-    if (isPaused) {
-        startReading(delay, scanRepeat);
-    } else {
-        stopReading();
-    }
-};
-
-const openWhenClosed = serialPort => (dispatch, getState) => {
+export const startReading = (
+    serialPort,
+    delay,
+    scanRepeat,
+    onOpened,
+    onData
+) => {
     port = new SerialPort(serialPort.path, { baudRate: 115200 }, () => {
         logger.info(`${serialPort.path} is open`);
-        dispatch(serialPortOpenedAction(serialPort.path));
+        onOpened(serialPort.path);
 
-        startReading(getDelay(getState()), getScanRepeat(getState()));
+        resumeReading(delay, scanRepeat);
 
-        port.on('data', data => dispatch(setRssiData(data)));
+        port.on('data', onData);
         port.on('error', console.log);
     });
 };
 
-export const close = () => async dispatch => {
+export const stopReading = async () => {
     if (
         port &&
         (typeof port.isOpen === 'function' ? port.isOpen() : port.isOpen)
     ) {
-        await stopReading();
+        await pauseReading();
         await new Promise(resolve => port.close(resolve));
         port = null;
     }
     logger.info('Serial port is closed');
-    dispatch(clearRssiData());
-    return dispatch(serialPortClosedAction());
 };
-
-export function open(serialPort) {
-    return dispatch =>
-        dispatch(close()).then(() => dispatch(openWhenClosed(serialPort)));
-}
