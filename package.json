@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "chart.js": "2.9.3",
-    "chartjs-plugin-datalabels": "0.7.0"
+    "chartjs-plugin-datalabels": "0.7.0",
+    "immer": "7.0.8"
   }
 }

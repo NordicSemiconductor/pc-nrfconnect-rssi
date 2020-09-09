@@ -35,6 +35,7 @@
  */
 
 import { bleChannels } from 'pc-nrfconnect-shared';
+import produce from 'immer';
 
 import {
     CLEAR_RSSI_DATA,
@@ -71,95 +72,77 @@ const initialState = {
     port: null,
 };
 
-const updateData = (rawData, oldState) => {
-    const data = [...oldState.data];
-    const dataMax = [...oldState.dataMax];
-    const buffer = [...oldState.buffer, ...rawData];
+const updateData = (rawData, draft) => {
+    draft.buffer = [...draft.buffer, ...rawData];
 
-    if (buffer.length > 246) {
-        buffer.splice(0, buffer.length - 246);
+    if (draft.buffer.length > 246) {
+        draft.buffer.splice(0, draft.buffer.length - 246);
     }
-    while (buffer.length >= 3) {
-        while (buffer.splice(0, 1)[0] !== 0xff);
+    while (draft.buffer.length >= 3) {
+        while (draft.buffer.splice(0, 1)[0] !== 0xff);
 
-        const [ch, d] = buffer.splice(0, 2);
+        const [ch, d] = draft.buffer.splice(0, 2);
         if (ch !== 0xff && d !== 0xff) {
-            data[ch] = [d, ...data[ch]];
-            data[ch].splice(oldState.maxScans);
-            dataMax[ch] = Math.min(...data[ch]);
+            draft.data[ch] = [d, ...draft.data[ch]];
+            draft.data[ch].splice(draft.maxScans);
+            draft.dataMax[ch] = Math.min(...draft.data[ch]);
         }
     }
-
-    return { data, dataMax, buffer };
 };
 
-export default (state = initialState, action) => {
+export default produce((draft, action) => {
+    // eslint-disable-next-line default-case -- we can neglect default case for reducers with immmer
     switch (action.type) {
         case TOGGLE_PAUSE:
-            return {
-                ...state,
-                isPaused: !state.isPaused,
-            };
+            draft.isPaused = !draft.isPaused;
+            break;
+
         case RECEIVE_RSSI_DATA:
-            if (state.isPaused) {
-                return state;
+            if (draft.isPaused) {
+                break;
             }
-            return {
-                ...state,
-                ...updateData(action.rawData, state),
-            };
+            updateData(action.rawData, draft);
+            break;
+
         case CLEAR_RSSI_DATA:
-            return {
-                ...state,
-                data: initialData(),
-                dataMax: [],
-            };
+            draft.data = initialData();
+            draft.dataMax = [];
+            break;
+
         case SET_DELAY:
-            return {
-                ...state,
-                delay: action.delay,
-            };
+            draft.delay = action.delay;
+            break;
+
         case SET_MAX_SCANS:
-            return {
-                ...state,
-                maxScans: action.maxScans,
-            };
+            draft.maxScans = action.maxScans;
+            break;
+
         case SET_SCAN_REPEAT:
-            return {
-                ...state,
-                scanRepeat: action.scanRepeat,
-            };
+            draft.scanRepeat = action.scanRepeat;
+            break;
+
         case SET_ANIMATION_DURATION:
-            return {
-                ...state,
-                animationDuration: action.animationDuration,
-            };
+            draft.animationDuration = action.animationDuration;
+            break;
+
         case SET_CHANNEL_RANGE:
-            return {
-                ...state,
-                channelRange: action.channelRange,
-            };
+            draft.channelRange = action.channelRange;
+            break;
+
         case SET_LEVEL_RANGE:
-            return {
-                ...state,
-                levelRange: action.levelRange,
-            };
+            draft.levelRange = action.levelRange;
+            break;
+
         case PORT_OPENED:
-            return {
-                ...state,
-                port: action.portName,
-                isPaused: false,
-            };
+            draft.port = action.portName;
+            draft.isPaused = false;
+            break;
+
         case PORT_CLOSED:
-            return {
-                ...state,
-                port: null,
-                isPaused: true,
-            };
-        default:
-            return state;
+            draft.port = null;
+            draft.isPaused = true;
     }
-};
+}, initialState);
 
 export const getIsConnected = state => state.app.port != null;
 export const getIsPaused = state => state.app.isPaused;
