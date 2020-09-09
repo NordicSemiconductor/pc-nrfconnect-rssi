@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { changeChannelScanRepeat } from '../actions';
+import { setScanRepeat as setScanRepeatAction } from '../actions';
 import { writeScanRepeat } from '../serialport';
 import { getScanRepeat } from '../reducer';
 
@@ -50,15 +50,15 @@ export default () => {
     const dispatch = useDispatch();
     const scanRepeat = useSelector(getScanRepeat);
 
-    const changeAndWriteScanRepeat = useCallback(
+    const setAndWriteScanRepeat = useCallback(
         newScanRepeat => {
-            dispatch(changeChannelScanRepeat(newScanRepeat));
+            dispatch(setScanRepeatAction(newScanRepeat));
             writeScanRepeat(newScanRepeat);
         },
         [dispatch]
     );
-    const dispatchChangeScanRepeat = useCallback(
-        newScanRepeat => dispatch(changeChannelScanRepeat(newScanRepeat)),
+    const setScanRepeat = useCallback(
+        newScanRepeat => dispatch(setScanRepeatAction(newScanRepeat)),
         [dispatch]
     );
 
@@ -69,7 +69,7 @@ export default () => {
                 <NumberInlineInput
                     value={scanRepeat}
                     range={range}
-                    onChange={changeAndWriteScanRepeat}
+                    onChange={setAndWriteScanRepeat}
                 />{' '}
                 times
             </Form.Label>
@@ -77,7 +77,7 @@ export default () => {
                 id={sliderId}
                 values={[scanRepeat]}
                 range={range}
-                onChange={[dispatchChangeScanRepeat]}
+                onChange={[setScanRepeat]}
                 onChangeComplete={() => writeScanRepeat(scanRepeat)}
             />
         </>

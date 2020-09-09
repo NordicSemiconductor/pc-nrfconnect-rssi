@@ -37,17 +37,17 @@
 import { bleChannels } from 'pc-nrfconnect-shared';
 
 import {
-    RSSI_PAUSE,
-    RSSI_DATA,
-    RSSI_CLEAR_DATA,
-    RSSI_CHANGE_DELAY,
-    RSSI_CHANGE_MAX_SCANS,
-    RSSI_CHANGE_SCAN_REPEAT,
-    RSSI_CHANGE_ANIMATION_DURATION,
-    RSSI_CHANNEL_RANGE_SET,
-    RSSI_LEVEL_RANGE_SET,
-    RSSI_SERIAL_OPENED,
-    RSSI_SERIAL_CLOSED,
+    CLEAR_RSSI_DATA,
+    PORT_CLOSED,
+    PORT_OPENED,
+    RECEIVE_RSSI_DATA,
+    SET_ANIMATION_DURATION,
+    SET_CHANNEL_RANGE,
+    SET_DELAY,
+    SET_LEVEL_RANGE,
+    SET_MAX_SCANS,
+    SET_SCAN_REPEAT,
+    TOGGLE_PAUSE,
 } from './actions';
 
 export const initialLevelRange = {
@@ -95,12 +95,12 @@ const updateData = (rawData, oldState) => {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case RSSI_PAUSE:
+        case TOGGLE_PAUSE:
             return {
                 ...state,
                 isPaused: !state.isPaused,
             };
-        case RSSI_DATA:
+        case RECEIVE_RSSI_DATA:
             if (state.isPaused) {
                 return state;
             }
@@ -108,49 +108,49 @@ export default (state = initialState, action) => {
                 ...state,
                 ...updateData(action.rawData, state),
             };
-        case RSSI_CLEAR_DATA:
+        case CLEAR_RSSI_DATA:
             return {
                 ...state,
                 data: initialData(),
                 dataMax: [],
             };
-        case RSSI_CHANGE_DELAY:
+        case SET_DELAY:
             return {
                 ...state,
                 delay: action.delay,
             };
-        case RSSI_CHANGE_MAX_SCANS:
+        case SET_MAX_SCANS:
             return {
                 ...state,
                 maxScans: action.maxScans,
             };
-        case RSSI_CHANGE_SCAN_REPEAT:
+        case SET_SCAN_REPEAT:
             return {
                 ...state,
                 scanRepeat: action.scanRepeat,
             };
-        case RSSI_CHANGE_ANIMATION_DURATION:
+        case SET_ANIMATION_DURATION:
             return {
                 ...state,
                 animationDuration: action.animationDuration,
             };
-        case RSSI_CHANNEL_RANGE_SET:
+        case SET_CHANNEL_RANGE:
             return {
                 ...state,
                 channelRange: action.channelRange,
             };
-        case RSSI_LEVEL_RANGE_SET:
+        case SET_LEVEL_RANGE:
             return {
                 ...state,
                 levelRange: action.levelRange,
             };
-        case RSSI_SERIAL_OPENED:
+        case PORT_OPENED:
             return {
                 ...state,
                 port: action.portName,
                 isPaused: false,
             };
-        case RSSI_SERIAL_CLOSED:
+        case PORT_CLOSED:
             return {
                 ...state,
                 port: null,

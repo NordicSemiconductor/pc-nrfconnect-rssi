@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { changeMaxScans } from '../actions';
+import { setMaxScans as setMaxScansAction } from '../actions';
 import { getMaxScans } from '../reducer';
 
 const range = { min: 1, max: 100 };
@@ -49,8 +49,8 @@ export default () => {
     const dispatch = useDispatch();
     const maxScans = useSelector(getMaxScans);
 
-    const dispatchChangeMaxScans = useCallback(
-        newMaxScans => dispatch(changeMaxScans(newMaxScans)),
+    const setMaxScans = useCallback(
+        newMaxScans => dispatch(setMaxScansAction(newMaxScans)),
         [dispatch]
     );
 
@@ -61,7 +61,7 @@ export default () => {
                 <NumberInlineInput
                     value={maxScans}
                     range={range}
-                    onChange={dispatchChangeMaxScans}
+                    onChange={setMaxScans}
                 />{' '}
                 scans
             </Form.Label>
@@ -69,7 +69,7 @@ export default () => {
                 id={sliderId}
                 values={[maxScans]}
                 range={range}
-                onChange={[dispatchChangeMaxScans]}
+                onChange={[setMaxScans]}
             />
         </>
     );

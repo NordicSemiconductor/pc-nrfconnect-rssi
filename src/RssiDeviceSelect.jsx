@@ -40,9 +40,9 @@ import { DeviceSelector, getAppFile, logger } from 'pc-nrfconnect-shared';
 
 import {
     clearRssiData,
-    serialPortClosedAction,
-    serialPortOpened,
-    setRssiData,
+    portClosed,
+    portOpened,
+    receiveRssiData,
 } from './actions';
 import { startReading, stopReading } from './serialport';
 import { getDelay, getScanRepeat } from './reducer';
@@ -82,7 +82,7 @@ export default () => {
 
     const startReadingFromDevice = device => {
         logger.info(`Opening device with s/n ${device.serialNumber}`);
-        dispatch(serialPortClosedAction());
+        dispatch(portClosed());
         dispatch(clearRssiData());
 
         stopReading().then(() => {
@@ -90,8 +90,8 @@ export default () => {
                 device.serialport,
                 delay,
                 scanRepeat,
-                portName => dispatch(serialPortOpened(portName)),
-                data => dispatch(setRssiData(data))
+                portName => dispatch(portOpened(portName)),
+                data => dispatch(receiveRssiData(data))
             );
         });
     };
@@ -100,7 +100,7 @@ export default () => {
         logger.info('Deselecting device');
 
         stopReading().then(() => {
-            dispatch(serialPortClosedAction());
+            dispatch(portClosed());
             dispatch(clearRssiData());
         });
     };

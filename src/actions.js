@@ -34,65 +34,65 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const RSSI_PAUSE = 'RSSI_PAUSE';
-export const togglePauseAction = () => ({
-    type: RSSI_PAUSE,
+export const TOGGLE_PAUSE = 'TOGGLE_PAUSE';
+export const togglePause = () => ({
+    type: TOGGLE_PAUSE,
 });
 
-export const RSSI_SERIAL_OPENED = 'RSSI_SERIAL_OPENED';
-export const serialPortOpened = portName => ({
-    type: RSSI_SERIAL_OPENED,
+export const PORT_OPENED = 'PORT_OPENED';
+export const portOpened = portName => ({
+    type: PORT_OPENED,
     portName,
 });
 
-export const RSSI_SERIAL_CLOSED = 'RSSI_SERIAL_CLOSED';
-export const serialPortClosedAction = () => ({
-    type: RSSI_SERIAL_CLOSED,
+export const PORT_CLOSED = 'PORT_CLOSED';
+export const portClosed = () => ({
+    type: PORT_CLOSED,
 });
 
-export const RSSI_CHANGE_DELAY = 'RSSI_CHANGE_DELAY';
-export const changeDelay = delay => ({
-    type: RSSI_CHANGE_DELAY,
+export const SET_DELAY = 'SET_DELAY';
+export const setDelay = delay => ({
+    type: SET_DELAY,
     delay,
 });
 
-export const RSSI_CHANGE_MAX_SCANS = 'RSSI_CHANGE_MAX_SCANS';
-export const changeMaxScans = maxScans => ({
-    type: RSSI_CHANGE_MAX_SCANS,
+export const SET_MAX_SCANS = 'SET_MAX_SCANS';
+export const setMaxScans = maxScans => ({
+    type: SET_MAX_SCANS,
     maxScans,
 });
 
-export const RSSI_CHANGE_SCAN_REPEAT = 'RSSI_CHANGE_SCAN_REPEAT';
-export const changeChannelScanRepeat = scanRepeat => ({
-    type: RSSI_CHANGE_SCAN_REPEAT,
+export const SET_SCAN_REPEAT = 'SET_SCAN_REPEAT';
+export const setScanRepeat = scanRepeat => ({
+    type: SET_SCAN_REPEAT,
     scanRepeat,
 });
 
-export const RSSI_CHANGE_ANIMATION_DURATION = 'RSSI_CHANGE_ANIMATION_DURATION';
-export const changeAnimationDuration = animationDuration => ({
-    type: RSSI_CHANGE_ANIMATION_DURATION,
+export const SET_ANIMATION_DURATION = 'SET_ANIMATION_DURATION';
+export const setAnimationDuration = animationDuration => ({
+    type: SET_ANIMATION_DURATION,
     animationDuration,
 });
 
-export const RSSI_CHANNEL_RANGE_SET = 'RSSI_CHANNEL_RANGE_SET';
+export const SET_CHANNEL_RANGE = 'SET_CHANNEL_RANGE';
 export const setChannelRange = channelRange => ({
-    type: RSSI_CHANNEL_RANGE_SET,
+    type: SET_CHANNEL_RANGE,
     channelRange,
 });
 
-export const RSSI_LEVEL_RANGE_SET = 'RSSI_LEVEL_RANGE_SET';
+export const SET_LEVEL_RANGE = 'SET_LEVEL_RANGE';
 export const setLevelRange = levelRange => ({
-    type: RSSI_LEVEL_RANGE_SET,
+    type: SET_LEVEL_RANGE,
     levelRange,
 });
 
-export const RSSI_DATA = 'RSSI_DATA';
-export const setRssiData = rawData => ({
-    type: RSSI_DATA,
+export const RECEIVE_RSSI_DATA = 'RECEIVE_RSSI_DATA';
+export const receiveRssiData = rawData => ({
+    type: RECEIVE_RSSI_DATA,
     rawData,
 });
 
-export const RSSI_CLEAR_DATA = 'RSSI_CLEAR_DATA';
+export const CLEAR_RSSI_DATA = 'CLEAR_RSSI_DATA';
 export const clearRssiData = () => ({
-    type: RSSI_CLEAR_DATA,
+    type: CLEAR_RSSI_DATA,
 });

@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { changeDelay } from '../actions';
+import { setDelay as setDelayAction } from '../actions';
 import { writeDelay } from '../serialport';
 import { getDelay } from '../reducer';
 
@@ -50,15 +50,15 @@ export default () => {
     const dispatch = useDispatch();
     const delay = useSelector(getDelay);
 
-    const changeAndWriteDelay = useCallback(
+    const setAndWriteDelay = useCallback(
         newDelay => {
-            dispatch(changeDelay(newDelay));
+            dispatch(setDelayAction(newDelay));
             writeDelay(newDelay);
         },
         [dispatch]
     );
-    const dispatchChangeDelay = useCallback(
-        newDelay => dispatch(changeDelay(newDelay)),
+    const setDelay = useCallback(
+        newDelay => dispatch(setDelayAction(newDelay)),
         [dispatch]
     );
 
@@ -69,7 +69,7 @@ export default () => {
                 <NumberInlineInput
                     value={delay}
                     range={range}
-                    onChange={changeAndWriteDelay}
+                    onChange={setAndWriteDelay}
                 />
                 &nbsp;ms
             </Form.Label>
@@ -77,7 +77,7 @@ export default () => {
                 id={sliderId}
                 values={[delay]}
                 range={range}
-                onChange={[dispatchChangeDelay]}
+                onChange={[setDelay]}
                 onChangeComplete={() => writeDelay(delay)}
             />
         </>

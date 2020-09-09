@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { changeAnimationDuration } from '../actions';
+import { setAnimationDuration as setAnimationDurationAction } from '../actions';
 import { getAnimationDuration } from '../reducer';
 
 const range = { min: 10, max: 1000 };
@@ -49,9 +49,9 @@ export default () => {
     const dispatch = useDispatch();
     const animationDuration = useSelector(getAnimationDuration);
 
-    const dispatchChangeAnimationDuration = useCallback(
+    const setAnimationDuration = useCallback(
         newAnimationDuration =>
-            dispatch(changeAnimationDuration(newAnimationDuration)),
+            dispatch(setAnimationDurationAction(newAnimationDuration)),
         [dispatch]
     );
 
@@ -62,7 +62,7 @@ export default () => {
                 <NumberInlineInput
                     value={animationDuration}
                     range={range}
-                    onChange={dispatchChangeAnimationDuration}
+                    onChange={setAnimationDuration}
                 />
                 &nbsp;ms
             </Form.Label>
@@ -70,7 +70,7 @@ export default () => {
                 id={sliderId}
                 values={[animationDuration]}
                 range={range}
-                onChange={[dispatchChangeAnimationDuration]}
+                onChange={[setAnimationDuration]}
             />
         </>
     );
