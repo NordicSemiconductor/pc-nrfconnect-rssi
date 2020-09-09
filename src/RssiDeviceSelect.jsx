@@ -34,7 +34,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { connect } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { DeviceSelector, getAppFile, logger } from 'pc-nrfconnect-shared';
 
 import * as RssiActions from './actions';
@@ -61,25 +62,32 @@ const deviceSetup = {
     needSerialport: true,
 };
 
-const mapState = () => ({
-    deviceListing,
-    deviceSetup,
-});
+const logSelectedDevice = device => {
+    logger.info(
+        `Validating firmware for device with s/n ${device.serialNumber}`
+    );
+};
 
-const mapDispatch = dispatch => ({
-    onDeviceSelected: device => {
-        logger.info(
-            `Validating firmware for device with s/n ${device.serialNumber}`
-        );
-    },
-    onDeviceDeselected: () => {
-        logger.info('Deselecting device');
-        dispatch(RssiActions.close());
-    },
-    onDeviceIsReady: device => {
+export default () => {
+    const dispatch = useDispatch();
+
+    const startReading = device => {
         logger.info(`Opening device with s/n ${device.serialNumber}`);
         dispatch(RssiActions.open(device.serialport));
-    },
-});
+    };
 
-export default connect(mapState, mapDispatch)(DeviceSelector);
+    const stopReading = () => {
+        logger.info('Deselecting device');
+        dispatch(RssiActions.close());
+    };
+
+    return (
+        <DeviceSelector
+            deviceListing={deviceListing}
+            deviceSetup={deviceSetup}
+            onDeviceSelected={logSelectedDevice}
+            onDeviceIsReady={startReading}
+            onDeviceDeselected={stopReading}
+        />
+    );
+};
