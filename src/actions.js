@@ -34,46 +34,65 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+export const RSSI_PAUSE = 'RSSI_PAUSE';
 export const togglePauseAction = () => ({
-    type: 'RSSI_PAUSE',
+    type: RSSI_PAUSE,
 });
+
+export const RSSI_SERIAL_OPENED = 'RSSI_SERIAL_OPENED';
 export const serialPortOpened = portName => ({
-    type: 'RSSI_SERIAL_OPENED',
+    type: RSSI_SERIAL_OPENED,
     portName,
 });
+
+export const RSSI_SERIAL_CLOSED = 'RSSI_SERIAL_CLOSED';
 export const serialPortClosedAction = () => ({
-    type: 'RSSI_SERIAL_CLOSED',
+    type: RSSI_SERIAL_CLOSED,
 });
+
+export const RSSI_CHANGE_DELAY = 'RSSI_CHANGE_DELAY';
 export const changeDelay = delay => ({
-    type: 'RSSI_CHANGE_DELAY',
+    type: RSSI_CHANGE_DELAY,
     delay,
 });
+
+export const RSSI_CHANGE_MAX_SCANS = 'RSSI_CHANGE_MAX_SCANS';
 export const changeMaxScans = maxScans => ({
-    type: 'RSSI_CHANGE_MAX_SCANS',
+    type: RSSI_CHANGE_MAX_SCANS,
     maxScans,
 });
+
+export const RSSI_CHANGE_SCAN_REPEAT = 'RSSI_CHANGE_SCAN_REPEAT';
 export const changeChannelScanRepeat = scanRepeat => ({
-    type: 'RSSI_CHANGE_SCAN_REPEAT',
+    type: RSSI_CHANGE_SCAN_REPEAT,
     scanRepeat,
 });
+
+export const RSSI_CHANGE_ANIMATION_DURATION = 'RSSI_CHANGE_ANIMATION_DURATION';
 export const changeAnimationDuration = animationDuration => ({
-    type: 'RSSI_CHANGE_ANIMATION_DURATION',
+    type: RSSI_CHANGE_ANIMATION_DURATION,
     animationDuration,
 });
+
+export const RSSI_CHANNEL_RANGE_SET = 'RSSI_CHANNEL_RANGE_SET';
 export const setChannelRange = channelRange => ({
-    type: 'RSSI_CHANNEL_RANGE_SET',
+    type: RSSI_CHANNEL_RANGE_SET,
     channelRange,
 });
+
+export const RSSI_LEVEL_RANGE_SET = 'RSSI_LEVEL_RANGE_SET';
 export const setLevelRange = levelRange => ({
-    type: 'RSSI_LEVEL_RANGE_SET',
+    type: RSSI_LEVEL_RANGE_SET,
     levelRange,
 });
 
+export const RSSI_DATA = 'RSSI_DATA';
 export const setRssiData = rawData => ({
-    type: 'RSSI_DATA',
+    type: RSSI_DATA,
     rawData,
 });
 
+export const RSSI_CLEAR_DATA = 'RSSI_CLEAR_DATA';
 export const clearRssiData = () => ({
-    type: 'RSSI_CLEAR_DATA',
+    type: RSSI_CLEAR_DATA,
 });
