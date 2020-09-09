@@ -36,6 +36,7 @@
 
 import { logger } from 'pc-nrfconnect-shared';
 import SerialPort from 'serialport';
+import { getScanRepeat, getDelay, getMaxScans } from './reducer';
 
 let port = null;
 
@@ -49,7 +50,7 @@ export const resetRssiData = () => {
     rssiDataMax = [];
 };
 
-const togglePauseAction = () => ({
+export const togglePauseAction = () => ({
     type: 'RSSI_PAUSE',
 });
 const serialPortOpenedAction = portName => ({
@@ -107,21 +108,20 @@ export const writeScanRepeat = scanRepeat =>
 
 export const toggleLED = () => writeAndDrain('led\r');
 
-export const startReading = async appState => {
-    await writeDelay(appState.delay);
-    await writeScanRepeat(appState.scanRepeat);
+export const startReading = async (delay, scanRepeat) => {
+    await writeDelay(delay);
+    await writeScanRepeat(scanRepeat);
 
     await writeAndDrain('start\r');
 };
 
 export const stopReading = () => writeAndDrain('stop\r');
 
-export const togglePause = (dispatch, getState) => {
-    const appState = getState().app;
+export const togglePause = (dispatch, isPaused, delay, scanRepeat) => {
     dispatch(togglePauseAction());
 
-    if (appState.isPaused) {
-        startReading(appState);
+    if (isPaused) {
+        startReading(delay, scanRepeat);
     } else {
         stopReading();
     }
@@ -133,7 +133,7 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
         dispatch(serialPortOpenedAction(serialPort.path));
 
         resetRssiData();
-        startReading(getState().app);
+        startReading(getDelay(getState()), getScanRepeat(getState()));
 
         const buf = [];
         port.on('data', data => {
@@ -147,7 +147,7 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
                 const [ch, d] = buf.splice(0, 2);
                 if (ch !== 0xff && d !== 0xff) {
                     rssiData[ch].unshift(d);
-                    rssiData[ch].splice(getState().app.maxScans);
+                    rssiData[ch].splice(getMaxScans(getState()));
                     rssiDataMax[ch] = Math.min(...rssiData[ch]);
                 }
             }
