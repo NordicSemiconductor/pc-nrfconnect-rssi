@@ -38,12 +38,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
-import {
-    clearRssiData,
-    pauseReading,
-    resumeReading,
-    togglePauseAction,
-} from '../actions';
+import { clearRssiData, togglePauseAction } from '../actions';
+import { pauseReading, resumeReading } from '../serialport';
 import {
     getDelay,
     getIsConnected,

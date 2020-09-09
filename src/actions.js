@@ -34,11 +34,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { logger } from 'pc-nrfconnect-shared';
-import SerialPort from 'serialport';
-
-let port = null;
-
 export const togglePauseAction = () => ({
     type: 'RSSI_PAUSE',
 });
@@ -82,59 +77,3 @@ export const setRssiData = rawData => ({
 export const clearRssiData = () => ({
     type: 'RSSI_CLEAR_DATA',
 });
-
-const writeAndDrain = async cmd => {
-    if (port) {
-        await new Promise(resolve => {
-            port.write(cmd, () => {
-                port.drain(resolve);
-            });
-        });
-    }
-};
-
-export const writeDelay = delay => writeAndDrain(`set delay ${delay}\r`);
-
-export const writeScanRepeat = scanRepeat =>
-    writeAndDrain(`set repeat ${scanRepeat}\r`);
-
-export const toggleLED = () => writeAndDrain('led\r');
-
-export const resumeReading = async (delay, scanRepeat) => {
-    await writeDelay(delay);
-    await writeScanRepeat(scanRepeat);
-
-    await writeAndDrain('start\r');
-};
-
-export const pauseReading = () => writeAndDrain('stop\r');
-
-export const startReading = (
-    serialPort,
-    delay,
-    scanRepeat,
-    onOpened,
-    onData
-) => {
-    port = new SerialPort(serialPort.path, { baudRate: 115200 }, () => {
-        logger.info(`${serialPort.path} is open`);
-        onOpened(serialPort.path);
-
-        resumeReading(delay, scanRepeat);
-
-        port.on('data', onData);
-        port.on('error', console.log);
-    });
-};
-
-export const stopReading = async () => {
-    if (
-        port &&
-        (typeof port.isOpen === 'function' ? port.isOpen() : port.isOpen)
-    ) {
-        await pauseReading();
-        await new Promise(resolve => port.close(resolve));
-        port = null;
-    }
-    logger.info('Serial port is closed');
-};

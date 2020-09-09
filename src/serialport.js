@@ -34,52 +34,63 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
+import { logger } from 'pc-nrfconnect-shared';
+import SerialPort from 'serialport';
 
-import { changeChannelScanRepeat } from '../actions';
-import { writeScanRepeat } from '../serialport';
-import { getScanRepeat } from '../reducer';
+let port = null;
 
-const range = { min: 1, max: 100 };
-const sliderId = 'sample-count-slider';
+const writeAndDrain = async cmd => {
+    if (port) {
+        await new Promise(resolve => {
+            port.write(cmd, () => {
+                port.drain(resolve);
+            });
+        });
+    }
+};
 
-export default () => {
-    const dispatch = useDispatch();
-    const scanRepeat = useSelector(getScanRepeat);
+export const writeDelay = delay => writeAndDrain(`set delay ${delay}\r`);
 
-    const changeAndWriteScanRepeat = useCallback(
-        newScanRepeat => {
-            dispatch(changeChannelScanRepeat(newScanRepeat));
-            writeScanRepeat(newScanRepeat);
-        },
-        [dispatch]
-    );
-    const dispatchChangeScanRepeat = useCallback(
-        newScanRepeat => dispatch(changeChannelScanRepeat(newScanRepeat)),
-        [dispatch]
-    );
+export const writeScanRepeat = scanRepeat =>
+    writeAndDrain(`set repeat ${scanRepeat}\r`);
 
-    return (
-        <>
-            <Form.Label htmlFor={sliderId}>
-                Sample each channel{' '}
-                <NumberInlineInput
-                    value={scanRepeat}
-                    range={range}
-                    onChange={changeAndWriteScanRepeat}
-                />{' '}
-                times
-            </Form.Label>
-            <Slider
-                id={sliderId}
-                values={[scanRepeat]}
-                range={range}
-                onChange={[dispatchChangeScanRepeat]}
-                onChangeComplete={() => writeScanRepeat(scanRepeat)}
-            />
-        </>
-    );
+export const toggleLED = () => writeAndDrain('led\r');
+
+export const resumeReading = async (delay, scanRepeat) => {
+    await writeDelay(delay);
+    await writeScanRepeat(scanRepeat);
+
+    await writeAndDrain('start\r');
+};
+
+export const pauseReading = () => writeAndDrain('stop\r');
+
+export const startReading = (
+    serialPort,
+    delay,
+    scanRepeat,
+    onOpened,
+    onData
+) => {
+    port = new SerialPort(serialPort.path, { baudRate: 115200 }, () => {
+        logger.info(`${serialPort.path} is open`);
+        onOpened(serialPort.path);
+
+        resumeReading(delay, scanRepeat);
+
+        port.on('data', onData);
+        port.on('error', console.log);
+    });
+};
+
+export const stopReading = async () => {
+    if (
+        port &&
+        (typeof port.isOpen === 'function' ? port.isOpen() : port.isOpen)
+    ) {
+        await pauseReading();
+        await new Promise(resolve => port.close(resolve));
+        port = null;
+    }
+    logger.info('Serial port is closed');
 };

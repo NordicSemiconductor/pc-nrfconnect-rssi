@@ -39,7 +39,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { changeDelay, writeDelay } from '../actions';
+import { changeDelay } from '../actions';
+import { writeDelay } from '../serialport';
 import { getDelay } from '../reducer';
 
 const range = { min: 5, max: 1000 };

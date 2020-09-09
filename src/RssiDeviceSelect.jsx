@@ -43,9 +43,8 @@ import {
     serialPortClosedAction,
     serialPortOpened,
     setRssiData,
-    startReading,
-    stopReading,
 } from './actions';
+import { startReading, stopReading } from './serialport';
 import { getDelay, getScanRepeat } from './reducer';
 
 const deviceListing = {
