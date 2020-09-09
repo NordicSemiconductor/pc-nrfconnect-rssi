@@ -38,7 +38,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
-import { resetRssiData, setRssiData, togglePause } from '../actions';
+import { togglePause, clearRssiData } from '../actions';
 import {
     getIsPaused,
     getIsConnected,
@@ -61,8 +61,7 @@ export default () => {
                 variant="secondary"
                 disabled={!isConnected}
                 onClick={() => {
-                    resetRssiData();
-                    dispatch(setRssiData());
+                    dispatch(clearRssiData());
                 }}
             >
                 Reset

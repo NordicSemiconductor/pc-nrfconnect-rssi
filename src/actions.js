@@ -36,19 +36,9 @@
 
 import { logger } from 'pc-nrfconnect-shared';
 import SerialPort from 'serialport';
-import { getScanRepeat, getDelay, getMaxScans } from './reducer';
+import { getScanRepeat, getDelay } from './reducer';
 
 let port = null;
-
-const initialRssiData = () => new Array(81).fill().map(() => []);
-
-let rssiData = initialRssiData();
-let rssiDataMax = [];
-
-export const resetRssiData = () => {
-    rssiData = initialRssiData();
-    rssiDataMax = [];
-};
 
 export const togglePauseAction = () => ({
     type: 'RSSI_PAUSE',
@@ -85,10 +75,13 @@ export const setLevelRange = levelRange => ({
     levelRange,
 });
 
-export const setRssiData = () => ({
+export const setRssiData = rawData => ({
     type: 'RSSI_DATA',
-    data: rssiData.map(scan => scan[0]),
-    dataMax: rssiDataMax,
+    rawData,
+});
+
+export const clearRssiData = () => ({
+    type: 'RSSI_CLEAR_DATA',
 });
 
 const writeAndDrain = async cmd => {
@@ -132,28 +125,10 @@ const openWhenClosed = serialPort => (dispatch, getState) => {
         logger.info(`${serialPort.path} is open`);
         dispatch(serialPortOpenedAction(serialPort.path));
 
-        resetRssiData();
         startReading(getDelay(getState()), getScanRepeat(getState()));
 
-        const buf = [];
-        port.on('data', data => {
-            buf.splice(buf.length, 0, ...data);
-            if (buf.length > 246) {
-                buf.splice(0, buf.length - 246);
-            }
-            while (buf.length > 3) {
-                while (buf.splice(0, 1)[0] !== 0xff);
-
-                const [ch, d] = buf.splice(0, 2);
-                if (ch !== 0xff && d !== 0xff) {
-                    rssiData[ch].unshift(d);
-                    rssiData[ch].splice(getMaxScans(getState()));
-                    rssiDataMax[ch] = Math.min(...rssiData[ch]);
-                }
-            }
-
-            dispatch(setRssiData());
-        }).on('error', console.log);
+        port.on('data', data => dispatch(setRssiData(data)));
+        port.on('error', console.log);
     });
 };
 
@@ -163,13 +138,11 @@ export const close = () => async dispatch => {
         (typeof port.isOpen === 'function' ? port.isOpen() : port.isOpen)
     ) {
         await stopReading();
-        resetRssiData();
         await new Promise(resolve => port.close(resolve));
         port = null;
-    } else {
-        resetRssiData();
     }
     logger.info('Serial port is closed');
+    dispatch(clearRssiData());
     return dispatch(serialPortClosedAction());
 };
 

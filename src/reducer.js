@@ -41,9 +41,12 @@ export const initialLevelRange = {
     max: 110,
 };
 
+const initialData = () => new Array(81).fill().map(() => []);
+
 const initialState = {
     isPaused: false,
-    data: [],
+    buffer: [],
+    data: initialData(),
     dataMax: [],
     delay: 10,
     scanRepeat: 1,
@@ -52,6 +55,28 @@ const initialState = {
     channelRange: [bleChannels.min, bleChannels.max],
     levelRange: [initialLevelRange.min, initialLevelRange.max],
     port: null,
+};
+
+const updateData = (rawData, oldState) => {
+    const data = [...oldState.data];
+    const dataMax = [...oldState.dataMax];
+    const buffer = [...oldState.buffer, ...rawData];
+
+    if (buffer.length > 246) {
+        buffer.splice(0, buffer.length - 246);
+    }
+    while (buffer.length >= 3) {
+        while (buffer.splice(0, 1)[0] !== 0xff);
+
+        const [ch, d] = buffer.splice(0, 2);
+        if (ch !== 0xff && d !== 0xff) {
+            data[ch] = [d, ...data[ch]];
+            data[ch].splice(oldState.maxScans);
+            dataMax[ch] = Math.min(...data[ch]);
+        }
+    }
+
+    return { data, dataMax, buffer };
 };
 
 export default (state = initialState, action) => {
@@ -67,8 +92,13 @@ export default (state = initialState, action) => {
             }
             return {
                 ...state,
-                data: action.data,
-                dataMax: action.dataMax,
+                ...updateData(action.rawData, state),
+            };
+        case 'RSSI_CLEAR_DATA':
+            return {
+                ...state,
+                data: initialData(),
+                dataMax: [],
             };
         case 'RSSI_CHANGE_DELAY':
             return {
@@ -111,8 +141,6 @@ export default (state = initialState, action) => {
                 ...state,
                 port: null,
                 isPaused: true,
-                data: [],
-                dataMax: [],
             };
         default:
             return state;
@@ -122,7 +150,7 @@ export default (state = initialState, action) => {
 export const getIsConnected = state => state.app.port != null;
 export const getIsPaused = state => state.app.isPaused;
 
-export const getRssi = state => state.app.data;
+export const getRssi = state => state.app.data.map(scan => scan[0]);
 export const getRssiMax = state => state.app.dataMax;
 export const getAnimationDuration = state => state.app.animationDuration;
 export const getDelay = state => state.app.delay;
