@@ -35,12 +35,13 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
-    "chart.js": "2.9.3",
-    "chartjs-plugin-datalabels": "0.7.0",
     "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.8.16",
     "react": "16.13.1",
     "react-chartjs-2": "2.9.0",
     "react-redux": "7.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "chart.js": "2.9.3",
+    "chartjs-plugin-datalabels": "0.7.0"
+  }
 }
