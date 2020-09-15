@@ -36,52 +36,87 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import { NumberInlineInput, Slider, bleChannels } from 'pc-nrfconnect-shared';
+import {
+    Device,
+    DeviceSelector,
+    getAppFile,
+    logger,
+} from 'pc-nrfconnect-shared';
 
-import { setChannelRange } from '../actions';
-import { getChannelRange } from '../reducer';
+import {
+    clearRssiData,
+    portClosed,
+    portOpened,
+    receiveRssiData,
+} from './actions';
+import { startReading, stopReading } from './serialport';
+import { getDelay, getScanRepeat } from './reducer';
 
-const sliderId = 'ble-channel-slider';
+const deviceListing = {
+    nordicUsb: true,
+    serialport: true,
+    jlink: true,
+};
+const deviceSetup = {
+    dfu: {
+        pca10059: {
+            application: getAppFile('fw/rssi-10059.hex'),
+            semver: 'rssi_cdc_acm 2.0.0+dfuMay-22-2018-10-43-22',
+        },
+    },
+    jprog: {
+        nrf52: {
+            fw: getAppFile('fw/rssi-10040.hex'),
+            fwVersion: 'rssi-fw-1.0.0',
+            fwIdAddress: 0x2000,
+        },
+    },
+    needSerialport: true,
+};
+
+const logSelectedDevice = (device: Device) => {
+    logger.info(
+        `Validating firmware for device with s/n ${device.serialNumber}`
+    );
+};
 
 export default () => {
     const dispatch = useDispatch();
-    const channelRange = useSelector(getChannelRange);
+    const delay = useSelector(getDelay);
+    const scanRepeat = useSelector(getScanRepeat);
 
-    const min = Math.min(...channelRange);
-    const max = Math.max(...channelRange);
+    const startReadingFromDevice = (device: Device) => {
+        logger.info(`Opening device with s/n ${device.serialNumber}`);
+        dispatch(portClosed());
+        dispatch(clearRssiData());
+
+        stopReading().then(() => {
+            startReading(
+                device.serialport,
+                delay,
+                scanRepeat,
+                portName => dispatch(portOpened(portName)),
+                data => dispatch(receiveRssiData(data))
+            );
+        });
+    };
+
+    const stopReadingFromDevice = () => {
+        logger.info('Deselecting device');
+
+        stopReading().then(() => {
+            dispatch(portClosed());
+            dispatch(clearRssiData());
+        });
+    };
 
     return (
-        <>
-            <Form.Label htmlFor={sliderId}>
-                BLE channels from{' '}
-                <NumberInlineInput
-                    value={min}
-                    range={{ min: bleChannels.min, max }}
-                    onChange={newMin =>
-                        dispatch(setChannelRange([newMin, max]))
-                    }
-                />{' '}
-                to{' '}
-                <NumberInlineInput
-                    value={max}
-                    range={{ min, max: bleChannels.max }}
-                    onChange={newMax =>
-                        dispatch(setChannelRange([min, newMax]))
-                    }
-                />
-            </Form.Label>
-            <Slider
-                id={sliderId}
-                values={channelRange}
-                range={{ min: bleChannels.min, max: bleChannels.max }}
-                onChange={[
-                    newValue =>
-                        dispatch(setChannelRange([newValue, channelRange[1]])),
-                    newValue =>
-                        dispatch(setChannelRange([channelRange[0], newValue])),
-                ]}
-            />
-        </>
+        <DeviceSelector
+            deviceListing={deviceListing}
+            deviceSetup={deviceSetup}
+            onDeviceSelected={logSelectedDevice}
+            onDeviceIsReady={startReadingFromDevice}
+            onDeviceDeselected={stopReadingFromDevice}
+        />
     );
 };

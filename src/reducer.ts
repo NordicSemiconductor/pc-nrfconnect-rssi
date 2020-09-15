@@ -34,31 +34,33 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { bleChannels } from 'pc-nrfconnect-shared';
-import produce from 'immer';
+import { bleChannels, NrfConnectState } from 'pc-nrfconnect-shared';
+import produce, { Draft } from 'immer';
 
-import {
-    CLEAR_RSSI_DATA,
-    PORT_CLOSED,
-    PORT_OPENED,
-    RECEIVE_RSSI_DATA,
-    SET_ANIMATION_DURATION,
-    SET_CHANNEL_RANGE,
-    SET_DELAY,
-    SET_LEVEL_RANGE,
-    SET_MAX_SCANS,
-    SET_SCAN_REPEAT,
-    TOGGLE_PAUSE,
-} from './actions';
+import { RssiActionType, RssiAction } from './actions';
 
 export const initialLevelRange = {
     min: 20,
     max: 110,
 };
 
-const initialData = () => new Array(81).fill().map(() => []);
+const initialData = () => new Array(81).fill(undefined).map(() => []);
 
-const initialState = {
+type RssiState = {
+    isPaused: boolean;
+    buffer: number[];
+    data: number[][];
+    dataMax: number[];
+    delay: number;
+    scanRepeat: number;
+    maxScans: number;
+    animationDuration: number;
+    channelRange: [number, number];
+    levelRange: [number, number];
+    port: string | null;
+};
+
+const initialState: RssiState = {
     isPaused: false,
     buffer: [],
     data: initialData(),
@@ -72,7 +74,7 @@ const initialState = {
     port: null,
 };
 
-const updateData = (rawData, draft) => {
+const updateData = (rawData: Buffer, draft: Draft<RssiState>) => {
     draft.buffer = [...draft.buffer, ...rawData];
 
     if (draft.buffer.length > 246) {
@@ -90,74 +92,79 @@ const updateData = (rawData, draft) => {
     }
 };
 
-export default produce((draft, action) => {
-    // eslint-disable-next-line default-case -- we can neglect default case for reducers with immmer
+export default produce((draft: Draft<RssiState>, action: RssiAction) => {
     switch (action.type) {
-        case TOGGLE_PAUSE:
+        case RssiActionType.TOGGLE_PAUSE:
             draft.isPaused = !draft.isPaused;
             break;
 
-        case RECEIVE_RSSI_DATA:
+        case RssiActionType.RECEIVE_RSSI_DATA:
             if (draft.isPaused) {
                 break;
             }
             updateData(action.rawData, draft);
             break;
 
-        case CLEAR_RSSI_DATA:
+        case RssiActionType.CLEAR_RSSI_DATA:
             draft.data = initialData();
             draft.dataMax = [];
             break;
 
-        case SET_DELAY:
+        case RssiActionType.SET_DELAY:
             draft.delay = action.delay;
             break;
 
-        case SET_MAX_SCANS:
+        case RssiActionType.SET_MAX_SCANS:
             draft.maxScans = action.maxScans;
             break;
 
-        case SET_SCAN_REPEAT:
+        case RssiActionType.SET_SCAN_REPEAT:
             draft.scanRepeat = action.scanRepeat;
             break;
 
-        case SET_ANIMATION_DURATION:
+        case RssiActionType.SET_ANIMATION_DURATION:
             draft.animationDuration = action.animationDuration;
             break;
 
-        case SET_CHANNEL_RANGE:
+        case RssiActionType.SET_CHANNEL_RANGE:
             draft.channelRange = action.channelRange;
             break;
 
-        case SET_LEVEL_RANGE:
+        case RssiActionType.SET_LEVEL_RANGE:
             draft.levelRange = action.levelRange;
             break;
 
-        case PORT_OPENED:
+        case RssiActionType.PORT_OPENED:
             draft.port = action.portName;
             draft.isPaused = false;
             break;
 
-        case PORT_CLOSED:
+        case RssiActionType.PORT_CLOSED:
             draft.port = null;
             draft.isPaused = true;
     }
 }, initialState);
 
-export const getIsConnected = state => state.app.port != null;
-export const getIsPaused = state => state.app.isPaused;
+type AppState = NrfConnectState<RssiState>;
 
-export const getRssi = state => state.app.data.map(scan => scan[0]);
-export const getRssiMax = state => state.app.dataMax;
-export const getAnimationDuration = state => state.app.animationDuration;
-export const getDelay = state => state.app.delay;
-export const getMaxScans = state => state.app.maxScans;
-export const getScanRepeat = state => state.app.scanRepeat;
+const sortedPair = ([a, b]: [number, number]): [number, number] =>
+    a < b ? [a, b] : [b, a];
 
-export const getChannelRange = state => state.app.channelRange;
-export const getChannelRangeSorted = state =>
-    [...state.app.channelRange].sort((a, b) => a - b);
+export const getIsConnected = (state: AppState) => state.app.port != null;
+export const getIsPaused = (state: AppState) => state.app.isPaused;
 
-export const getLevelRange = state => state.app.levelRange;
-export const getLevelRangeSorted = state =>
-    [...state.app.levelRange].sort((a, b) => a - b);
+export const getRssi = (state: AppState) => state.app.data.map(scan => scan[0]);
+export const getRssiMax = (state: AppState) => state.app.dataMax;
+export const getAnimationDuration = (state: AppState) =>
+    state.app.animationDuration;
+export const getDelay = (state: AppState) => state.app.delay;
+export const getMaxScans = (state: AppState) => state.app.maxScans;
+export const getScanRepeat = (state: AppState) => state.app.scanRepeat;
+
+export const getChannelRange = (state: AppState) => state.app.channelRange;
+export const getChannelRangeSorted = (state: AppState) =>
+    sortedPair(getChannelRange(state));
+
+export const getLevelRange = (state: AppState) => state.app.levelRange;
+export const getLevelRangeSorted = (state: AppState): [number, number] =>
+    sortedPair(getLevelRange(state));

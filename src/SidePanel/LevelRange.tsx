@@ -36,82 +36,62 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DeviceSelector, getAppFile, logger } from 'pc-nrfconnect-shared';
+import Form from 'react-bootstrap/Form';
+import { Slider, NumberInlineInput } from 'pc-nrfconnect-shared';
 
-import {
-    clearRssiData,
-    portClosed,
-    portOpened,
-    receiveRssiData,
-} from './actions';
-import { startReading, stopReading } from './serialport';
-import { getDelay, getScanRepeat } from './reducer';
+import { setLevelRange } from '../actions';
+import { getLevelRange, initialLevelRange } from '../reducer';
 
-const deviceListing = {
-    nordicUsb: true,
-    serialport: true,
-    jlink: true,
-};
-const deviceSetup = {
-    dfu: {
-        pca10059: {
-            application: getAppFile('fw/rssi-10059.hex'),
-            semver: 'rssi_cdc_acm 2.0.0+dfuMay-22-2018-10-43-22',
-        },
-    },
-    jprog: {
-        nrf52: {
-            fw: getAppFile('fw/rssi-10040.hex'),
-            fwVersion: 'rssi-fw-1.0.0',
-            fwIdAddress: 0x2000,
-        },
-    },
-    needSerialport: true,
-};
-
-const logSelectedDevice = device => {
-    logger.info(
-        `Validating firmware for device with s/n ${device.serialNumber}`
-    );
-};
+const sliderId = 'ble-level-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const delay = useSelector(getDelay);
-    const scanRepeat = useSelector(getScanRepeat);
+    const levelRange = useSelector(getLevelRange);
 
-    const startReadingFromDevice = device => {
-        logger.info(`Opening device with s/n ${device.serialNumber}`);
-        dispatch(portClosed());
-        dispatch(clearRssiData());
+    const min = Math.min(...levelRange);
+    const max = Math.max(...levelRange);
 
-        stopReading().then(() => {
-            startReading(
-                device.serialport,
-                delay,
-                scanRepeat,
-                portName => dispatch(portOpened(portName)),
-                data => dispatch(receiveRssiData(data))
-            );
-        });
-    };
-
-    const stopReadingFromDevice = () => {
-        logger.info('Deselecting device');
-
-        stopReading().then(() => {
-            dispatch(portClosed());
-            dispatch(clearRssiData());
-        });
+    const setNewLevelRangeIfUnequal = (value1: number, value2: number) => {
+        if (value1 !== value2) {
+            dispatch(setLevelRange([value1, value2]));
+        }
     };
 
     return (
-        <DeviceSelector
-            deviceListing={deviceListing}
-            deviceSetup={deviceSetup}
-            onDeviceSelected={logSelectedDevice}
-            onDeviceIsReady={startReadingFromDevice}
-            onDeviceDeselected={stopReadingFromDevice}
-        />
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Signal levels from{' '}
+                <NumberInlineInput
+                    value={-max}
+                    range={{ min: -initialLevelRange.max, max: -min + 1 }}
+                    onChange={(newMax: number) =>
+                        setNewLevelRangeIfUnequal(min, -newMax)
+                    }
+                />{' '}
+                to{' '}
+                <NumberInlineInput
+                    value={-min}
+                    range={{ min: -max + 1, max: -initialLevelRange.min }}
+                    onChange={(newMin: number) =>
+                        setNewLevelRangeIfUnequal(-newMin, max)
+                    }
+                />{' '}
+                dBm
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={levelRange.map(v => -v)}
+                range={{
+                    min: -initialLevelRange.max,
+                    max: -initialLevelRange.min,
+                }}
+                onChange={[
+                    newValue =>
+                        setNewLevelRangeIfUnequal(-newValue, levelRange[1]),
+                    newValue =>
+                        setNewLevelRangeIfUnequal(levelRange[0], -newValue),
+                ]}
+            />
+        </>
     );
 };

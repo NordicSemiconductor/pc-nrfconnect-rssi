@@ -37,55 +37,49 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { Slider, NumberInlineInput } from 'pc-nrfconnect-shared';
+import { NumberInlineInput, Slider, bleChannels } from 'pc-nrfconnect-shared';
 
-import { setLevelRange } from '../actions';
-import { getLevelRange, initialLevelRange } from '../reducer';
+import { setChannelRange } from '../actions';
+import { getChannelRange } from '../reducer';
 
-const sliderId = 'ble-level-slider';
+const sliderId = 'ble-channel-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const levelRange = useSelector(getLevelRange);
+    const channelRange = useSelector(getChannelRange);
 
-    const min = Math.min(...levelRange);
-    const max = Math.max(...levelRange);
-
-    const setNewLevelRangeIfUnequal = (value1, value2) => {
-        if (value1 !== value2) {
-            dispatch(setLevelRange([value1, value2]));
-        }
-    };
+    const min = Math.min(...channelRange);
+    const max = Math.max(...channelRange);
 
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                Signal levels from{' '}
+                BLE channels from{' '}
                 <NumberInlineInput
-                    value={-max}
-                    range={{ min: -initialLevelRange.max, max: -min + 1 }}
-                    onChange={newMax => setNewLevelRangeIfUnequal(min, -newMax)}
+                    value={min}
+                    range={{ min: bleChannels.min, max }}
+                    onChange={(newMin: number) =>
+                        dispatch(setChannelRange([newMin, max]))
+                    }
                 />{' '}
                 to{' '}
                 <NumberInlineInput
-                    value={-min}
-                    range={{ min: -max + 1, max: -initialLevelRange.min }}
-                    onChange={newMin => setNewLevelRangeIfUnequal(-newMin, max)}
-                />{' '}
-                dBm
+                    value={max}
+                    range={{ min, max: bleChannels.max }}
+                    onChange={(newMax: number) =>
+                        dispatch(setChannelRange([min, newMax]))
+                    }
+                />
             </Form.Label>
             <Slider
                 id={sliderId}
-                values={levelRange.map(v => -v)}
-                range={{
-                    min: -initialLevelRange.max,
-                    max: -initialLevelRange.min,
-                }}
+                values={channelRange}
+                range={{ min: bleChannels.min, max: bleChannels.max }}
                 onChange={[
                     newValue =>
-                        setNewLevelRangeIfUnequal(-newValue, levelRange[1]),
+                        dispatch(setChannelRange([newValue, channelRange[1]])),
                     newValue =>
-                        setNewLevelRangeIfUnequal(levelRange[0], -newValue),
+                        dispatch(setChannelRange([channelRange[0], newValue])),
                 ]}
             />
         </>

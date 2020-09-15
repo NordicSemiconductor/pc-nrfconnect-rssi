@@ -36,7 +36,9 @@
 
 import React from 'react';
 import { Main, bleChannels } from 'pc-nrfconnect-shared';
-import { Bar, Chart } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
+import { Chart } from 'chart.js';
+
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useSelector } from 'react-redux';
 import {
@@ -66,10 +68,11 @@ const rssiMaxColors = bleChannels.map(channel =>
 
 const labels = bleChannels;
 
-const selectBLEValues = allData =>
+const selectBLEValues = (allData: number[]) =>
     allData.slice(2).filter((_, index) => index % 2 === 0);
 
-const isInRange = ([min, max], index) => index >= min && index <= max;
+const isInRange = ([min, max]: [number, number], value: number) =>
+    value >= min && value <= max;
 
 export default () => {
     const rssi = useSelector(getRssi);
@@ -78,17 +81,17 @@ export default () => {
     const channelRange = useSelector(getChannelRangeSorted);
     const [levelMin, levelMax] = useSelector(getLevelRangeSorted);
 
-    const convertInLevel = v => levelMin + levelMax - v;
-    const limitToLevelRange = v => {
+    const convertInLevel = (v: number) => levelMin + levelMax - v;
+    const limitToLevelRange = (v: number) => {
         if (v < levelMin) return levelMin;
         if (v > levelMax) return levelMax;
         return v;
     };
 
-    const maskValuesOutsideChannelRange = (value, index) =>
+    const maskValuesOutsideChannelRange = (value: number, index: number) =>
         isInRange(channelRange, bleChannels[index]) ? value : levelMin - 1;
 
-    const convertToScreenValue = rawRssi =>
+    const convertToScreenValue = (rawRssi: number[]) =>
         selectBLEValues(rawRssi)
             .map(convertInLevel)
             .map(limitToLevelRange)
@@ -117,7 +120,7 @@ export default () => {
                                     color: rssiColors,
                                     anchor: 'end',
                                     align: 'end',
-                                    formatter: v =>
+                                    formatter: (v: number) =>
                                         v <= levelMin || v >= levelMax
                                             ? ''
                                             : convertInLevel(v),
@@ -146,7 +149,7 @@ export default () => {
                                     position: 'top',
                                     offset: true,
                                     ticks: {
-                                        callback: (_, index) =>
+                                        callback: (_: number, index: number) =>
                                             String(bleChannels[index]).padStart(
                                                 2,
                                                 '0'
@@ -164,10 +167,7 @@ export default () => {
                                         fontSize: 14,
                                     },
                                     gridLines: {
-                                        offsetGridLines: true,
                                         display: false,
-                                        drawBorder: false,
-                                        fontColor: color.label,
                                     },
                                     stacked: true,
                                 },
@@ -176,7 +176,7 @@ export default () => {
                                     position: 'bottom',
                                     offset: true,
                                     ticks: {
-                                        callback: (_, index) =>
+                                        callback: (_: number, index: number) =>
                                             2402 + 2 * index,
                                         minRotation: 90,
                                         labelOffset: 0,
@@ -194,7 +194,6 @@ export default () => {
                                         offsetGridLines: true,
                                         display: false,
                                         drawBorder: false,
-                                        fontColor: color.label,
                                     },
                                     stacked: true,
                                 },
@@ -202,10 +201,9 @@ export default () => {
                             yAxes: [
                                 {
                                     type: 'linear',
-                                    min: levelMin,
-                                    max: levelMax,
                                     ticks: {
-                                        callback: v => v - levelMin - levelMax,
+                                        callback: (v: number) =>
+                                            v - levelMin - levelMax,
                                         min: levelMin,
                                         max: levelMax,
                                         fontColor: color.label,

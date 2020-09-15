@@ -34,65 +34,61 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export const TOGGLE_PAUSE = 'TOGGLE_PAUSE';
-export const togglePause = () => ({
-    type: TOGGLE_PAUSE,
-});
+import { logger, Device } from 'pc-nrfconnect-shared';
+import SerialPort from 'serialport';
 
-export const PORT_OPENED = 'PORT_OPENED';
-export const portOpened = portName => ({
-    type: PORT_OPENED,
-    portName,
-});
+let port: SerialPort | null = null;
 
-export const PORT_CLOSED = 'PORT_CLOSED';
-export const portClosed = () => ({
-    type: PORT_CLOSED,
-});
+const writeAndDrain = async (cmd: string) => {
+    if (port) {
+        await new Promise(resolve => {
+            port?.write(cmd, () => {
+                port?.drain(resolve);
+            });
+        });
+    }
+};
 
-export const SET_DELAY = 'SET_DELAY';
-export const setDelay = delay => ({
-    type: SET_DELAY,
-    delay,
-});
+export const writeDelay = (delay: number) =>
+    writeAndDrain(`set delay ${delay}\r`);
 
-export const SET_MAX_SCANS = 'SET_MAX_SCANS';
-export const setMaxScans = maxScans => ({
-    type: SET_MAX_SCANS,
-    maxScans,
-});
+export const writeScanRepeat = (scanRepeat: number) =>
+    writeAndDrain(`set repeat ${scanRepeat}\r`);
 
-export const SET_SCAN_REPEAT = 'SET_SCAN_REPEAT';
-export const setScanRepeat = scanRepeat => ({
-    type: SET_SCAN_REPEAT,
-    scanRepeat,
-});
+export const toggleLED = () => writeAndDrain('led\r');
 
-export const SET_ANIMATION_DURATION = 'SET_ANIMATION_DURATION';
-export const setAnimationDuration = animationDuration => ({
-    type: SET_ANIMATION_DURATION,
-    animationDuration,
-});
+export const resumeReading = async (delay: number, scanRepeat: number) => {
+    await writeDelay(delay);
+    await writeScanRepeat(scanRepeat);
 
-export const SET_CHANNEL_RANGE = 'SET_CHANNEL_RANGE';
-export const setChannelRange = channelRange => ({
-    type: SET_CHANNEL_RANGE,
-    channelRange,
-});
+    await writeAndDrain('start\r');
+};
 
-export const SET_LEVEL_RANGE = 'SET_LEVEL_RANGE';
-export const setLevelRange = levelRange => ({
-    type: SET_LEVEL_RANGE,
-    levelRange,
-});
+export const pauseReading = () => writeAndDrain('stop\r');
 
-export const RECEIVE_RSSI_DATA = 'RECEIVE_RSSI_DATA';
-export const receiveRssiData = rawData => ({
-    type: RECEIVE_RSSI_DATA,
-    rawData,
-});
+export const startReading = (
+    serialPort: Device['serialport'],
+    delay: number,
+    scanRepeat: number,
+    onOpened: (portname: string) => void,
+    onData: (data: Buffer) => void
+) => {
+    port = new SerialPort(serialPort.path, { baudRate: 115200 }, () => {
+        logger.info(`${serialPort.path} is open`);
+        onOpened(serialPort.path);
 
-export const CLEAR_RSSI_DATA = 'CLEAR_RSSI_DATA';
-export const clearRssiData = () => ({
-    type: CLEAR_RSSI_DATA,
-});
+        resumeReading(delay, scanRepeat);
+
+        port?.on('data', onData);
+        port?.on('error', console.log);
+    });
+};
+
+export const stopReading = async () => {
+    if (port?.isOpen) {
+        await pauseReading();
+        await new Promise(resolve => port?.close(resolve));
+        port = null;
+    }
+    logger.info('Serial port is closed');
+};
