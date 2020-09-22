@@ -68,10 +68,10 @@ const rssiMaxColors = bleChannels.map(channel =>
 
 const labels = bleChannels;
 
-const selectBLEValues = (allData: number[]) =>
+const selectBLEValues = (allData: readonly number[]) =>
     allData.slice(2).filter((_, index) => index % 2 === 0);
 
-const isInRange = ([min, max]: [number, number], value: number) =>
+const isInRange = ([min, max]: readonly [number, number], value: number) =>
     value >= min && value <= max;
 
 export default () => {
@@ -91,7 +91,7 @@ export default () => {
     const maskValuesOutsideChannelRange = (value: number, index: number) =>
         isInRange(channelRange, bleChannels[index]) ? value : levelMin - 1;
 
-    const convertToScreenValue = (rawRssi: number[]) =>
+    const convertToScreenValue = (rawRssi: readonly number[]) =>
         selectBLEValues(rawRssi)
             .map(convertInLevel)
             .map(limitToLevelRange)

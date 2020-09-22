@@ -46,19 +46,21 @@ export const initialLevelRange = {
 
 const initialData = () => new Array(81).fill(undefined).map(() => []);
 
-type RssiState = {
-    isPaused: boolean;
-    buffer: number[];
-    data: number[][];
-    dataMax: number[];
-    delay: number;
-    scanRepeat: number;
-    maxScans: number;
-    animationDuration: number;
-    channelRange: [number, number];
-    levelRange: [number, number];
-    port: string | null;
-};
+type NumberPair = readonly [number, number];
+
+interface RssiState {
+    readonly isPaused: boolean;
+    readonly buffer: readonly number[];
+    readonly data: readonly (readonly number[])[];
+    readonly dataMax: readonly number[];
+    readonly delay: number;
+    readonly scanRepeat: number;
+    readonly maxScans: number;
+    readonly animationDuration: number;
+    readonly channelRange: NumberPair;
+    readonly levelRange: NumberPair;
+    readonly port: string | null;
+}
 
 const initialState: RssiState = {
     isPaused: false,
@@ -147,7 +149,7 @@ export default produce((draft: Draft<RssiState>, action: RssiAction) => {
 
 type AppState = NrfConnectState<RssiState>;
 
-const sortedPair = ([a, b]: [number, number]): [number, number] =>
+const sortedPair = ([a, b]: NumberPair): NumberPair =>
     a < b ? [a, b] : [b, a];
 
 export const getIsConnected = (state: AppState) => state.app.port != null;
@@ -166,5 +168,5 @@ export const getChannelRangeSorted = (state: AppState) =>
     sortedPair(getChannelRange(state));
 
 export const getLevelRange = (state: AppState) => state.app.levelRange;
-export const getLevelRangeSorted = (state: AppState): [number, number] =>
+export const getLevelRangeSorted = (state: AppState) =>
     sortedPair(getLevelRange(state));
