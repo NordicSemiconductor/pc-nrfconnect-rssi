@@ -34,42 +34,55 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { connect } from 'react-redux';
-import { DeviceSelector, getAppFile, logger } from 'pc-nrfconnect-shared';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 
-import * as RssiActions from './actions';
+import { clearRssiData, togglePause as togglePauseAction } from '../actions';
+import { pauseReading, resumeReading } from '../serialport';
+import {
+    getDelay,
+    getIsConnected,
+    getIsPaused,
+    getScanRepeat,
+} from '../reducer';
 
-const deviceListing = {
-    nordicUsb: true,
-    serialport: true,
-    jlink: true,
+import './control-buttons.scss';
+
+export default () => {
+    const isConnected = useSelector(getIsConnected);
+    const isPaused = useSelector(getIsPaused);
+    const delay = useSelector(getDelay);
+    const scanRepeat = useSelector(getScanRepeat);
+    const dispatch = useDispatch();
+
+    const togglePause = () => {
+        dispatch(togglePauseAction());
+
+        if (isPaused) {
+            resumeReading(delay, scanRepeat);
+        } else {
+            pauseReading();
+        }
+    };
+    return (
+        <div className="control-buttons">
+            <Button
+                variant="secondary"
+                disabled={!isConnected}
+                onClick={() => {
+                    dispatch(clearRssiData());
+                }}
+            >
+                Reset
+            </Button>
+            <Button
+                variant="secondary"
+                disabled={!isConnected}
+                onClick={togglePause}
+            >
+                {isPaused ? 'Start' : 'Pause'}
+            </Button>
+        </div>
+    );
 };
-const deviceSetup = {
-    dfu: {
-        pca10059: {
-            application: getAppFile('fw/rssi-10059.hex'),
-            semver: 'rssi_cdc_acm 2.0.0+dfuMay-22-2018-10-43-22',
-        },
-    },
-    jprog: {
-        nrf52: {
-            fw: getAppFile('fw/rssi-10040.hex'),
-            fwVersion: 'rssi-fw-1.0.0',
-            fwIdAddress: 0x2000,
-        },
-    },
-    needSerialport: true,
-};
-
-const mapState = () => ({
-    deviceListing,
-    deviceSetup,
-});
-
-const mapDispatch = dispatch => ({
-    onDeviceSelected: device => { logger.info(`Validating firmware for device with s/n ${device.serialNumber}`); },
-    onDeviceDeselected: () => { logger.info('Deselecting device'); dispatch(RssiActions.close()); },
-    onDeviceIsReady: device => { logger.info(`Opening device with s/n ${device.serialNumber}`); dispatch(RssiActions.open(device.serialport)); },
-});
-
-export default connect(mapState, mapDispatch)(DeviceSelector);

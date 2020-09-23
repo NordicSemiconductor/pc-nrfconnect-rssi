@@ -39,37 +39,46 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { changeMaxScans } from '../actions';
-import { getMaxScans } from '../reducer';
+import { setDelay as setDelayAction } from '../actions';
+import { writeDelay } from '../serialport';
+import { getDelay } from '../reducer';
 
-const range = { min: 1, max: 100 };
-const sliderId = 'max-scans-slider';
+const range = { min: 5, max: 1000 };
+const sliderId = 'delay-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const maxScans = useSelector(getMaxScans);
+    const delay = useSelector(getDelay);
 
-    const dispatchChangeMaxScans = useCallback(
-        newMaxScans => dispatch(changeMaxScans(newMaxScans)),
-        [dispatch],
+    const setAndWriteDelay = useCallback(
+        newDelay => {
+            dispatch(setDelayAction(newDelay));
+            writeDelay(newDelay);
+        },
+        [dispatch]
+    );
+    const setDelay = useCallback(
+        newDelay => dispatch(setDelayAction(newDelay)),
+        [dispatch]
     );
 
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                Show maximum for the last{' '}
+                Run scan every{' '}
                 <NumberInlineInput
-                    value={maxScans}
+                    value={delay}
                     range={range}
-                    onChange={dispatchChangeMaxScans}
+                    onChange={setAndWriteDelay}
                 />
-                {' '}scans
+                &nbsp;ms
             </Form.Label>
             <Slider
                 id={sliderId}
-                values={[maxScans]}
+                values={[delay]}
                 range={range}
-                onChange={[dispatchChangeMaxScans]}
+                onChange={[setDelay]}
+                onChangeComplete={() => writeDelay(delay)}
             />
         </>
     );

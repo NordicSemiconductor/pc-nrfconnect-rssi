@@ -35,38 +35,53 @@
  */
 
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import Button from 'react-bootstrap/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
+import { NumberInlineInput, Slider, bleChannels } from 'pc-nrfconnect-shared';
 
-import { resetRssiData, setRssiData, togglePause } from '../actions';
-import { getIsPaused, getIsConnected } from '../reducer';
+import { setChannelRange } from '../actions';
+import { getChannelRange } from '../reducer';
 
-import './control-buttons.scss';
+const sliderId = 'ble-channel-slider';
 
 export default () => {
-    const isConnected = useSelector(getIsConnected);
-    const isPaused = useSelector(getIsPaused);
     const dispatch = useDispatch();
+    const channelRange = useSelector(getChannelRange);
+
+    const min = Math.min(...channelRange);
+    const max = Math.max(...channelRange);
 
     return (
-        <div className="control-buttons">
-            <Button
-                variant="secondary"
-                disabled={!isConnected}
-                onClick={() => {
-                    resetRssiData();
-                    dispatch(setRssiData());
-                }}
-            >
-                Reset
-            </Button>
-            <Button
-                variant="secondary"
-                disabled={!isConnected}
-                onClick={() => dispatch(togglePause)}
-            >
-                {isPaused ? 'Start' : 'Pause'}
-            </Button>
-        </div>
+        <>
+            <Form.Label htmlFor={sliderId}>
+                BLE channels from{' '}
+                <NumberInlineInput
+                    value={min}
+                    range={{ min: bleChannels.min, max }}
+                    onChange={(newMin: number) =>
+                        dispatch(setChannelRange([newMin, max]))
+                    }
+                />{' '}
+                to{' '}
+                <NumberInlineInput
+                    value={max}
+                    range={{ min, max: bleChannels.max }}
+                    onChange={(newMax: number) =>
+                        dispatch(setChannelRange([min, newMax]))
+                    }
+                />
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={channelRange}
+                range={{ min: bleChannels.min, max: bleChannels.max }}
+                onChange={[
+                    newValue =>
+                        dispatch(setChannelRange([newValue, channelRange[1]])),
+                    newValue =>
+                        dispatch(setChannelRange([channelRange[0], newValue])),
+                ]}
+            />
+        </>
     );
 };

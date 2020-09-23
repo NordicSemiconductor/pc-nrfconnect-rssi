@@ -39,42 +39,38 @@ import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { writeScanRepeat, changeChannelScanRepeat } from '../actions';
-import { getScanRepeat } from '../reducer';
+import { setAnimationDuration as setAnimationDurationAction } from '../actions';
+import { getAnimationDuration } from '../reducer';
 
-const range = { min: 1, max: 100 };
-const sliderId = 'sample-count-slider';
+const range = { min: 10, max: 1000 };
+const sliderId = 'animation-duration-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const scanRepeat = useSelector(getScanRepeat);
+    const animationDuration = useSelector(getAnimationDuration);
 
-    const changeAndWriteScanRepeat = useCallback(newScanRepeat => {
-        dispatch(changeChannelScanRepeat(newScanRepeat));
-        writeScanRepeat(newScanRepeat);
-    }, [dispatch]);
-    const dispatchChangeScanRepeat = useCallback(
-        newScanRepeat => dispatch(changeChannelScanRepeat(newScanRepeat)),
-        [dispatch],
+    const setAnimationDuration = useCallback(
+        newAnimationDuration =>
+            dispatch(setAnimationDurationAction(newAnimationDuration)),
+        [dispatch]
     );
 
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                Sample each channel{' '}
+                Hold values for{' '}
                 <NumberInlineInput
-                    value={scanRepeat}
+                    value={animationDuration}
                     range={range}
-                    onChange={changeAndWriteScanRepeat}
+                    onChange={setAnimationDuration}
                 />
-                {' '}times
+                &nbsp;ms
             </Form.Label>
             <Slider
                 id={sliderId}
-                values={[scanRepeat]}
+                values={[animationDuration]}
                 range={range}
-                onChange={[dispatchChangeScanRepeat]}
-                onChangeComplete={() => writeScanRepeat(scanRepeat)}
+                onChange={[setAnimationDuration]}
             />
         </>
     );

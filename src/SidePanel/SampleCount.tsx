@@ -34,47 +34,51 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { NumberInlineInput, Slider, bleChannels } from 'pc-nrfconnect-shared';
+import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { setChannelRange } from '../actions';
-import { getChannelRange } from '../reducer';
+import { setScanRepeat as setScanRepeatAction } from '../actions';
+import { writeScanRepeat } from '../serialport';
+import { getScanRepeat } from '../reducer';
 
-const sliderId = 'ble-channel-slider';
+const range = { min: 1, max: 100 };
+const sliderId = 'sample-count-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const channelRange = useSelector(getChannelRange);
+    const scanRepeat = useSelector(getScanRepeat);
 
-    const min = Math.min(...channelRange);
-    const max = Math.max(...channelRange);
+    const setAndWriteScanRepeat = useCallback(
+        newScanRepeat => {
+            dispatch(setScanRepeatAction(newScanRepeat));
+            writeScanRepeat(newScanRepeat);
+        },
+        [dispatch]
+    );
+    const setScanRepeat = useCallback(
+        newScanRepeat => dispatch(setScanRepeatAction(newScanRepeat)),
+        [dispatch]
+    );
 
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                BLE channels from{' '}
+                Sample each channel{' '}
                 <NumberInlineInput
-                    value={min}
-                    range={{ min: bleChannels.min, max }}
-                    onChange={newMin => dispatch(setChannelRange([newMin, max]))}
-                />
-                {' '}to{' '}
-                <NumberInlineInput
-                    value={max}
-                    range={{ min, max: bleChannels.max }}
-                    onChange={newMax => dispatch(setChannelRange([min, newMax]))}
-                />
+                    value={scanRepeat}
+                    range={range}
+                    onChange={setAndWriteScanRepeat}
+                />{' '}
+                times
             </Form.Label>
             <Slider
                 id={sliderId}
-                values={channelRange}
-                range={{ min: bleChannels.min, max: bleChannels.max }}
-                onChange={[
-                    newValue => dispatch(setChannelRange([newValue, channelRange[1]])),
-                    newValue => dispatch(setChannelRange([channelRange[0], newValue])),
-                ]}
+                values={[scanRepeat]}
+                range={range}
+                onChange={[setScanRepeat]}
+                onChangeComplete={() => writeScanRepeat(scanRepeat)}
             />
         </>
     );
