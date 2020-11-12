@@ -35,7 +35,7 @@
  */
 
 import React from 'react';
-import Form from 'react-bootstrap/Form';
+import { SidePanel, Group } from 'pc-nrfconnect-shared';
 
 import ControlButtons from './ControlButtons';
 import Delay from './Delay';
@@ -48,25 +48,27 @@ import ToggleLed from './ToggleLed';
 
 import './sidepanel.scss';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
+export default () => (
+    <SidePanel className="sidepanel">
         <ControlButtons />
 
-        <h2>Sweep scan</h2>
-        <Delay />
+        <Group heading="Sweep scan">
+            <Delay />
+        </Group>
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
+        <Group heading="Channel details">
+            <MaxCount />
+            <SampleCount />
+            <AnimationSpeed />
+        </Group>
 
-        <h2>Filters</h2>
-        <ChannelRange />
-        <LevelRange />
+        <Group heading="Filters">
+            <ChannelRange />
+            <LevelRange />
+        </Group>
 
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
+        <Group heading="Device">
+            <ToggleLed />
+        </Group>
+    </SidePanel>
 );
-
-export default SidePanel;

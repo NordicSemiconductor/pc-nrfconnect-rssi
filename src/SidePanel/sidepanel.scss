@@ -1,33 +1,5 @@
-@import "~pc-nrfconnect-shared/src/variables";
-
 .sidepanel {
-    font-size: 12px;
-    color: $gray-600;
-
-    h2 {
-        margin-top: 6ex;
-        margin-bottom: 3ex;
-
-        text-transform: uppercase;
-        font-size: 10px;
-        font-weight: normal;
-        letter-spacing: 0.5ex;
-
-        color: $gray-400;
-    }
-
-    h2 + .form-label {
-        margin-top: 0;
-    }
-
     .form-label {
-        margin-top: 1ex;
         margin-bottom: 0;
-    }
-
-    .number-inline-input {
-        font-size: 14px;
-
-        &:focus { background-color: $white; }
     }
 }
