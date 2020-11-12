@@ -20,12 +20,14 @@
   ],
   "main": "dist/bundle.js",
   "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js",
+  "eslintConfig": {
+      "extends" : "./node_modules/pc-nrfconnect-shared/config/eslintrc.json"
+  },
   "scripts": {
     "dev": "nrfconnect-scripts build-watch",
     "webpack": "nrfconnect-scripts build-dev",
     "build": "nrfconnect-scripts build-prod",
     "nordic-publish": "nrfconnect-scripts nordic-publish",
-    "lint-init": "nrfconnect-scripts lint-init",
     "lint": "nrfconnect-scripts lint src",
     "lintfix": "nrfconnect-scripts lint --fix src",
     "test": "nrfconnect-scripts test --passWithNoTests",
