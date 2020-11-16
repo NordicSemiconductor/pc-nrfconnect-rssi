@@ -91,6 +91,11 @@ export default () => {
         dispatch(clearRssiData());
 
         stopReading().then(() => {
+            if (device.serialport == null) {
+                logger.error(`Missing serial port information`);
+                return;
+            }
+
             startReading(
                 device.serialport,
                 delay,
