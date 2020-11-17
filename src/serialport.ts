@@ -34,7 +34,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { logger, Device } from 'pc-nrfconnect-shared';
+import { logger, Serialport as DeviceSerialport } from 'pc-nrfconnect-shared';
 import SerialPort from 'serialport';
 
 let port: SerialPort | null = null;
@@ -67,7 +67,7 @@ export const resumeReading = async (delay: number, scanRepeat: number) => {
 export const pauseReading = () => writeAndDrain('stop\r');
 
 export const startReading = (
-    serialPort: Device['serialport'],
+    serialPort: DeviceSerialport,
     delay: number,
     scanRepeat: number,
     onOpened: (portname: string) => void,
