@@ -35,54 +35,40 @@
  */
 
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import { Slider, NumberInlineInput } from 'pc-nrfconnect-shared';
+import { SidePanel, Group } from 'pc-nrfconnect-shared';
 
-import { setLevelRange } from '../actions';
-import { getLevelRange, initialLevelRange } from '../reducer';
+import ControlButtons from './ControlButtons';
+import Delay from './Delay';
+import MaxCount from './MaxCount';
+import SampleCount from './SampleCount';
+import AnimationSpeed from './AnimationSpeed';
+import ChannelRange from './ChannelRange';
+import LevelRange from './LevelRange';
+import ToggleLed from './ToggleLed';
 
-const sliderId = 'ble-level-slider';
+import './sidepanel.scss';
 
-export default () => {
-    const dispatch = useDispatch();
-    const levelRange = useSelector(getLevelRange);
+export default () => (
+    <SidePanel className="sidepanel">
+        <ControlButtons />
 
-    const min = Math.min(...levelRange);
-    const max = Math.max(...levelRange);
+        <Group heading="Sweep scan">
+            <Delay />
+        </Group>
 
-    const setNewLevelRangeIfUnequal = (value1, value2) => {
-        if (value1 !== value2) {
-            dispatch(setLevelRange([value1, value2]));
-        }
-    };
+        <Group heading="Channel details">
+            <MaxCount />
+            <SampleCount />
+            <AnimationSpeed />
+        </Group>
 
-    return (
-        <>
-            <Form.Label htmlFor={sliderId}>
-                Signal levels from{' '}
-                <NumberInlineInput
-                    value={-max}
-                    range={{ min: -initialLevelRange.max, max: -min + 1 }}
-                    onChange={newMax => setNewLevelRangeIfUnequal(min, -newMax)}
-                />
-                {' '}to{' '}
-                <NumberInlineInput
-                    value={-min}
-                    range={{ min: -max + 1, max: -initialLevelRange.min }}
-                    onChange={newMin => setNewLevelRangeIfUnequal(-newMin, max)}
-                />
-                {' '}dBm
-            </Form.Label>
-            <Slider
-                id={sliderId}
-                values={levelRange.map(v => -v)}
-                range={{ min: -initialLevelRange.max, max: -initialLevelRange.min }}
-                onChange={[
-                    newValue => setNewLevelRangeIfUnequal(-newValue, levelRange[1]),
-                    newValue => setNewLevelRangeIfUnequal(levelRange[0], -newValue),
-                ]}
-            />
-        </>
-    );
-};
+        <Group heading="Filters">
+            <ChannelRange />
+            <LevelRange />
+        </Group>
+
+        <Group heading="Device">
+            <ToggleLed />
+        </Group>
+    </SidePanel>
+);

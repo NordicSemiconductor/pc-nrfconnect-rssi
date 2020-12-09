@@ -34,10 +34,23 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { connect } from 'react-redux';
-import { DeviceSelector, getAppFile, logger } from 'pc-nrfconnect-shared';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    Device,
+    DeviceSelector,
+    getAppFile,
+    logger,
+} from 'pc-nrfconnect-shared';
 
-import * as RssiActions from './actions';
+import {
+    clearRssiData,
+    portClosed,
+    portOpened,
+    receiveRssiData,
+} from './actions';
+import { startReading, stopReading } from './serialport';
+import { getDelay, getScanRepeat } from './reducer';
 
 const deviceListing = {
     nordicUsb: true,
@@ -61,15 +74,54 @@ const deviceSetup = {
     needSerialport: true,
 };
 
-const mapState = () => ({
-    deviceListing,
-    deviceSetup,
-});
+const logSelectedDevice = (device: Device) => {
+    logger.info(
+        `Validating firmware for device with s/n ${device.serialNumber}`
+    );
+};
 
-const mapDispatch = dispatch => ({
-    onDeviceSelected: device => { logger.info(`Validating firmware for device with s/n ${device.serialNumber}`); },
-    onDeviceDeselected: () => { logger.info('Deselecting device'); dispatch(RssiActions.close()); },
-    onDeviceIsReady: device => { logger.info(`Opening device with s/n ${device.serialNumber}`); dispatch(RssiActions.open(device.serialport)); },
-});
+export default () => {
+    const dispatch = useDispatch();
+    const delay = useSelector(getDelay);
+    const scanRepeat = useSelector(getScanRepeat);
 
-export default connect(mapState, mapDispatch)(DeviceSelector);
+    const startReadingFromDevice = (device: Device) => {
+        logger.info(`Opening device with s/n ${device.serialNumber}`);
+        dispatch(portClosed());
+        dispatch(clearRssiData());
+
+        stopReading().then(() => {
+            if (device.serialport == null) {
+                logger.error(`Missing serial port information`);
+                return;
+            }
+
+            startReading(
+                device.serialport,
+                delay,
+                scanRepeat,
+                portName => dispatch(portOpened(portName)),
+                data => dispatch(receiveRssiData(data))
+            );
+        });
+    };
+
+    const stopReadingFromDevice = () => {
+        logger.info('Deselecting device');
+
+        stopReading().then(() => {
+            dispatch(portClosed());
+            dispatch(clearRssiData());
+        });
+    };
+
+    return (
+        <DeviceSelector
+            deviceListing={deviceListing}
+            deviceSetup={deviceSetup}
+            onDeviceSelected={logSelectedDevice}
+            onDeviceIsReady={startReadingFromDevice}
+            onDeviceDeselected={stopReadingFromDevice}
+        />
+    );
+};

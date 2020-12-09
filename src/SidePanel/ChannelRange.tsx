@@ -34,47 +34,53 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
+import { NumberInlineInput, Slider, bleChannels } from 'pc-nrfconnect-shared';
 
-import { changeDelay, writeDelay } from '../actions';
-import { getDelay } from '../reducer';
+import { setChannelRange } from '../actions';
+import { getChannelRange } from '../reducer';
 
-const range = { min: 5, max: 1000 };
-const sliderId = 'delay-slider';
+const sliderId = 'ble-channel-slider';
 
 export default () => {
     const dispatch = useDispatch();
-    const delay = useSelector(getDelay);
+    const channelRange = useSelector(getChannelRange);
 
-    const changeAndWriteDelay = useCallback(newDelay => {
-        dispatch(changeDelay(newDelay));
-        writeDelay(newDelay);
-    }, [dispatch]);
-    const dispatchChangeDelay = useCallback(
-        newDelay => dispatch(changeDelay(newDelay)),
-        [dispatch],
-    );
+    const min = Math.min(...channelRange);
+    const max = Math.max(...channelRange);
 
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                Run scan every{' '}
+                BLE channels from{' '}
                 <NumberInlineInput
-                    value={delay}
-                    range={range}
-                    onChange={changeAndWriteDelay}
+                    value={min}
+                    range={{ min: bleChannels.min, max }}
+                    onChange={(newMin: number) =>
+                        dispatch(setChannelRange([newMin, max]))
+                    }
+                />{' '}
+                to{' '}
+                <NumberInlineInput
+                    value={max}
+                    range={{ min, max: bleChannels.max }}
+                    onChange={(newMax: number) =>
+                        dispatch(setChannelRange([min, newMax]))
+                    }
                 />
-                &nbsp;ms
             </Form.Label>
             <Slider
                 id={sliderId}
-                values={[delay]}
-                range={range}
-                onChange={[dispatchChangeDelay]}
-                onChangeComplete={() => writeDelay(delay)}
+                values={channelRange}
+                range={{ min: bleChannels.min, max: bleChannels.max }}
+                onChange={[
+                    newValue =>
+                        dispatch(setChannelRange([newValue, channelRange[1]])),
+                    newValue =>
+                        dispatch(setChannelRange([channelRange[0], newValue])),
+                ]}
             />
         </>
     );

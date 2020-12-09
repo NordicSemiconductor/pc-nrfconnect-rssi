@@ -34,39 +34,52 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import ControlButtons from './ControlButtons';
-import Delay from './Delay';
-import MaxCount from './MaxCount';
-import SampleCount from './SampleCount';
-import AnimationSpeed from './AnimationSpeed';
-import ChannelRange from './ChannelRange';
-import LevelRange from './LevelRange';
-import ToggleLed from './ToggleLed';
+import { setDelay as setDelayAction } from '../actions';
+import { writeDelay } from '../serialport';
+import { getDelay } from '../reducer';
 
-import './sidepanel.scss';
+const range = { min: 5, max: 1000 };
+const sliderId = 'delay-slider';
 
-const SidePanel = () => (
-    <Form className="sidepanel">
-        <ControlButtons />
+export default () => {
+    const dispatch = useDispatch();
+    const delay = useSelector(getDelay);
 
-        <h2>Sweep scan</h2>
-        <Delay />
+    const setAndWriteDelay = useCallback(
+        newDelay => {
+            dispatch(setDelayAction(newDelay));
+            writeDelay(newDelay);
+        },
+        [dispatch]
+    );
+    const setDelay = useCallback(
+        newDelay => dispatch(setDelayAction(newDelay)),
+        [dispatch]
+    );
 
-        <h2>Channel details</h2>
-        <MaxCount />
-        <SampleCount />
-        <AnimationSpeed />
-
-        <h2>Filters</h2>
-        <ChannelRange />
-        <LevelRange />
-
-        <h2>Device</h2>
-        <ToggleLed />
-    </Form>
-);
-
-export default SidePanel;
+    return (
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Run scan every{' '}
+                <NumberInlineInput
+                    value={delay}
+                    range={range}
+                    onChange={setAndWriteDelay}
+                />
+                &nbsp;ms
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={[delay]}
+                range={range}
+                onChange={[setDelay]}
+                onChangeComplete={() => writeDelay(delay)}
+            />
+        </>
+    );
+};

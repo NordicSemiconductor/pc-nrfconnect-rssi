@@ -34,43 +34,19 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Form from 'react-bootstrap/Form';
-import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 
-import { changeMaxScans } from '../actions';
-import { getMaxScans } from '../reducer';
-
-const range = { min: 1, max: 100 };
-const sliderId = 'max-scans-slider';
+import { toggleLED } from '../serialport';
+import { getIsConnected } from '../reducer';
 
 export default () => {
-    const dispatch = useDispatch();
-    const maxScans = useSelector(getMaxScans);
-
-    const dispatchChangeMaxScans = useCallback(
-        newMaxScans => dispatch(changeMaxScans(newMaxScans)),
-        [dispatch],
-    );
+    const isConnected = useSelector(getIsConnected);
 
     return (
-        <>
-            <Form.Label htmlFor={sliderId}>
-                Show maximum for the last{' '}
-                <NumberInlineInput
-                    value={maxScans}
-                    range={range}
-                    onChange={dispatchChangeMaxScans}
-                />
-                {' '}scans
-            </Form.Label>
-            <Slider
-                id={sliderId}
-                values={[maxScans]}
-                range={range}
-                onChange={[dispatchChangeMaxScans]}
-            />
-        </>
+        <Button variant="secondary" disabled={!isConnected} onClick={toggleLED}>
+            Toggle LED
+        </Button>
     );
 };

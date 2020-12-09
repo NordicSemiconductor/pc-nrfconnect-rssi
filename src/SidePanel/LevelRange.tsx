@@ -35,38 +35,63 @@
  */
 
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import Button from 'react-bootstrap/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import Form from 'react-bootstrap/Form';
+import { Slider, NumberInlineInput } from 'pc-nrfconnect-shared';
 
-import { resetRssiData, setRssiData, togglePause } from '../actions';
-import { getIsPaused, getIsConnected } from '../reducer';
+import { setLevelRange } from '../actions';
+import { getLevelRange, initialLevelRange } from '../reducer';
 
-import './control-buttons.scss';
+const sliderId = 'ble-level-slider';
 
 export default () => {
-    const isConnected = useSelector(getIsConnected);
-    const isPaused = useSelector(getIsPaused);
     const dispatch = useDispatch();
+    const levelRange = useSelector(getLevelRange);
+
+    const min = Math.min(...levelRange);
+    const max = Math.max(...levelRange);
+
+    const setNewLevelRangeIfUnequal = (value1: number, value2: number) => {
+        if (value1 !== value2) {
+            dispatch(setLevelRange([value1, value2]));
+        }
+    };
 
     return (
-        <div className="control-buttons">
-            <Button
-                variant="secondary"
-                disabled={!isConnected}
-                onClick={() => {
-                    resetRssiData();
-                    dispatch(setRssiData());
+        <>
+            <Form.Label htmlFor={sliderId}>
+                Signal levels from{' '}
+                <NumberInlineInput
+                    value={-max}
+                    range={{ min: -initialLevelRange.max, max: -min + 1 }}
+                    onChange={(newMax: number) =>
+                        setNewLevelRangeIfUnequal(min, -newMax)
+                    }
+                />{' '}
+                to{' '}
+                <NumberInlineInput
+                    value={-min}
+                    range={{ min: -max + 1, max: -initialLevelRange.min }}
+                    onChange={(newMin: number) =>
+                        setNewLevelRangeIfUnequal(-newMin, max)
+                    }
+                />{' '}
+                dBm
+            </Form.Label>
+            <Slider
+                id={sliderId}
+                values={levelRange.map(v => -v)}
+                range={{
+                    min: -initialLevelRange.max,
+                    max: -initialLevelRange.min,
                 }}
-            >
-                Reset
-            </Button>
-            <Button
-                variant="secondary"
-                disabled={!isConnected}
-                onClick={() => dispatch(togglePause)}
-            >
-                {isPaused ? 'Start' : 'Pause'}
-            </Button>
-        </div>
+                onChange={[
+                    newValue =>
+                        setNewLevelRangeIfUnequal(-newValue, levelRange[1]),
+                    newValue =>
+                        setNewLevelRangeIfUnequal(levelRange[0], -newValue),
+                ]}
+            />
+        </>
     );
 };

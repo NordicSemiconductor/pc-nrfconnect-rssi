@@ -1,3 +1,7 @@
+## Version 1.3.1
+### Updates
+- Slight updates to the UI and needed changes for launcher 3.6.1
+
 ## Version 1.3.0
 ### Updates
 - New look & feel
