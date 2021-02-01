@@ -45,7 +45,7 @@
     "@types/serialport": "8.0.1",
     "chart.js": "2.9.3",
     "chartjs-plugin-datalabels": "0.7.0",
-    "immer": "7.0.8",
+    "immer": "8.0.1",
     "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.15.0",
     "react": "16.13.1",
     "react-chartjs-2": "2.9.0",
