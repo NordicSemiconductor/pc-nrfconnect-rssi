@@ -35,13 +35,13 @@
  */
 
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { useDispatch, useSelector } from 'react-redux';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { setScanRepeat as setScanRepeatAction } from '../actions';
-import { writeScanRepeat } from '../serialport';
 import { getScanRepeat } from '../reducer';
+import { writeScanRepeat } from '../serialport';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'sample-count-slider';

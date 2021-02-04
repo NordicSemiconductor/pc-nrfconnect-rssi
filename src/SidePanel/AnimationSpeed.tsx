@@ -35,8 +35,8 @@
  */
 
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
+import { useDispatch, useSelector } from 'react-redux';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { setAnimationDuration as setAnimationDurationAction } from '../actions';
