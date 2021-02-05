@@ -35,15 +35,15 @@
  */
 
 import React from 'react';
-import { SidePanel, Group } from 'pc-nrfconnect-shared';
+import { Group, SidePanel } from 'pc-nrfconnect-shared';
 
-import ControlButtons from './ControlButtons';
-import Delay from './Delay';
-import MaxCount from './MaxCount';
-import SampleCount from './SampleCount';
 import AnimationSpeed from './AnimationSpeed';
 import ChannelRange from './ChannelRange';
+import ControlButtons from './ControlButtons';
+import Delay from './Delay';
 import LevelRange from './LevelRange';
+import MaxCount from './MaxCount';
+import SampleCount from './SampleCount';
 import ToggleLed from './ToggleLed';
 
 import './sidepanel.scss';

@@ -34,10 +34,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { bleChannels, NrfConnectState } from 'pc-nrfconnect-shared';
 import produce, { Draft } from 'immer';
+import { bleChannels, NrfConnectState } from 'pc-nrfconnect-shared';
 
-import { RssiActionType, RssiAction } from './actions';
+import { RssiAction, RssiActionType } from './actions';
 
 export const initialLevelRange = {
     min: 20,

@@ -37,10 +37,10 @@
 import React from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
-import reducer from './reducer';
 import Chart from './Chart/Chart';
-import SidePanel from './SidePanel/SidePanel';
+import reducer from './reducer';
 import RssiDeviceSelect from './RssiDeviceSelect';
+import SidePanel from './SidePanel/SidePanel';
 
 export default () => (
     <App

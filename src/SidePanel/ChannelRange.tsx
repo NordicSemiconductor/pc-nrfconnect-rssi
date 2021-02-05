@@ -35,9 +35,9 @@
  */
 
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { NumberInlineInput, Slider, bleChannels } from 'pc-nrfconnect-shared';
+import { useDispatch, useSelector } from 'react-redux';
+import { bleChannels, NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { setChannelRange } from '../actions';
 import { getChannelRange } from '../reducer';

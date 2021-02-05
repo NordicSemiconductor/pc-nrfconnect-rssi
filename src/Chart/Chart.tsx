@@ -35,18 +35,18 @@
  */
 
 import React from 'react';
-import { Main, bleChannels } from 'pc-nrfconnect-shared';
 import { Bar } from 'react-chartjs-2';
-import { Chart } from 'chart.js';
-
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useSelector } from 'react-redux';
+import { Chart } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { bleChannels, Main } from 'pc-nrfconnect-shared';
+
 import {
-    getRssi,
-    getRssiMax,
     getAnimationDuration,
     getChannelRangeSorted,
     getLevelRangeSorted,
+    getRssi,
+    getRssiMax,
 } from '../reducer';
 import color from './rssiColors';
 

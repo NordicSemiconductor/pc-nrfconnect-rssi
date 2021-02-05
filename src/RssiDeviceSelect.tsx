@@ -49,8 +49,8 @@ import {
     portOpened,
     receiveRssiData,
 } from './actions';
-import { startReading, stopReading } from './serialport';
 import { getDelay, getScanRepeat } from './reducer';
+import { startReading, stopReading } from './serialport';
 
 const deviceListing = {
     nordicUsb: true,

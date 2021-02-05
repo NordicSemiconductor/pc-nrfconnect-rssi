@@ -46,7 +46,7 @@
     "chart.js": "2.9.4",
     "chartjs-plugin-datalabels": "0.7.0",
     "immer": "8.0.1",
-    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.15.0",
+    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v4.17.2",
     "react": "16.13.1",
     "react-chartjs-2": "2.9.0",
     "react-redux": "7.2.0"
