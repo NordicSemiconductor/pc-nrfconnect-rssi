@@ -35,9 +35,9 @@
  */
 
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Form from 'react-bootstrap/Form';
-import { Slider, NumberInlineInput } from 'pc-nrfconnect-shared';
+import { useDispatch, useSelector } from 'react-redux';
+import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import { setLevelRange } from '../actions';
 import { getLevelRange, initialLevelRange } from '../reducer';
