@@ -1,5 +1,5 @@
 /* Copyright (c) 2015 - 2017, Nordic Semiconductor ASA
- *
+ pico*
  * All rights reserved.
  *
  * Use in source and binary forms, redistribution in binary form only, with
@@ -67,6 +67,11 @@ const deviceSetup = {
     jprog: {
         nrf52: {
             fw: getAppFile('fw/rssi-10040.hex'),
+            fwVersion: 'rssi-fw-1.0.0',
+            fwIdAddress: 0x2000,
+        },
+        pca10056: {
+            fw: getAppFile('fw/rssi-10056.hex'),
             fwVersion: 'rssi-fw-1.0.0',
             fwIdAddress: 0x2000,
         },
