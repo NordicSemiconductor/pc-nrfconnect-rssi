@@ -162,7 +162,8 @@ export default () => {
                                     },
                                     scaleLabel: {
                                         display: true,
-                                        labelString: 'BLE channel',
+                                        labelString:
+                                            'Bluetooth Low Energy Channel',
                                         fontColor: color.label,
                                         fontSize: 14,
                                     },
