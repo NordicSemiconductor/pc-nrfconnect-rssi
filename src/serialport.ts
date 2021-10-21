@@ -73,9 +73,9 @@ export const startReading = (
     onOpened: (portname: string) => void,
     onData: (data: Buffer) => void
 ) => {
-    port = new SerialPort(serialPort.path, { baudRate: 115200 }, () => {
-        logger.info(`${serialPort.path} is open`);
-        onOpened(serialPort.path);
+    port = new SerialPort(serialPort.comName, { baudRate: 115200 }, () => {
+        logger.info(`${serialPort.comName} is open`);
+        onOpened(serialPort.comName);
 
         resumeReading(delay, scanRepeat);
 
