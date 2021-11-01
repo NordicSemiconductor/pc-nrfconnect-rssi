@@ -1,5 +1,4 @@
-## 1.3.2-pre1
-
+## 1.4.0 - 2021-11-01
 ### Changed
 - Label of graph changed from abbreviated BLE Channel
 - Establish compatibility with nRF Connect for Desktop 3.8
