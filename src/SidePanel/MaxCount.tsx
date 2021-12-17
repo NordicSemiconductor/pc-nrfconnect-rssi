@@ -27,7 +27,7 @@ export default () => {
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                Show maximum for the last{' '}
+                Show max for last{' '}
                 <NumberInlineInput
                     value={maxScans}
                     range={range}
