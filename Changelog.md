@@ -1,3 +1,7 @@
+## Unreleased
+### Changed
+- Wording of some sidepanel items.
+
 ## 1.4.0 - 2021-11-01
 ### Changed
 - Label of graph changed from abbreviated BLE Channel

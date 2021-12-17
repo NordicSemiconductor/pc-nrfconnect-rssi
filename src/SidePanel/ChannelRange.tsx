@@ -24,7 +24,7 @@ export default () => {
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                BLE channels from{' '}
+                Channels from{' '}
                 <NumberInlineInput
                     value={min}
                     range={{ min: bleChannels.min, max }}

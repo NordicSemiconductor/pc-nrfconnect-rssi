@@ -30,7 +30,7 @@ export default () => {
     return (
         <>
             <Form.Label htmlFor={sliderId}>
-                Signal levels from{' '}
+                Levels from{' '}
                 <NumberInlineInput
                     value={-max}
                     range={{ min: -initialLevelRange.max, max: -min + 1 }}
