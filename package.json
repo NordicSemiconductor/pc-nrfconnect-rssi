@@ -37,7 +37,7 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
-    "@nordicsemiconductor/nrf-device-lib-js": "^0.3.16",
+    "@nordicsemiconductor/nrf-device-lib-js": "0.4.1",
     "@types/chart.js": "2.9.30",
     "@types/jest": "26.0.20",
     "@types/react": "^17.0.37",
