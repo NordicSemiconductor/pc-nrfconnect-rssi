@@ -53,7 +53,7 @@ const updateData = (rawData: Buffer, draft: Draft<RssiState>) => {
         draft.buffer.splice(0, draft.buffer.length - 246);
     }
     while (draft.buffer.length >= 3) {
-        while (draft.buffer.splice(0, 1)[0] !== 0xff);
+        while (draft.buffer.length && draft.buffer.shift() !== 0xff);
 
         const [ch, d] = draft.buffer.splice(0, 2);
         if (ch !== 0xff && d !== 0xff) {
