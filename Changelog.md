@@ -1,6 +1,8 @@
-## Unreleased
+## 1.4.1 - 2022-01-04
 ### Changed
 - Wording of some sidepanel items.
+### Fixed
+- Not using bundled firmware in some cases froze the app.
 
 ## 1.4.0 - 2021-11-01
 ### Changed
