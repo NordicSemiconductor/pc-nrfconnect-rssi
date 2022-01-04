@@ -37,7 +37,7 @@
     "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
   },
   "devDependencies": {
-    "@types/chart.js": "2.9.30",
+    "@types/chart.js": "2.9.35",
     "@types/jest": "26.0.20",
     "@types/react": "^17.0.37",
     "@types/react-dom": "16.9.8",
