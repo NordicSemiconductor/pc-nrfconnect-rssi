@@ -24,7 +24,7 @@ import { startReading, stopReading } from './serialport';
 
 const deviceListing = {
     nordicUsb: true,
-    serialport: true,
+    serialPort: true,
     jlink: true,
 };
 const deviceSetup = {

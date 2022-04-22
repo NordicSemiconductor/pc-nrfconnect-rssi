@@ -1,3 +1,8 @@
+## Unreleased
+
+## Fixed
+- Did not display all serialport devices.
+
 ## 1.4.1 - 2022-01-04
 ### Changed
 - Wording of some sidepanel items.
