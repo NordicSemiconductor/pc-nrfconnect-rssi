@@ -1,55 +1,55 @@
 {
-  "name": "pc-nrfconnect-rssi",
-  "version": "1.4.1",
-  "description": "Demo application for nRF528xx SoC",
-  "displayName": "RSSI Viewer",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/NordicSemiconductor/pc-nrfconnect-rssi.git"
-  },
-  "author": "Nordic Semiconductor ASA",
-  "license": "SEE LICENSE IN LICENSE",
-  "engines": {
-    "nrfconnect": "^3.8.0"
-  },
-  "files": [
-    "dist/",
-    "fw/*.hex",
-    "resources/icon.*",
-    "LICENSE"
-  ],
-  "main": "dist/bundle.js",
-  "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js",
-  "eslintConfig": {
-    "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc.json"
-  },
-  "scripts": {
-    "dev": "nrfconnect-scripts build-watch",
-    "webpack": "nrfconnect-scripts build-dev",
-    "build": "nrfconnect-scripts build-prod",
-    "nordic-publish": "nrfconnect-scripts nordic-publish",
-    "lint": "nrfconnect-scripts lint src",
-    "lintfix": "nrfconnect-scripts lint --fix src",
-    "test": "nrfconnect-scripts test --passWithNoTests",
-    "test-watch": "nrfconnect-scripts test --watch",
-    "clean": "npm run clean-dist && npm run clean-modules",
-    "clean-dist": "rimraf dist",
-    "clean-modules": "rimraf \"node_modules/!(rimraf|.bin)\""
-  },
-  "devDependencies": {
-    "@types/chart.js": "2.9.30",
-    "@types/jest": "26.0.20",
-    "@types/react": "^17.0.37",
-    "@types/react-dom": "16.9.8",
-    "@types/react-redux": "7.1.9",
-    "@types/serialport": "8.0.1",
-    "chart.js": "2.9.4",
-    "chartjs-plugin-datalabels": "0.7.0",
-    "immer": "9.0.6",
-    "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v5.13.0",
-    "react": "16.13.1",
-    "react-chartjs-2": "2.9.0",
-    "react-redux": "7.2.0"
-  },
-  "dependencies": {}
+    "name": "pc-nrfconnect-rssi",
+    "version": "1.4.1",
+    "description": "Demo application for nRF528xx SoC",
+    "displayName": "RSSI Viewer",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NordicSemiconductor/pc-nrfconnect-rssi.git"
+    },
+    "author": "Nordic Semiconductor ASA",
+    "license": "SEE LICENSE IN LICENSE",
+    "engines": {
+        "nrfconnect": "^3.11.1"
+    },
+    "files": [
+        "dist/",
+        "fw/*.hex",
+        "resources/icon.*",
+        "LICENSE"
+    ],
+    "main": "dist/bundle.js",
+    "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js",
+    "eslintConfig": {
+        "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc"
+    },
+    "scripts": {
+        "dev": "webpack watch --mode development",
+        "webpack": "webpack build --mode development",
+        "build": "webpack build",
+        "test": "jest --passWithNoTests",
+        "check": "run-p --silent --continue-on-error --print-label 'check:*'",
+        "check:lint": "eslint --color .",
+        "check:types": "check-for-typescript tsc --noEmit --pretty",
+        "check:license": "nrfconnect-license check",
+        "nordic-publish": "nordic-publish"
+    },
+    "devDependencies": {
+        "@types/chart.js": "2.9.30",
+        "@types/jest": "26.0.20",
+        "@types/react": "17.0.44",
+        "@types/react-dom": "17.0.15",
+        "@types/react-redux": "7.1.9",
+        "@types/serialport": "8.0.1",
+        "chart.js": "2.9.4",
+        "chartjs-plugin-datalabels": "0.7.0",
+        "electron-store": "8.0.1",
+        "immer": "9.0.6",
+        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v6.0.5",
+        "react": "16.13.1",
+        "react-chartjs-2": "2.9.0",
+        "react-dom": "16.13.1",
+        "react-redux": "7.2.0"
+    },
+    "dependencies": {}
 }
