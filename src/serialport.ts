@@ -57,7 +57,9 @@ export const startReading = (
 export const stopReading = async () => {
     if (port?.isOpen) {
         await pauseReading();
-        await new Promise(resolve => port?.close(resolve));
+        await new Promise(resolve => {
+            port?.close(resolve);
+        });
         port = null;
     }
     logger.info('Serial port is closed');
