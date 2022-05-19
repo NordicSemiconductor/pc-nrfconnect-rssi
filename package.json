@@ -45,7 +45,7 @@
         "chartjs-plugin-datalabels": "0.7.0",
         "electron-store": "8.0.1",
         "immer": "9.0.6",
-        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v6.2.2",
+        "pc-nrfconnect-shared": "https://github.com/NordicSemiconductor/pc-nrfconnect-shared#v6.2.2",
         "react": "16.13.1",
         "react-chartjs-2": "2.9.0",
         "react-dom": "16.13.1",
