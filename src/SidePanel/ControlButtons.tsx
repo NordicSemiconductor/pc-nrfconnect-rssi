@@ -17,8 +17,6 @@ import {
 } from '../reducer';
 import { pauseReading, resumeReading } from '../serialport';
 
-import './control-buttons.scss';
-
 export default () => {
     const isConnected = useSelector(getIsConnected);
     const isPaused = useSelector(getIsPaused);
@@ -40,7 +38,6 @@ export default () => {
         <div className="control-buttons">
             {!isPaused && isConnected ? (
                 <Button
-                    title="alt+t"
                     className="w-100 start-stop active-anim"
                     disabled={!isConnected}
                     onClick={togglePause}
@@ -50,7 +47,6 @@ export default () => {
                 </Button>
             ) : (
                 <Button
-                    title="alt+t"
                     className="start-stop"
                     disabled={!isConnected}
                     onClick={togglePause}
@@ -61,7 +57,6 @@ export default () => {
             )}
 
             <Button
-                title="alt+r"
                 className="reset-btn"
                 disabled={!isConnected}
                 onClick={() => {
