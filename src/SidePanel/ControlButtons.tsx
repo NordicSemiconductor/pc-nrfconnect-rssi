@@ -6,8 +6,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'pc-nrfconnect-shared';
-import { useHotKey } from 'pc-nrfconnect-shared';
+import { Button, useHotKey } from 'pc-nrfconnect-shared';
 
 import { clearRssiData, togglePause as togglePauseAction } from '../actions';
 import {
@@ -77,7 +76,6 @@ export default () => {
             <Button
                 className="reset-btn"
                 title="alt+r"
-                variant="secondary"
                 disabled={!isConnected}
                 onClick={() => {
                     dispatch(clearRssiData());
