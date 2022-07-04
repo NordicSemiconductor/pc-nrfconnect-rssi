@@ -7,6 +7,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'pc-nrfconnect-shared';
+import { useHotKey } from 'pc-nrfconnect-shared';
 
 import { clearRssiData, togglePause as togglePauseAction } from '../actions';
 import {
@@ -34,6 +35,23 @@ export default () => {
         }
     };
 
+    useHotKey({
+        hotKey: 'alt+r',
+        title: 'Reset',
+        isGlobal: false,
+        action: () => dispatch(clearRssiData()),
+    });
+
+    useHotKey(
+        {
+            hotKey: 'alt+t',
+            title: 'Start/Pause',
+            isGlobal: false,
+            action: () => togglePause(),
+        },
+        [isPaused]
+    );
+
     return (
         <div className="control-buttons">
             {!isPaused && isConnected ? (
@@ -58,6 +76,8 @@ export default () => {
 
             <Button
                 className="reset-btn"
+                title="alt+r"
+                variant="secondary"
                 disabled={!isConnected}
                 onClick={() => {
                     dispatch(clearRssiData());
