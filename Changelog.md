@@ -1,3 +1,9 @@
+## Unrealeased
+
+### Changed
+
+-   Button style and layout
+
 ## 1.4.2 - 2022-06-30
 
 ### Added
