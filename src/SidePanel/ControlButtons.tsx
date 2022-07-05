@@ -5,9 +5,8 @@
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHotKey } from 'pc-nrfconnect-shared';
+import { Button, useHotKey } from 'pc-nrfconnect-shared';
 
 import { clearRssiData, togglePause as togglePauseAction } from '../actions';
 import {
@@ -17,8 +16,6 @@ import {
     getScanRepeat,
 } from '../reducer';
 import { pauseReading, resumeReading } from '../serialport';
-
-import './control-buttons.scss';
 
 export default () => {
     const isConnected = useSelector(getIsConnected);
@@ -56,23 +53,35 @@ export default () => {
 
     return (
         <div className="control-buttons">
+            {!isPaused && isConnected ? (
+                <Button
+                    className="w-100 start-stop active-anim"
+                    disabled={!isConnected}
+                    onClick={togglePause}
+                >
+                    <span className="mdi mdi-stop-circle" />
+                    Pause
+                </Button>
+            ) : (
+                <Button
+                    className="start-stop"
+                    disabled={!isConnected}
+                    onClick={togglePause}
+                >
+                    <span className="mdi mdi-play-circle" />
+                    Start
+                </Button>
+            )}
+
             <Button
+                className="reset-btn"
                 title="alt+r"
-                variant="secondary"
                 disabled={!isConnected}
                 onClick={() => {
                     dispatch(clearRssiData());
                 }}
             >
                 Reset
-            </Button>
-            <Button
-                title="alt+t"
-                variant="secondary"
-                disabled={!isConnected}
-                onClick={togglePause}
-            >
-                {isPaused ? 'Start' : 'Pause'}
             </Button>
         </div>
     );
