@@ -40,6 +40,11 @@ const deviceSetup = {
             fwVersion: 'rssi-fw-1.0.0',
             fwIdAddress: 0x2000,
         },
+        nrf52_family: {
+            fw: getAppFile('fw/rssi-10040.hex'),
+            fwVersion: 'rssi-fw-1.0.0',
+            fwIdAddress: 0x2000,
+        },
     },
     needSerialport: true,
 };
