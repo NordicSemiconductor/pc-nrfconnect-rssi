@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { logger, Serialport as DeviceSerialport } from 'pc-nrfconnect-shared';
+import { SerialPort as DeviceSerialport } from '@nordicsemiconductor/nrf-device-lib-js';
+import { logger } from 'pc-nrfconnect-shared';
 import SerialPort from 'serialport';
 
 let port: SerialPort | null = null;
@@ -43,15 +44,19 @@ export const startReading = (
     onOpened: (portname: string) => void,
     onData: (data: Buffer) => void
 ) => {
-    port = new SerialPort(serialPort.comName, { baudRate: 115200 }, () => {
-        logger.info(`${serialPort.comName} is open`);
-        onOpened(serialPort.comName);
+    port = new SerialPort(
+        serialPort.comName as string,
+        { baudRate: 115200 },
+        () => {
+            logger.info(`${serialPort.comName} is open`);
+            onOpened(serialPort.comName as string);
 
-        resumeReading(delay, scanRepeat);
+            resumeReading(delay, scanRepeat);
 
-        port?.on('data', onData);
-        port?.on('error', console.log);
-    });
+            port?.on('data', onData);
+            port?.on('error', console.log);
+        }
+    );
 };
 
 export const stopReading = async () => {
