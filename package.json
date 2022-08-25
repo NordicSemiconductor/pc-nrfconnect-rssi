@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-rssi",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "description": "Demo application for nRF528xx SoC",
     "displayName": "RSSI Viewer",
     "repository": {
@@ -32,13 +32,14 @@
         "check:lint": "eslint --color .",
         "check:types": "check-for-typescript tsc --noEmit --pretty",
         "check:license": "nrfconnect-license check",
-        "nordic-publish": "nordic-publish"
+        "nordic-publish": "nordic-publish",
+        "prepare": "husky install"
     },
     "devDependencies": {
         "@types/chart.js": "2.9.30",
         "chart.js": "2.9.4",
         "chartjs-plugin-datalabels": "0.7.0",
-        "pc-nrfconnect-shared": "https://github.com/NordicSemiconductor/pc-nrfconnect-shared#v6.4.0",
+        "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v6.6.0",
         "react-chartjs-2": "2.9.0"
     },
     "dependencies": {}
