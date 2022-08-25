@@ -1,4 +1,8 @@
-## Unrealeased
+## 1.4.3
+
+### Added
+
+-   Support for `nrf-device-lib-js` 0.4.12.
 
 ### Changed
 
