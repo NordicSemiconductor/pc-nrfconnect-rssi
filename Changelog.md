@@ -1,18 +1,13 @@
-## 1.4.3
+## 1.4.2 -
 
 ### Added
 
+-   Support for keyboard shortcuts.
 -   Support for `nrf-device-lib-js` 0.4.12.
 
 ### Changed
 
 -   Button style and layout
-
-## 1.4.2 - 2022-06-30
-
-### Added
-
--   Support for keyboard shortcuts.
 
 ### Fixed
 
