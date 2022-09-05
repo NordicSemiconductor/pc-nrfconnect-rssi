@@ -26,6 +26,7 @@ const deviceListing = {
     nordicUsb: true,
     serialPorts: true,
     jlink: true,
+    nordicDfu: true,
 };
 const deviceSetup = {
     dfu: {
