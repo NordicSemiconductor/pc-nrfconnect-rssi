@@ -6,7 +6,7 @@
 
 import { SerialPort as DeviceSerialport } from '@nordicsemiconductor/nrf-device-lib-js';
 import { logger } from 'pc-nrfconnect-shared';
-import SerialPort from 'serialport';
+import { SerialPort } from 'serialport';
 
 let port: SerialPort | null = null;
 
@@ -45,8 +45,7 @@ export const startReading = (
     onData: (data: Buffer) => void
 ) => {
     port = new SerialPort(
-        serialPort.comName as string,
-        { baudRate: 115200 },
+        { path: serialPort.comName as string, baudRate: 115200 },
         () => {
             logger.info(`${serialPort.comName} is open`);
             onOpened(serialPort.comName as string);
