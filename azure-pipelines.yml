@@ -11,7 +11,7 @@ steps:
     set -o errexit -o pipefail
     npm ci
     npm run check
-    npm run build
+    npm run build:prod
     npm pack
   displayName: 'Build and pack'
 - bash: |
