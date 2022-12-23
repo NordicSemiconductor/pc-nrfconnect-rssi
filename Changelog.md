@@ -1,3 +1,9 @@
+## 1.4.3 - Unreleased
+
+### Changed
+
+-   Support for launcher v3.13.0
+
 ## 1.4.2 - 2022-09-05
 
 ### Added
