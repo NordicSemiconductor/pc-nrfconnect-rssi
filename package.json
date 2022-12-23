@@ -11,7 +11,7 @@
     "author": "Nordic Semiconductor ASA",
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "nrfconnect": "^3.12.0"
+        "nrfconnect": "^3.13.0"
     },
     "files": [
         "dist/",
@@ -36,14 +36,14 @@
         "check:lint": "eslint --color .",
         "check:types": "check-for-typescript tsc --noEmit --pretty",
         "check:license": "nrfconnect-license check",
-        "nordic-publish": "nordic-publish",
+        "nordic-publish": "node ./dist/nordic-publish.js",
         "prepare": "husky install"
     },
     "devDependencies": {
         "@types/chart.js": "2.9.30",
         "chart.js": "2.9.4",
         "chartjs-plugin-datalabels": "0.7.0",
-        "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v6.13.1",
+        "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v6.13.2",
         "react-chartjs-2": "2.9.0"
     },
     "dependencies": {}

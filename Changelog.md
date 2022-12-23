@@ -1,8 +1,8 @@
-## 1.4.3 - 2022-12-08
+## 1.4.3 - Unreleased
 
 ### Changed
 
--   Use serialport v10
+-   Support for launcher v3.13.0
 
 ## 1.4.2 - 2022-09-05
 
