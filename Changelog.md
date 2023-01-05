@@ -2,7 +2,7 @@
 
 ### Changed
 
--   Support for launcher v3.13.0
+-   Support for launcher v4.0.0
 
 ## 1.4.2 - 2022-09-05
 
