@@ -4,6 +4,10 @@
 
 -   Support for nRF Connect for Desktop v4.0.0
 
+### Fixed
+
+-   Programming the device firmware on macOs.
+
 ## 1.4.2 - 2022-09-05
 
 ### Added
