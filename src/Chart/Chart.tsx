@@ -9,12 +9,21 @@ import { Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Alert, bleChannels, Button, Main } from 'pc-nrfconnect-shared';
+import {
+    Alert,
+    bleChannels,
+    Button,
+    getReadbackProtection,
+    Main,
+    selectedDevice,
+} from 'pc-nrfconnect-shared';
 
+import { recoverHex } from '../recoverHex';
 import {
     getAnimationDuration,
     getChannelRangeSorted,
     getLevelRangeSorted,
+    getNoDataReceived,
     getRssi,
     getRssiMax,
 } from '../reducer';
@@ -50,6 +59,9 @@ export default () => {
     const animationDuration = useSelector(getAnimationDuration);
     const channelRange = useSelector(getChannelRangeSorted);
     const [levelMin, levelMax] = useSelector(getLevelRangeSorted);
+    const device = useSelector(selectedDevice);
+    const readbackProtection = useSelector(getReadbackProtection);
+    const noData = useSelector(getNoDataReceived);
 
     const convertInLevel = (v: number) => levelMin + levelMax - v;
     const limitToLevelRange = (v: number) => {
@@ -69,11 +81,16 @@ export default () => {
 
     return (
         <Main>
-            <Alert variant="warning">
-                No data received for a while, maybe the firmware is wrong. Try
-                to reflash?
-                <Button onClick={() => {}}>Recover and Program</Button>
-            </Alert>
+            {device && noData && readbackProtection === 'protected' && (
+                <Alert variant="warning">
+                    {readbackProtection}
+                    No data received for a while, maybe the firmware is wrong.
+                    Try to reflash?
+                    <Button onClick={recoverHex(device)}>
+                        Recover and Program
+                    </Button>
+                </Alert>
+            )}
             <div className="chart-container">
                 <Bar
                     data={{

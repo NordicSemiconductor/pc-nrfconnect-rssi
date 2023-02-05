@@ -11,6 +11,7 @@ import {
     DeviceSelector,
     DeviceSetup,
     getAppFile,
+    getReadbackProtection,
     logger,
 } from 'pc-nrfconnect-shared';
 
@@ -24,7 +25,7 @@ const deviceListing = {
     jlink: true,
     nordicDfu: true,
 };
-const deviceSetup: DeviceSetup = {
+export const deviceSetup: DeviceSetup = {
     dfu: {
         pca10059: {
             application: getAppFile('fw/rssi-10059.hex'),

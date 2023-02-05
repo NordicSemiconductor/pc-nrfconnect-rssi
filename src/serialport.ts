@@ -52,11 +52,23 @@ export const startReading = (
     const comName = device.serialport?.comName ?? '';
     port = new SerialPort({ path: comName, baudRate: 115200 }, () => {
         dataReceived = false;
+        console.log('Waiting for data');
         startedReading = setTimeout(() => {
-            if (!dataReceived && device.readbackProtection === 'protected') {
-                dispatch(receiveNoRssiData);
-            }
+            console.log('Wait complete');
+
+            dispatch((innerDispatch, getState) => {
+                if (
+                    !dataReceived &&
+                    getState().device.readbackProtection === 'protected'
+                ) {
+                    dispatch(receiveNoRssiData());
+                    console.log('Got no data');
+                } else {
+                    console.log('Got some data');
+                }
+            });
         }, 3000);
+
         logger.info(`${comName} is open`);
 
         dispatch(portOpened(comName));
