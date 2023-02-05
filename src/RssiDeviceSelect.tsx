@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     Device,
     DeviceSelector,
+    DeviceSetup,
     getAppFile,
     logger,
 } from 'pc-nrfconnect-shared';
@@ -28,11 +29,12 @@ const deviceListing = {
     jlink: true,
     nordicDfu: true,
 };
-const deviceSetup = {
+const deviceSetup: DeviceSetup = {
     dfu: {
         pca10059: {
             application: getAppFile('fw/rssi-10059.hex'),
             semver: 'rssi_cdc_acm 2.0.0+dfuMay-22-2018-10-43-22',
+            params: {},
         },
     },
     jprog: {
