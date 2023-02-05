@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { SerialPort as DeviceSerialport } from '@nordicsemiconductor/nrf-device-lib-js';
-import { logger } from 'pc-nrfconnect-shared';
+// import { SerialPort as DeviceSerialport } from '@nordicsemiconductor/nrf-device-lib-js';
+import { Device, logger } from 'pc-nrfconnect-shared';
+import { TDispatch } from 'pc-nrfconnect-shared/typings/generated/src/state';
 import { SerialPort } from 'serialport';
+
+import { portOpened, receiveNoRssiData, receiveRssiData } from './actions';
 
 let port: SerialPort | null = null;
 
@@ -37,28 +40,42 @@ export const resumeReading = async (delay: number, scanRepeat: number) => {
 
 export const pauseReading = () => writeAndDrain('stop\r');
 
+let startedReading: NodeJS.Timeout;
+let dataReceived = false;
+
 export const startReading = (
-    serialPort: DeviceSerialport,
+    device: Device,
     delay: number,
     scanRepeat: number,
-    onOpened: (portname: string) => void,
-    onData: (data: Buffer) => void
+    dispatch: TDispatch
 ) => {
-    port = new SerialPort(
-        { path: serialPort.comName ?? '', baudRate: 115200 },
-        () => {
-            logger.info(`${serialPort.comName} is open`);
-            onOpened(serialPort.comName as string);
+    const comName = device.serialport?.comName ?? '';
+    port = new SerialPort({ path: comName, baudRate: 115200 }, () => {
+        dataReceived = false;
+        startedReading = setTimeout(() => {
+            if (!dataReceived && device.readbackProtection === 'protected') {
+                dispatch(receiveNoRssiData);
+            }
+        }, 3000);
+        logger.info(`${comName} is open`);
 
-            resumeReading(delay, scanRepeat);
+        dispatch(portOpened(comName));
 
-            port?.on('data', onData);
-            port?.on('error', console.log);
-        }
-    );
+        resumeReading(delay, scanRepeat);
+
+        port?.on('data', data => {
+            dataReceived = true;
+            dispatch(receiveRssiData(data));
+        });
+        port?.on('error', console.log);
+    });
 };
 
 export const stopReading = async () => {
+    if (startedReading) {
+        clearTimeout(startedReading);
+    }
+
     if (port?.isOpen) {
         await pauseReading();
         await new Promise(resolve => {

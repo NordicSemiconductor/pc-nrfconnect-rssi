@@ -9,7 +9,7 @@ import { Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { bleChannels, Main } from 'pc-nrfconnect-shared';
+import { Alert, bleChannels, Button, Main } from 'pc-nrfconnect-shared';
 
 import {
     getAnimationDuration,
@@ -69,6 +69,11 @@ export default () => {
 
     return (
         <Main>
+            <Alert variant="warning">
+                No data received for a while, maybe the firmware is wrong. Try
+                to reflash?
+                <Button onClick={() => {}}>Recover and Program</Button>
+            </Alert>
             <div className="chart-container">
                 <Bar
                     data={{

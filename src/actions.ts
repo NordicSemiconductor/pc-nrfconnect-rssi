@@ -15,6 +15,7 @@ export enum RssiActionType {
     SET_CHANNEL_RANGE = 'SET_CHANNEL_RANGE',
     SET_LEVEL_RANGE = 'SET_LEVEL_RANGE',
     RECEIVE_RSSI_DATA = 'RECEIVE_RSSI_DATA',
+    RECEIVE_NO_RSSI_DATA = 'RECEIVE_NO_RSSI_DATA',
     CLEAR_RSSI_DATA = 'CLEAR_RSSI_DATA',
 }
 
@@ -108,6 +109,13 @@ export const receiveRssiData = (rawData: Buffer): ReceiveRssiData => ({
     rawData,
 });
 
+interface ReceiveNoRssiData {
+    type: RssiActionType.RECEIVE_NO_RSSI_DATA;
+}
+export const receiveNoRssiData = (): ReceiveNoRssiData => ({
+    type: RssiActionType.RECEIVE_NO_RSSI_DATA,
+});
+
 interface ClearRssiData {
     type: RssiActionType.CLEAR_RSSI_DATA;
 }
@@ -126,4 +134,5 @@ export type RssiAction =
     | SetChannelRange
     | SetLevelRange
     | ReceiveRssiData
-    | ClearRssiData;
+    | ClearRssiData
+    | ReceiveNoRssiData;

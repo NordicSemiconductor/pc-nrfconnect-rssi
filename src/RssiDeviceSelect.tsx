@@ -14,12 +14,7 @@ import {
     logger,
 } from 'pc-nrfconnect-shared';
 
-import {
-    clearRssiData,
-    portClosed,
-    portOpened,
-    receiveRssiData,
-} from './actions';
+import { clearRssiData, portClosed } from './actions';
 import { getDelay, getScanRepeat } from './reducer';
 import { startReading, stopReading } from './serialport';
 
@@ -58,25 +53,19 @@ export default () => {
     const delay = useSelector(getDelay);
     const scanRepeat = useSelector(getScanRepeat);
 
-    const startReadingFromDevice = (device: Device) => {
+    const startReadingFromDevice = async (device: Device) => {
         logger.info(`Opening device with s/n ${device.serialNumber}`);
         dispatch(portClosed());
         dispatch(clearRssiData());
 
-        stopReading().then(() => {
-            if (device.serialport == null) {
-                logger.error(`Missing serial port information`);
-                return;
-            }
+        await stopReading();
 
-            startReading(
-                device.serialport,
-                delay,
-                scanRepeat,
-                portName => dispatch(portOpened(portName)),
-                data => dispatch(receiveRssiData(data))
-            );
-        });
+        if (device.serialport == null) {
+            logger.error(`Missing serial port information`);
+            return;
+        }
+
+        startReading(device, delay, scanRepeat, dispatch);
     };
 
     const stopReadingFromDevice = () => {
