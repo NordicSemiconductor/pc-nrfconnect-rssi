@@ -89,6 +89,7 @@ export default produce((draft: Draft<RssiState>, action: RssiAction) => {
         case RssiActionType.CLEAR_RSSI_DATA:
             draft.data = initialData();
             draft.dataMax = [];
+            draft.noDataReceived = false;
             break;
 
         case RssiActionType.SET_DELAY:
@@ -127,7 +128,7 @@ export default produce((draft: Draft<RssiState>, action: RssiAction) => {
     }
 }, initialState);
 
-type AppState = NrfConnectState<RssiState>;
+export type AppState = NrfConnectState<RssiState>;
 
 const sortedPair = ([a, b]: NumberPair): NumberPair =>
     a < b ? [a, b] : [b, a];

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {
@@ -62,6 +62,7 @@ export default () => {
     const device = useSelector(selectedDevice);
     const readbackProtection = useSelector(getReadbackProtection);
     const noData = useSelector(getNoDataReceived);
+    const dispatch = useDispatch();
 
     const convertInLevel = (v: number) => levelMin + levelMax - v;
     const limitToLevelRange = (v: number) => {
@@ -83,12 +84,13 @@ export default () => {
         <Main>
             {device && noData && readbackProtection === 'protected' && (
                 <Alert variant="warning">
-                    {readbackProtection}
-                    No data received for a while, maybe the firmware is wrong.
-                    Try to reflash?
-                    <Button onClick={recoverHex(device)}>
-                        Recover and Program
-                    </Button>
+                    <div className="d-flex justify-content-between">
+                        No data received for a while, maybe the firmware is
+                        wrong. Try to reflash?
+                        <Button onClick={() => dispatch(recoverHex(device))}>
+                            Recover and Program
+                        </Button>
+                    </div>
                 </Alert>
             )}
             <div className="chart-container">

@@ -11,7 +11,6 @@ import {
     DeviceSelector,
     DeviceSetup,
     getAppFile,
-    getReadbackProtection,
     logger,
 } from 'pc-nrfconnect-shared';
 

@@ -40,9 +40,6 @@ export const resumeReading = async (delay: number, scanRepeat: number) => {
 
 export const pauseReading = () => writeAndDrain('stop\r');
 
-let startedReading: NodeJS.Timeout;
-let dataReceived = false;
-
 export const startReading = (
     device: Device,
     delay: number,
@@ -51,20 +48,10 @@ export const startReading = (
 ) => {
     const comName = device.serialport?.comName ?? '';
     port = new SerialPort({ path: comName, baudRate: 115200 }, () => {
-        dataReceived = false;
-        console.log('Waiting for data');
-        startedReading = setTimeout(() => {
-            console.log('Wait complete');
-
-            dispatch((innerDispatch, getState) => {
-                if (
-                    !dataReceived &&
-                    getState().device.readbackProtection === 'protected'
-                ) {
+        const noDataTimeout = setTimeout(() => {
+            dispatch((_, getState) => {
+                if (getState().device.readbackProtection === 'protected') {
                     dispatch(receiveNoRssiData());
-                    console.log('Got no data');
-                } else {
-                    console.log('Got some data');
                 }
             });
         }, 3000);
@@ -76,7 +63,7 @@ export const startReading = (
         resumeReading(delay, scanRepeat);
 
         port?.on('data', data => {
-            dataReceived = true;
+            clearTimeout(noDataTimeout);
             dispatch(receiveRssiData(data));
         });
         port?.on('error', console.log);
@@ -84,13 +71,10 @@ export const startReading = (
 };
 
 export const stopReading = async () => {
-    if (startedReading) {
-        clearTimeout(startedReading);
-    }
-
     if (port?.isOpen) {
         await pauseReading();
-        await new Promise(resolve => {
+        await new Promise((resolve, reject) => {
+            setTimeout(() => reject, 1000);
             port?.close(resolve);
         });
         port = null;
