@@ -1,5 +1,10 @@
 ## 1.4.3 - Unreleased
 
+### Added
+
+-   Prompt to program device if firmware can not be validated and no data is
+    received when started
+
 ### Changed
 
 -   Support for nRF Connect for Desktop v4.0.0

@@ -30,6 +30,7 @@ interface RssiState {
     readonly channelRange: NumberPair;
     readonly levelRange: NumberPair;
     readonly port: string | null;
+    readonly noDataReceived: boolean;
 }
 
 const initialState: RssiState = {
@@ -44,6 +45,7 @@ const initialState: RssiState = {
     channelRange: [bleChannels.min, bleChannels.max],
     levelRange: [initialLevelRange.min, initialLevelRange.max],
     port: null,
+    noDataReceived: false,
 };
 
 const updateData = (rawData: Buffer, draft: Draft<RssiState>) => {
@@ -77,9 +79,17 @@ export default produce((draft: Draft<RssiState>, action: RssiAction) => {
             updateData(action.rawData, draft);
             break;
 
+        case RssiActionType.RECEIVE_NO_RSSI_DATA:
+            if (draft.isPaused) {
+                break;
+            }
+            draft.noDataReceived = true;
+            break;
+
         case RssiActionType.CLEAR_RSSI_DATA:
             draft.data = initialData();
             draft.dataMax = [];
+            draft.noDataReceived = false;
             break;
 
         case RssiActionType.SET_DELAY:
@@ -109,6 +119,7 @@ export default produce((draft: Draft<RssiState>, action: RssiAction) => {
         case RssiActionType.PORT_OPENED:
             draft.port = action.portName;
             draft.isPaused = false;
+            draft.noDataReceived = false;
             break;
 
         case RssiActionType.PORT_CLOSED:
@@ -117,7 +128,7 @@ export default produce((draft: Draft<RssiState>, action: RssiAction) => {
     }
 }, initialState);
 
-type AppState = NrfConnectState<RssiState>;
+export type AppState = NrfConnectState<RssiState>;
 
 const sortedPair = ([a, b]: NumberPair): NumberPair =>
     a < b ? [a, b] : [b, a];
@@ -140,3 +151,5 @@ export const getChannelRangeSorted = (state: AppState) =>
 export const getLevelRange = (state: AppState) => state.app.levelRange;
 export const getLevelRangeSorted = (state: AppState) =>
     sortedPair(getLevelRange(state));
+
+export const getNoDataReceived = (state: AppState) => state.app.noDataReceived;
