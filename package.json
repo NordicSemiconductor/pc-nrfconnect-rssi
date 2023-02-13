@@ -17,6 +17,7 @@
         "dist/",
         "fw/*.hex",
         "resources/icon.*",
+        "Changelog.md",
         "LICENSE"
     ],
     "main": "dist/bundle.js",
