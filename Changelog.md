@@ -11,7 +11,7 @@
 
 ### Fixed
 
--   Programming the device firmware on macOs.
+-   Programming the device firmware on macOS.
 
 ## 1.4.2 - 2022-09-05
 
