@@ -3,11 +3,11 @@
 ### Added
 
 -   Prompt to program device if firmware can not be validated and no data is
-    received when started
+    received when started.
 
 ### Changed
 
--   Support for nRF Connect for Desktop v4.0.0
+-   Support for nRF Connect for Desktop v4.0.0.
 
 ### Fixed
 
@@ -22,7 +22,7 @@
 
 ### Changed
 
--   Button style and layout
+-   Button style and layout.
 
 ### Fixed
 
@@ -42,8 +42,8 @@
 
 ### Changed
 
--   Label of graph changed from abbreviated BLE Channel
--   Establish compatibility with nRF Connect for Desktop 3.8
+-   Label of graph changed from abbreviated BLE Channel.
+-   Establish compatibility with nRF Connect for Desktop 3.8.
 
 ## 1.3.1 - 2020-12-09
 
