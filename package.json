@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-rssi",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "displayName": "RSSI Viewer",
     "description": "Live visualization of RSSI per frequency for nRF52832",
     "homepage": "https://github.com/NordicSemiconductor/pc-nrfconnect-rssi",
