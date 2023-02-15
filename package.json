@@ -16,6 +16,8 @@
     "files": [
         "dist/",
         "fw/*.hex",
+        "fw/*.zip",
+        "node_modules/pc-nrfconnect-shared/fw/bootloader/*.zip",
         "resources/icon.*",
         "Changelog.md",
         "LICENSE"
@@ -27,10 +29,10 @@
     },
     "scripts": {
         "watch": "run-p --silent --continue-on-error watch:*",
-        "watch:build": "run-esbuild --watch",
+        "watch:build": "run-esbuild --watch --include-bootloader",
         "watch:types": "tsc --noEmit --pretty --watch --preserveWatchOutput",
-        "build:dev": "run-esbuild",
-        "build:prod": "run-esbuild --prod",
+        "build:dev": "run-esbuild --include-bootloader",
+        "build:prod": "run-esbuild --prod --include-bootloader",
         "test": "jest --passWithNoTests",
         "check": "run-p --silent --continue-on-error --print-label check:*",
         "check:app": "check-app-properties",
@@ -44,7 +46,7 @@
         "@types/chart.js": "2.9.30",
         "chart.js": "2.9.4",
         "chartjs-plugin-datalabels": "0.7.0",
-        "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#v6.18.14",
+        "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#fix/auto-reconnect-mcu-boot",
         "react-chartjs-2": "2.9.0"
     },
     "dependencies": {}
