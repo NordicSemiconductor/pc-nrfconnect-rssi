@@ -9,7 +9,13 @@ import { Device, logger } from 'pc-nrfconnect-shared';
 import { TDispatch } from 'pc-nrfconnect-shared/typings/generated/src/state';
 import { SerialPort } from 'serialport';
 
-import { portOpened, receiveNoRssiData, receiveRssiData } from './actions';
+import {
+    clearRssiData,
+    portClosed,
+    portOpened,
+    receiveNoRssiData,
+    receiveRssiData,
+} from './actions';
 
 let port: SerialPort | null = null;
 
@@ -67,6 +73,11 @@ export const startReading = (
             dispatch(receiveRssiData(data));
         });
         port?.on('error', console.log);
+
+        port?.on('close', () => {
+            dispatch(portClosed());
+            dispatch(clearRssiData());
+        });
     });
 };
 

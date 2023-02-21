@@ -12,6 +12,7 @@
 -   No longer auto reconnect to the least device if it is still in the device
     list when clicking the `Auto Reconnect` Toggle.
 -   Dispatch `deviceSetupError` when `sdfu` programming fails.
+-   State update not always updated when port is closed by a disconnect
 
 ## 1.4.3 - 2023-02-13
 
