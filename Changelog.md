@@ -1,3 +1,19 @@
+## 1.4.4 - UNRELEASED
+
+### Added
+
+-   `Update Bootloader` prompt and `sdfu` programming for it.
+-   Reconnecting status in device selector.
+
+### Fixed
+
+-   Blocking dialog when disconnecting a device when the Programming dialog is
+    open.
+-   No longer auto reselect to the least disconnected device if is is in the
+    device list when clicking the `Auto Reconnect` Toggle.
+-   Dispatch `deviceSetupError` when `sdfu` programming fails.
+-   State not always updated when port is closed by a usb disconnect
+
 ## 1.4.3 - 2023-02-13
 
 ### Added

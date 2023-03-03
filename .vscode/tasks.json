@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build:dev",
+        "type": "npm",
+        "script": "build:dev",
+      },
+      {
+        "label": "Clean Packed Shared",
+        "type": "shell",
+        "command": "rm pc-nrfconnect-shared-*.tgz || echo 0",
+        "windows": {
+          "command": "(rm pc-nrfconnect-shared.tgz) -and (echo 0)",
+        },
+      },
+      {
+        "label": "Pack Shared",
+        "type": "shell",
+        "command": "npm pack ${SharedWorkspace}",
+        "windows": {
+          "command": "(npm pack $Env:SharedWorkspace) -and (mv ./pc-nrfconnect-shared-*.tgz pc-nrfconnect-shared.tgz)",
+        },
+      },
+      {
+        "label": "Install Shared",
+        "type": "shell",
+        "command": "npm i pc-nrfconnect-shared-*.tgz",
+        "windows": {
+          "command": "(npm i ./pc-nrfconnect-shared.tgz)",
+        },
+      },
+      {
+        "label": "Install Local Shared",
+        "dependsOn": ["Clean Packed Shared", "Pack Shared", "Install Shared"] 
+      }
+    ]
+  }
