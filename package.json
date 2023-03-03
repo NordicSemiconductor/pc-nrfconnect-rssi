@@ -46,8 +46,7 @@
         "@types/chart.js": "2.9.30",
         "chart.js": "2.9.4",
         "chartjs-plugin-datalabels": "0.7.0",
-        "pc-nrfconnect-shared": "git+https://github.com/NordicSemiconductor/pc-nrfconnect-shared.git#fix/auto-reconnect-mcu-boot",
+        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v15",
         "react-chartjs-2": "2.9.0"
-    },
-    "dependencies": {}
+    }
 }
