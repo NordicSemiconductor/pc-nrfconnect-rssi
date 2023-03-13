@@ -20,7 +20,9 @@ import './sidepanel.scss';
 
 export default () => (
     <SidePanel className="sidepanel">
-        <ControlButtons />
+        <Group heading="Controls">
+            <ControlButtons />
+        </Group>
 
         <Group heading="Sweep scan">
             <Delay />

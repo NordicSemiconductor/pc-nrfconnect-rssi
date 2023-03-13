@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, useHotKey } from 'pc-nrfconnect-shared';
+import { Button, StartStopButton, useHotKey } from 'pc-nrfconnect-shared';
 
 import { clearRssiData, togglePause as togglePauseAction } from '../actions';
 import {
@@ -52,29 +52,18 @@ export default () => {
     );
 
     return (
-        <div className="control-buttons">
-            {!isPaused && isConnected ? (
-                <Button
-                    className="w-100 start-stop active-anim"
-                    disabled={!isConnected}
-                    onClick={togglePause}
-                >
-                    <span className="mdi mdi-stop-circle" />
-                    Pause
-                </Button>
-            ) : (
-                <Button
-                    className="start-stop"
-                    disabled={!isConnected}
-                    onClick={togglePause}
-                >
-                    <span className="mdi mdi-play-circle" />
-                    Start
-                </Button>
-            )}
+        <>
+            <StartStopButton
+                startText="Start"
+                stopText="Pause"
+                started={!isPaused && isConnected}
+                onClick={togglePause}
+                disabled={!isConnected}
+            />
 
             <Button
-                className="reset-btn"
+                variant="secondary"
+                className="w-100"
                 title="alt+r"
                 disabled={!isConnected}
                 onClick={() => {
@@ -83,6 +72,6 @@ export default () => {
             >
                 Reset
             </Button>
-        </div>
+        </>
     );
 };

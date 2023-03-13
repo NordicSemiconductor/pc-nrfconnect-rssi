@@ -87,6 +87,7 @@ export default () => {
                             No data received for a while, maybe the firmware is
                             wrong. Try to reflash?
                             <Button
+                                variant="secondary"
                                 onClick={() => dispatch(recoverHex(device))}
                             >
                                 Recover and Program
