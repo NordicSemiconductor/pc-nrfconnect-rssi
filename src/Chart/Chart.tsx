@@ -79,23 +79,20 @@ export default () => {
             .map(maskValuesOutsideChannelRange);
 
     return (
-        <Main>
-            <div className="d-flex flex-column h-100">
-                {device && noData && readbackProtection === 'protected' && (
-                    <Alert variant="warning">
-                        <div className="d-flex justify-content-between">
-                            No data received for a while, maybe the firmware is
-                            wrong. Try to reflash?
-                            <Button
-                                variant="secondary"
-                                onClick={() => dispatch(recoverHex(device))}
-                            >
-                                Recover and Program
-                            </Button>
-                        </div>
-                    </Alert>
-                )}
-                <div className="position-relative flex-grow-1 overflow-hidden">
+        <div className="d-flex flex-column h-100">
+            {device && noData && readbackProtection === 'protected' && (
+                <Alert variant="warning">
+                    <div className="d-flex justify-content-between">
+                        No data received for a while, maybe the firmware is
+                        wrong. Try to reflash?
+                        <Button onClick={() => dispatch(recoverHex(device))}>
+                            Recover and Program
+                        </Button>
+                    </div>
+                </Alert>
+            )}
+            <div className="position-relative flex-grow-1 overflow-hidden">
+                <Main>
                     <Bar
                         data={{
                             labels,
@@ -225,8 +222,8 @@ export default () => {
                             },
                         }}
                     />
-                </div>
+                </Main>
             </div>
-        </Main>
+        </div>
     );
 };
