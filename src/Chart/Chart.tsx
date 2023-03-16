@@ -29,8 +29,6 @@ import {
 } from '../reducer';
 import color from './rssiColors';
 
-import './chart.scss';
-
 Chart.plugins.register(ChartDataLabels);
 
 const rssiColors = bleChannels.map(channel =>
@@ -82,142 +80,151 @@ export default () => {
 
     return (
         <Main>
-            {device && noData && readbackProtection === 'protected' && (
-                <Alert variant="warning">
-                    <div className="d-flex justify-content-between">
-                        No data received for a while, maybe the firmware is
-                        wrong. Try to reflash?
-                        <Button onClick={() => dispatch(recoverHex(device))}>
-                            Recover and Program
-                        </Button>
-                    </div>
-                </Alert>
-            )}
-            <div className="chart-container">
-                <Bar
-                    data={{
-                        labels,
-                        datasets: [
-                            {
-                                label: 'rssi',
-                                backgroundColor: rssiColors,
-                                borderWidth: 0,
-                                data: convertToScreenValue(rssi),
-                                datalabels: { display: false },
-                            },
-                            {
-                                label: 'rssiMax',
-                                backgroundColor: rssiMaxColors,
-                                borderWidth: 0,
-                                data: convertToScreenValue(rssiMax),
-                                datalabels: {
-                                    color: rssiColors,
-                                    anchor: 'end',
-                                    align: 'end',
-                                    formatter: (v: number) =>
-                                        v <= levelMin || v >= levelMax
-                                            ? ''
-                                            : convertInLevel(v),
-                                    offset: -3,
-                                    font: { size: 9 },
-                                },
-                            },
-                            {
-                                label: 'bgBars',
-                                backgroundColor: color.bar.background,
-                                borderWidth: 0,
-                                data: Array(81).fill(levelMax),
-                                datalabels: { display: false },
-                            },
-                        ],
-                    }}
-                    options={{
-                        animation: { duration: animationDuration },
-                        maintainAspectRatio: false,
-                        legend: { display: false },
-                        tooltips: { enabled: false },
-                        scales: {
-                            xAxes: [
+            <div className="d-flex flex-column h-100">
+                {device && noData && readbackProtection === 'protected' && (
+                    <Alert variant="warning">
+                        <div className="d-flex justify-content-between">
+                            No data received for a while, maybe the firmware is
+                            wrong. Try to reflash?
+                            <Button
+                                onClick={() => dispatch(recoverHex(device))}
+                            >
+                                Recover and Program
+                            </Button>
+                        </div>
+                    </Alert>
+                )}
+                <div className="position-relative flex-grow-1 overflow-hidden">
+                    <Bar
+                        data={{
+                            labels,
+                            datasets: [
                                 {
-                                    type: 'category',
-                                    position: 'top',
-                                    offset: true,
-                                    ticks: {
-                                        callback: (_: number, index: number) =>
-                                            String(bleChannels[index]).padStart(
-                                                2,
-                                                '0'
-                                            ),
-                                        minRotation: 0,
-                                        maxRotation: 0,
-                                        labelOffset: 0,
-                                        autoSkipPadding: 5,
-                                        fontColor: color.label,
-                                    },
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString:
-                                            'Bluetooth Low Energy Channel',
-                                        fontColor: color.label,
-                                        fontSize: 14,
-                                    },
-                                    gridLines: {
-                                        display: false,
-                                    },
-                                    stacked: true,
+                                    label: 'rssi',
+                                    backgroundColor: rssiColors,
+                                    borderWidth: 0,
+                                    data: convertToScreenValue(rssi),
+                                    datalabels: { display: false },
                                 },
                                 {
-                                    type: 'category',
-                                    position: 'bottom',
-                                    offset: true,
-                                    ticks: {
-                                        callback: (_: number, index: number) =>
-                                            2402 + 2 * index,
-                                        minRotation: 90,
-                                        labelOffset: 0,
-                                        autoSkipPadding: 5,
-                                        fontColor: color.label,
+                                    label: 'rssiMax',
+                                    backgroundColor: rssiMaxColors,
+                                    borderWidth: 0,
+                                    data: convertToScreenValue(rssiMax),
+                                    datalabels: {
+                                        color: rssiColors,
+                                        anchor: 'end',
+                                        align: 'end',
+                                        formatter: (v: number) =>
+                                            v <= levelMin || v >= levelMax
+                                                ? ''
+                                                : convertInLevel(v),
+                                        offset: -3,
+                                        font: { size: 9 },
                                     },
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'MHz',
-                                        fontColor: color.label,
-                                        fontSize: 14,
-                                        padding: { top: 10 },
-                                    },
-                                    gridLines: {
-                                        offsetGridLines: true,
-                                        display: false,
-                                        drawBorder: false,
-                                    },
-                                    stacked: true,
+                                },
+                                {
+                                    label: 'bgBars',
+                                    backgroundColor: color.bar.background,
+                                    borderWidth: 0,
+                                    data: Array(81).fill(levelMax),
+                                    datalabels: { display: false },
                                 },
                             ],
-                            yAxes: [
-                                {
-                                    type: 'linear',
-                                    ticks: {
-                                        callback: (v: number) =>
-                                            v - levelMin - levelMax,
-                                        min: levelMin,
-                                        max: levelMax,
-                                        fontColor: color.label,
+                        }}
+                        options={{
+                            responsive: true,
+                            animation: { duration: animationDuration },
+                            maintainAspectRatio: false,
+                            legend: { display: false },
+                            tooltips: { enabled: false },
+                            scales: {
+                                xAxes: [
+                                    {
+                                        type: 'category',
+                                        position: 'top',
+                                        offset: true,
+                                        ticks: {
+                                            callback: (
+                                                _: number,
+                                                index: number
+                                            ) =>
+                                                String(
+                                                    bleChannels[index]
+                                                ).padStart(2, '0'),
+                                            minRotation: 0,
+                                            maxRotation: 0,
+                                            labelOffset: 0,
+                                            autoSkipPadding: 5,
+                                            fontColor: color.label,
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString:
+                                                'Bluetooth Low Energy Channel',
+                                            fontColor: color.label,
+                                            fontSize: 14,
+                                        },
+                                        gridLines: {
+                                            display: false,
+                                        },
+                                        stacked: true,
                                     },
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'dBm',
-                                        fontColor: color.label,
-                                        fontSize: 14,
+                                    {
+                                        type: 'category',
+                                        position: 'bottom',
+                                        offset: true,
+                                        ticks: {
+                                            callback: (
+                                                _: number,
+                                                index: number
+                                            ) => 2402 + 2 * index,
+                                            minRotation: 90,
+                                            labelOffset: 0,
+                                            autoSkipPadding: 5,
+                                            fontColor: color.label,
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'MHz',
+                                            fontColor: color.label,
+                                            fontSize: 14,
+                                            padding: { top: 10 },
+                                        },
+                                        gridLines: {
+                                            offsetGridLines: true,
+                                            display: false,
+                                            drawBorder: false,
+                                        },
+                                        stacked: true,
                                     },
-                                    gridLines: {
-                                        display: false,
-                                        drawBorder: false,
+                                ],
+                                yAxes: [
+                                    {
+                                        type: 'linear',
+                                        ticks: {
+                                            callback: (v: number) =>
+                                                v - levelMin - levelMax,
+                                            min: levelMin,
+                                            max: levelMax,
+                                            fontColor: color.label,
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'dBm',
+                                            fontColor: color.label,
+                                            fontSize: 14,
+                                        },
+                                        gridLines: {
+                                            display: false,
+                                            drawBorder: false,
+                                        },
                                     },
-                                },
-                            ],
-                        },
-                    }}
-                />
+                                ],
+                            },
+                        }}
+                    />
+                </div>
             </div>
         </Main>
     );
