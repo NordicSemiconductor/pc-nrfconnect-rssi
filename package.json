@@ -46,7 +46,7 @@
         "@types/chart.js": "2.9.30",
         "chart.js": "2.9.4",
         "chartjs-plugin-datalabels": "0.7.0",
-        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v18",
+        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v23",
         "react-chartjs-2": "2.9.0"
     }
 }
