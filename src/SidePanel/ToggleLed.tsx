@@ -16,7 +16,8 @@ export default () => {
 
     return (
         <Button
-            className="w-100 h-24"
+            variant="secondary"
+            className="w-100"
             disabled={!isConnected}
             onClick={toggleLED}
         >
