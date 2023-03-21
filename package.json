@@ -2,7 +2,7 @@
     "name": "pc-nrfconnect-rssi",
     "version": "1.4.4",
     "displayName": "RSSI Viewer",
-    "description": "Live visualization of RSSI per frequency for nRF52832",
+    "description": "Live visualization of RSSI vs frequency in the 2.4 GHz band",
     "homepage": "https://github.com/NordicSemiconductor/pc-nrfconnect-rssi",
     "repository": {
         "type": "git",
