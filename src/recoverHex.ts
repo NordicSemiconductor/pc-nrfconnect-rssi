@@ -14,6 +14,7 @@ import {
     Device,
     getDeviceLibContext,
     logger,
+    updateHasReadbackProtection,
 } from 'pc-nrfconnect-shared';
 import { TDispatch } from 'pc-nrfconnect-shared/typings/generated/src/state';
 
@@ -75,6 +76,8 @@ export const recoverHex =
 
             logger.info('Reseting device');
             await deviceControlReset(context, device.id);
+            await dispatch(updateHasReadbackProtection());
+
             const { delay, scanRepeat } = getState().app;
 
             logger.info('Start reading again.');
