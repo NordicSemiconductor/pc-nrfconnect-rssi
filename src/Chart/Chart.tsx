@@ -29,6 +29,8 @@ import {
 } from '../reducer';
 import color from './rssiColors';
 
+import './alert.scss';
+
 Chart.plugins.register(ChartDataLabels);
 
 const rssiColors = bleChannels.map(channel =>
@@ -82,14 +84,16 @@ export default () => {
         <div className="d-flex flex-column h-100">
             {device && noData && readbackProtection === 'protected' && (
                 <Alert variant="warning">
-                    <div className="d-flex justify-content-between">
-                        No data received for a while, maybe the firmware is
-                        wrong. Try to reflash?
+                    <div className="d-flex align-items-center">
+                        No data received. Unable to verify compatible firmware
+                        because the selected device has readback protection
+                        enabled.
                         <Button
                             onClick={() => dispatch(recoverHex(device))}
                             variant="secondary"
+                            className="alert-program"
                         >
-                            Recover and Program
+                            Program compatible firmware
                         </Button>
                     </div>
                 </Alert>
