@@ -85,7 +85,10 @@ export default () => {
                     <div className="d-flex justify-content-between">
                         No data received for a while, maybe the firmware is
                         wrong. Try to reflash?
-                        <Button onClick={() => dispatch(recoverHex(device))}>
+                        <Button
+                            onClick={() => dispatch(recoverHex(device))}
+                            variant="secondary"
+                        >
                             Recover and Program
                         </Button>
                     </div>
