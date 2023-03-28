@@ -84,14 +84,13 @@ export default () => {
         <div className="d-flex flex-column h-100">
             {device && noData && readbackProtection === 'protected' && (
                 <Alert variant="warning">
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center flex-wrap readback-protection-warning">
                         No data received. Unable to verify compatible firmware
                         because the selected device has readback protection
                         enabled.
                         <Button
                             onClick={() => dispatch(recoverHex(device))}
-                            variant="secondary"
-                            className="alert-program"
+                            variant="custom"
                         >
                             Program compatible firmware
                         </Button>
