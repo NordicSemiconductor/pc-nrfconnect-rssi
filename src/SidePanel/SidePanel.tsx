@@ -7,6 +7,7 @@
 import React from 'react';
 import { Group, SidePanel } from 'pc-nrfconnect-shared';
 
+import useRssiDevice from '../features/useRssiDevice';
 import AnimationSpeed from './AnimationSpeed';
 import ChannelRange from './ChannelRange';
 import ControlButtons from './ControlButtons';
@@ -18,29 +19,33 @@ import ToggleLed from './ToggleLed';
 
 import './sidepanel.scss';
 
-export default () => (
-    <SidePanel className="sidepanel">
-        <Group heading="Controls">
-            <ControlButtons />
-        </Group>
+export default () => {
+    useRssiDevice();
 
-        <Group heading="Sweep scan">
-            <Delay />
-        </Group>
+    return (
+        <SidePanel className="sidepanel">
+            <Group heading="Controls">
+                <ControlButtons />
+            </Group>
 
-        <Group heading="Channel details">
-            <MaxCount />
-            <SampleCount />
-            <AnimationSpeed />
-        </Group>
+            <Group heading="Sweep scan">
+                <Delay />
+            </Group>
 
-        <Group heading="Filters">
-            <ChannelRange />
-            <LevelRange />
-        </Group>
+            <Group heading="Channel details">
+                <MaxCount />
+                <SampleCount />
+                <AnimationSpeed />
+            </Group>
 
-        <Group heading="Device">
-            <ToggleLed />
-        </Group>
-    </SidePanel>
-);
+            <Group heading="Filters">
+                <ChannelRange />
+                <LevelRange />
+            </Group>
+
+            <Group heading="Device">
+                <ToggleLed />
+            </Group>
+        </SidePanel>
+    );
+};

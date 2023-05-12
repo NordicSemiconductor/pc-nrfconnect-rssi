@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { setMaxScans as setMaxScansAction } from '../actions';
-import { getMaxScans } from '../reducer';
+import { getMaxScans, setMaxScans } from '../features/rssiSlice';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'max-scans-slider';
@@ -19,11 +18,6 @@ export default () => {
     const dispatch = useDispatch();
     const maxScans = useSelector(getMaxScans);
 
-    const setMaxScans = useCallback(
-        newMaxScans => dispatch(setMaxScansAction(newMaxScans)),
-        [dispatch]
-    );
-
     return (
         <>
             <Form.Label htmlFor={sliderId}>
@@ -31,7 +25,7 @@ export default () => {
                 <NumberInlineInput
                     value={maxScans}
                     range={range}
-                    onChange={setMaxScans}
+                    onChange={newMaxScans => dispatch(setMaxScans(newMaxScans))}
                 />{' '}
                 scans
             </Form.Label>
@@ -39,7 +33,7 @@ export default () => {
                 id={sliderId}
                 values={[maxScans]}
                 range={range}
-                onChange={[setMaxScans]}
+                onChange={[newMaxScans => dispatch(setMaxScans(newMaxScans))]}
             />
         </>
     );
