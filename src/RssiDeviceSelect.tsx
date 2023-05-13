@@ -11,7 +11,9 @@ import {
     DeviceSelector,
     DeviceSetup,
     getAppFile,
+    jProgDeviceSetup,
     logger,
+    sDFUDeviceSetup,
 } from 'pc-nrfconnect-shared';
 
 import { clearRssiData, portClosed } from './actions';
@@ -25,20 +27,24 @@ const deviceListing = {
     nordicDfu: true,
 };
 export const deviceSetup: DeviceSetup = {
-    dfu: {
-        pca10059: {
-            application: getAppFile('fw/rssi-10059.hex'),
-            semver: 'rssi_cdc_acm 2.0.0+dfuMay-22-2018-10-43-22',
-            params: {},
-        },
-    },
-    jprog: {
-        nrf52_family: {
-            fw: getAppFile('fw/rssi-10040.hex'),
-            fwVersion: 'rssi-fw-1.0.0',
-            fwIdAddress: 0x2000,
-        },
-    },
+    deviceSetups: [
+        sDFUDeviceSetup([
+            {
+                key: 'pca10059',
+                application: getAppFile('fw/rssi-10059.hex'),
+                semver: 'rssi_cdc_acm 2.0.0+dfuMay-22-2018-10-43-22',
+                params: {},
+            },
+        ]),
+        jProgDeviceSetup([
+            {
+                key: 'nrf52_family',
+                fw: getAppFile('fw/rssi-10040.hex'),
+                fwVersion: 'rssi-fw-1.0.0',
+                fwIdAddress: 0x2000,
+            },
+        ]),
+    ],
     needSerialport: true,
 };
 
