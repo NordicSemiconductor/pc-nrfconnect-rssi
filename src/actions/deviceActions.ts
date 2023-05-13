@@ -9,13 +9,14 @@ import {
     DeviceSetup,
     getAppFile,
     jProgDeviceSetup,
+    logger,
     prepareDevice,
     sDFUDeviceSetup,
 } from 'pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
 import {
-    closeSerialPort,
+    clearSerialPort,
     setAvailableSerialPorts,
     setSelectedSerialport,
     setSerialPort,
@@ -45,7 +46,7 @@ export const deviceSetup: DeviceSetup = {
 };
 
 export const closeDevice = (): TAction => dispatch => {
-    dispatch(closeSerialPort());
+    dispatch(clearSerialPort());
     dispatch(setAvailableSerialPorts([]));
 };
 
@@ -64,18 +65,24 @@ export const openDevice =
                 );
             }
 
-            console.log(ports);
-
             const comPort = ports[0].comName; // We want to connect to vComIndex 0
             if (comPort) {
-                dispatch(setSelectedSerialport(comPort));
-                dispatch(
-                    setSerialPort(
-                        new SerialPort(
-                            { path: comPort, baudRate: 115200 },
-                            console.log
-                        )
-                    )
+                logger.info(`Opening Serial port ${comPort}`);
+                const serialPort = new SerialPort(
+                    { path: comPort, baudRate: 115200 },
+                    error => {
+                        if (error) {
+                            logger.error(
+                                `Failed to open serial port ${comPort}.`
+                            );
+                            logger.error(`Error ${error}.`);
+                            return;
+                        }
+
+                        dispatch(setSelectedSerialport(comPort));
+                        dispatch(setSerialPort(serialPort));
+                        logger.info(`Serial Port ${comPort} has been opened`);
+                    }
                 );
             }
         }
@@ -83,17 +90,19 @@ export const openDevice =
 
 export const recoverHex =
     (device: Device): TAction =>
-    dispatch => {
-        dispatch(closeDevice());
-        dispatch(
-            prepareDevice(
-                device,
-                deviceSetup,
-                programmedDevice => {
-                    dispatch(openDevice(programmedDevice));
-                },
-                () => {},
-                false
-            )
-        );
+    (dispatch, getState) => {
+        getState().app.rssi.serialPort?.close(() => {
+            dispatch(clearSerialPort());
+            dispatch(
+                prepareDevice(
+                    device,
+                    deviceSetup,
+                    programmedDevice => {
+                        dispatch(openDevice(programmedDevice));
+                    },
+                    () => {},
+                    false
+                )
+            );
+        });
     };

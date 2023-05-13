@@ -10,7 +10,7 @@ import { bleChannels } from 'pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
 import type { RootState } from '../appReducer';
-import { RssiDevice } from '../rssiDevice';
+import { RssiDevice } from './rssiDevice';
 
 const initialData = () => new Array(81).fill(undefined).map(() => []);
 
@@ -70,15 +70,13 @@ const rssiSlice = createSlice({
             state,
             action: PayloadAction<SerialPort<AutoDetectTypes>>
         ) => {
-            state.serialPort?.close();
             state.serialPort = action.payload;
         },
         setRssiDevice: (state, action: PayloadAction<RssiDevice>) => {
             state.rssiDevice = action.payload;
         },
 
-        closeSerialPort: state => {
-            state.serialPort?.close();
+        clearSerialPort: state => {
             state.serialPort = undefined;
             state.selectedSerialport = undefined;
             state.rssiDevice = undefined;
@@ -178,7 +176,7 @@ export const getNoDataReceived = (state: RootState) =>
 export const {
     setSerialPort,
     setRssiDevice,
-    closeSerialPort,
+    clearSerialPort,
     setAvailableSerialPorts,
     setSelectedSerialport,
     toggleIsPaused,

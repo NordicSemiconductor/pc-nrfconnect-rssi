@@ -49,7 +49,7 @@ const mapDispatch = (dispatch: TDispatch): Partial<DeviceSelectorProps> => ({
         dispatch(closeDevice());
     },
     onDeviceIsReady: (device: Device) => {
-        logger.info(`Device Connected SN:${device.serialNumber}`);
+        logger.info(`Device isReady SN:${device.serialNumber}`);
         dispatch(openDevice(device));
     },
 

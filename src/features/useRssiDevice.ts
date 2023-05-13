@@ -6,13 +6,13 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { logger } from 'pc-nrfconnect-shared';
 
 import { RootState } from '../appReducer';
-import { createRssiDevice } from '../rssiDevice';
 import { TDispatch } from '../thunk';
+import { createRssiDevice } from './rssiDevice';
 import {
     clearRssiData,
-    closeSerialPort,
     getSerialPort,
     onReceiveNoRssiData,
     onReceiveRssiData,
@@ -50,14 +50,17 @@ export default () => {
             serialPort?.on('error', console.log);
 
             serialPort?.on('close', () => {
-                dispatch(closeSerialPort());
+                logger.info(`Serial Port ${serialPort.path} has been closed`);
                 dispatch(clearRssiData());
             });
 
             return () => {
-                device.stopReading();
-                dispatch(closeSerialPort());
-                dispatch(clearRssiData());
+                if (serialPort.isOpen) {
+                    device.stopReading();
+                    logger.info(`Stop RSSI Device`);
+                    serialPort.close();
+                    logger.info(`Closing Serial Port ${serialPort.path}`);
+                }
             };
         }
     }, [dispatch, serialPort]);
