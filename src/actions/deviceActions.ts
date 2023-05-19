@@ -8,10 +8,10 @@ import {
     Device,
     DeviceSetup,
     getAppFile,
-    jProgDeviceSetup,
+    jprogDeviceSetup,
     logger,
     prepareDevice,
-    sDFUDeviceSetup,
+    sdfuDeviceSetup,
 } from 'pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
@@ -25,7 +25,7 @@ import { TAction } from '../thunk';
 
 export const deviceSetup: DeviceSetup = {
     deviceSetups: [
-        sDFUDeviceSetup([
+        sdfuDeviceSetup([
             {
                 key: 'pca10059',
                 application: getAppFile('fw/rssi-10059.hex'),
@@ -33,7 +33,7 @@ export const deviceSetup: DeviceSetup = {
                 params: {},
             },
         ]),
-        jProgDeviceSetup([
+        jprogDeviceSetup([
             {
                 key: 'nrf52_family',
                 fw: getAppFile('fw/rssi-10040.hex'),
@@ -101,6 +101,7 @@ export const recoverHex =
                         dispatch(openDevice(programmedDevice));
                     },
                     () => {},
+                    false,
                     false
                 )
             );
