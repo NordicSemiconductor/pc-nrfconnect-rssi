@@ -7,14 +7,18 @@
 import { connect } from 'react-redux';
 import { DeviceTraits } from '@nordicsemiconductor/nrf-device-lib-js';
 import {
+    AppDispatch,
     Device,
     DeviceSelector,
     DeviceSelectorProps,
     logger,
 } from 'pc-nrfconnect-shared';
 
-import { closeDevice, deviceSetup, openDevice } from './actions/deviceActions';
-import { TDispatch } from './thunk';
+import {
+    closeDevice,
+    deviceSetupConfig,
+    openDevice,
+} from './actions/deviceActions';
 
 /**
  * Configures which device types to show in the device selector.
@@ -30,7 +34,7 @@ const deviceListing: DeviceTraits = {
 
 const mapState = () => ({
     deviceListing,
-    deviceSetup,
+    deviceSetupConfig,
 });
 
 /*
@@ -40,7 +44,7 @@ const mapState = () => ({
  * Note that the callbacks releaseCurrentDevice and onDeviceIsReady
  * are only invoked, if a deviceSetup is defined.
  */
-const mapDispatch = (dispatch: TDispatch): Partial<DeviceSelectorProps> => ({
+const mapDispatch = (dispatch: AppDispatch): Partial<DeviceSelectorProps> => ({
     onDeviceSelected: (device: Device) => {
         logger.info(`Selected device with s/n ${device.serialNumber}`);
     },

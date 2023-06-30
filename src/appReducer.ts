@@ -4,14 +4,17 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { NrfConnectState } from 'pc-nrfconnect-shared';
+import {
+    NrfConnectState,
+    RootState as SharedRootState,
+} from 'pc-nrfconnect-shared';
 import { combineReducers } from 'redux';
 
 import rssiReducer from './features/rssiSlice';
 
 type AppState = ReturnType<typeof appReducer>;
 
-export type RootState = NrfConnectState<AppState>;
+export type RootState = NrfConnectState<AppState & SharedRootState>;
 
 const appReducer = combineReducers({
     rssi: rssiReducer,
