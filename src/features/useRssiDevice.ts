@@ -6,9 +6,8 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, logger } from 'pc-nrfconnect-shared';
+import { logger, TAction } from 'pc-nrfconnect-shared';
 
-import { RootState } from '../appReducer';
 import { createRssiDevice } from './rssiDevice';
 import {
     clearRssiData,
@@ -27,14 +26,14 @@ export default () => {
             const device = createRssiDevice(serialPort);
             dispatch(setRssiDevice(device));
 
-            dispatch((_: AppDispatch, getState: () => RootState) => {
+            dispatch<TAction<void>>((_, getState) => {
                 device.resumeReading(
                     getState().app.rssi.delay,
                     getState().app.rssi.scanRepeat
                 );
             });
             let noDataTimeout: NodeJS.Timeout;
-            dispatch((_: AppDispatch, getState: () => RootState) => {
+            dispatch<TAction<void>>((_, getState) => {
                 noDataTimeout = setTimeout(() => {
                     if (getState().device.readbackProtection === 'protected') {
                         dispatch(onReceiveNoRssiData());

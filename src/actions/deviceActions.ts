@@ -12,11 +12,10 @@ import {
     logger,
     prepareDevice,
     sdfuDeviceSetup,
+    TAction,
 } from 'pc-nrfconnect-shared';
-import { AppDispatch } from 'pc-nrfconnect-shared/typings/generated/src/store';
 import { SerialPort } from 'serialport';
 
-import { RootState } from '../appReducer';
 import {
     clearSerialPort,
     setAvailableSerialPorts,
@@ -51,45 +50,52 @@ export const deviceSetupConfig: DeviceSetupConfig = {
     ],
 };
 
-export const closeDevice = () => (dispatch: AppDispatch) => {
+export const closeDevice = (): TAction<void> => dispatch => {
     dispatch(clearSerialPort());
     dispatch(setAvailableSerialPorts([]));
 };
 
-export const openDevice = (device: Device) => (dispatch: AppDispatch) => {
-    // Reset serial port settings
-    const ports = device.serialPorts;
+export const openDevice =
+    (device: Device): TAction<void> =>
+    dispatch => {
+        // Reset serial port settings
+        const ports = device.serialPorts;
 
-    if (ports) {
-        if (ports?.length > 0) {
-            dispatch(
-                setAvailableSerialPorts(ports.map(port => port.comName ?? ''))
-            );
-        }
+        if (ports) {
+            if (ports?.length > 0) {
+                dispatch(
+                    setAvailableSerialPorts(
+                        ports.map(port => port.comName ?? '')
+                    )
+                );
+            }
 
-        const comPort = ports[0].comName; // We want to connect to vComIndex 0
-        if (comPort) {
-            logger.info(`Opening Serial port ${comPort}`);
-            const serialPort = new SerialPort(
-                { path: comPort, baudRate: 115200 },
-                error => {
-                    if (error) {
-                        logger.error(`Failed to open serial port ${comPort}.`);
-                        logger.error(`Error ${error}.`);
-                        return;
+            const comPort = ports[0].comName; // We want to connect to vComIndex 0
+            if (comPort) {
+                logger.info(`Opening Serial port ${comPort}`);
+                const serialPort = new SerialPort(
+                    { path: comPort, baudRate: 115200 },
+                    error => {
+                        if (error) {
+                            logger.error(
+                                `Failed to open serial port ${comPort}.`
+                            );
+                            logger.error(`Error ${error}.`);
+                            return;
+                        }
+
+                        dispatch(setSelectedSerialport(comPort));
+                        dispatch(setSerialPort(serialPort));
+                        logger.info(`Serial Port ${comPort} has been opened`);
                     }
-
-                    dispatch(setSelectedSerialport(comPort));
-                    dispatch(setSerialPort(serialPort));
-                    logger.info(`Serial Port ${comPort} has been opened`);
-                }
-            );
+                );
+            }
         }
-    }
-};
+    };
 
 export const recoverHex =
-    (device: Device) => (dispatch: AppDispatch, getState: () => RootState) => {
+    (device: Device): TAction<void> =>
+    (dispatch, getState) => {
         getState().app.rssi.serialPort?.close(() => {
             dispatch(clearSerialPort());
             dispatch(

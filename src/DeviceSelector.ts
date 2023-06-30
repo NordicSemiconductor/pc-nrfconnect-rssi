@@ -10,7 +10,6 @@ import {
     AppDispatch,
     Device,
     DeviceSelector,
-    DeviceSelectorProps,
     logger,
 } from 'pc-nrfconnect-shared';
 
@@ -44,7 +43,7 @@ const mapState = () => ({
  * Note that the callbacks releaseCurrentDevice and onDeviceIsReady
  * are only invoked, if a deviceSetup is defined.
  */
-const mapDispatch = (dispatch: AppDispatch): Partial<DeviceSelectorProps> => ({
+const mapDispatch = (dispatch: AppDispatch) => ({
     onDeviceSelected: (device: Device) => {
         logger.info(`Selected device with s/n ${device.serialNumber}`);
     },
