@@ -1,9 +1,10 @@
-## 1.4.\5 - UNRELEASED
+## 1.4.5 - UNRELEASED
 
 ### Fixed
 
 -   Selecting a different device without ejecting will does work
 -   Switching bootloader to application does not update graphs data
+-   `Restart application with verbose logging` button did not restart app
 
 ## 1.4.4 - 2023-04-13
 
