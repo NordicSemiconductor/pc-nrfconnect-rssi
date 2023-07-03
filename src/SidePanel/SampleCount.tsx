@@ -9,9 +9,11 @@ import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { setScanRepeat as setScanRepeatAction } from '../actions';
-import { getScanRepeat } from '../reducer';
-import { writeScanRepeat } from '../serialport';
+import {
+    getRssiDevice,
+    getScanRepeat,
+    setScanRepeat,
+} from '../features/rssiSlice';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'sample-count-slider';
@@ -19,17 +21,14 @@ const sliderId = 'sample-count-slider';
 export default () => {
     const dispatch = useDispatch();
     const scanRepeat = useSelector(getScanRepeat);
+    const rssiDevice = useSelector(getRssiDevice);
 
     const setAndWriteScanRepeat = useCallback(
         newScanRepeat => {
-            dispatch(setScanRepeatAction(newScanRepeat));
-            writeScanRepeat(newScanRepeat);
+            dispatch(setScanRepeat(newScanRepeat));
+            rssiDevice?.writeScanRepeat(newScanRepeat);
         },
-        [dispatch]
-    );
-    const setScanRepeat = useCallback(
-        newScanRepeat => dispatch(setScanRepeatAction(newScanRepeat)),
-        [dispatch]
+        [dispatch, rssiDevice]
     );
 
     return (
@@ -47,8 +46,10 @@ export default () => {
                 id={sliderId}
                 values={[scanRepeat]}
                 range={range}
-                onChange={[setScanRepeat]}
-                onChangeComplete={() => writeScanRepeat(scanRepeat)}
+                onChange={[
+                    newScanRepeat => dispatch(setScanRepeat(newScanRepeat)),
+                ]}
+                onChangeComplete={() => rssiDevice?.writeScanRepeat(scanRepeat)}
             />
         </>
     );

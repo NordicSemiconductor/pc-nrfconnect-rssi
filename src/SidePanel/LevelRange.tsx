@@ -9,8 +9,11 @@ import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { setLevelRange } from '../actions';
-import { getLevelRange, initialLevelRange } from '../reducer';
+import {
+    getLevelRange,
+    initialLevelRange,
+    setLevelRange,
+} from '../features/rssiSlice';
 
 const sliderId = 'ble-level-slider';
 

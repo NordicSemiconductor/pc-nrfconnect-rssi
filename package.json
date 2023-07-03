@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-rssi",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "displayName": "RSSI Viewer",
     "description": "Live visualization of RSSI vs frequency in the 2.4 GHz band",
     "homepage": "https://github.com/NordicSemiconductor/pc-nrfconnect-rssi",
@@ -46,7 +46,7 @@
         "@types/chart.js": "2.9.30",
         "chart.js": "2.9.4",
         "chartjs-plugin-datalabels": "0.7.0",
-        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v30",
+        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v66",
         "react-chartjs-2": "2.9.0"
     }
 }

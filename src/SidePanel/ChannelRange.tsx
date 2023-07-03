@@ -9,8 +9,7 @@ import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { bleChannels, NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { setChannelRange } from '../actions';
-import { getChannelRange } from '../reducer';
+import { getChannelRange, setChannelRange } from '../features/rssiSlice';
 
 const sliderId = 'ble-channel-slider';
 
