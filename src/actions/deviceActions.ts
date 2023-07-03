@@ -5,6 +5,7 @@
  */
 
 import {
+    AppThunk,
     Device,
     DeviceSetupConfig,
     getAppFile,
@@ -12,7 +13,6 @@ import {
     logger,
     prepareDevice,
     sdfuDeviceSetup,
-    TAction,
 } from 'pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
@@ -50,13 +50,13 @@ export const deviceSetupConfig: DeviceSetupConfig = {
     ],
 };
 
-export const closeDevice = (): TAction<void> => dispatch => {
+export const closeDevice = (): AppThunk => dispatch => {
     dispatch(clearSerialPort());
     dispatch(setAvailableSerialPorts([]));
 };
 
 export const openDevice =
-    (device: Device): TAction<void> =>
+    (device: Device): AppThunk =>
     dispatch => {
         // Reset serial port settings
         const ports = device.serialPorts;
@@ -94,7 +94,7 @@ export const openDevice =
     };
 
 export const recoverHex =
-    (device: Device): TAction<void> =>
+    (device: Device): AppThunk =>
     (dispatch, getState) => {
         getState().app.rssi.serialPort?.close(() => {
             dispatch(clearSerialPort());
