@@ -5,12 +5,10 @@
  */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { AutoDetectTypes } from '@serialport/bindings-cpp';
 import { bleChannels } from 'pc-nrfconnect-shared';
-import { SerialPort } from 'serialport';
 
 import type { RootState } from '../../app/appReducer';
-import { RssiDevice } from './rssiDevice';
+import { portIsOpen } from './rssiDevice';
 
 const initialData = () => new Array(81).fill(undefined).map(() => []);
 
@@ -36,8 +34,6 @@ interface RssiState {
     channelRange: NumberPair;
     levelRange: NumberPair;
     noDataReceived: boolean;
-    serialPort?: SerialPort<AutoDetectTypes>;
-    rssiDevice?: RssiDevice;
 }
 
 const initialState: RssiState = {
@@ -58,21 +54,6 @@ const deviceSlice = createSlice({
     name: 'rssi',
     initialState,
     reducers: {
-        setSerialPort: (
-            state,
-            action: PayloadAction<SerialPort<AutoDetectTypes>>
-        ) => {
-            state.serialPort = action.payload;
-        },
-        setRssiDevice: (state, action: PayloadAction<RssiDevice>) => {
-            state.rssiDevice = action.payload;
-        },
-
-        clearSerialPort: state => {
-            state.serialPort = undefined;
-            state.rssiDevice = undefined;
-        },
-
         toggleIsPaused: state => {
             state.isPaused = !state.isPaused;
         },
@@ -116,7 +97,7 @@ const deviceSlice = createSlice({
         },
 
         onReceiveRssiData: (state, action: PayloadAction<Buffer>) => {
-            if (!state.serialPort || !state.serialPort.isOpen) {
+            if (!portIsOpen()) {
                 state.data = initialData();
                 state.dataMax = [];
                 return;
@@ -152,9 +133,6 @@ const deviceSlice = createSlice({
     },
 });
 
-export const getSerialPort = (state: RootState) => state.app.rssi.serialPort;
-export const getRssiDevice = (state: RootState) => state.app.rssi.rssiDevice;
-export const getIsConnected = (state: RootState) => !!state.app.rssi.serialPort;
 export const getIsPaused = (state: RootState) => state.app.rssi.isPaused;
 
 export const getRssi = (state: RootState) =>
@@ -179,9 +157,6 @@ export const getNoDataReceived = (state: RootState) =>
     state.app.rssi.noDataReceived;
 
 export const {
-    setSerialPort,
-    setRssiDevice,
-    clearSerialPort,
     toggleIsPaused,
     resetRssiStore,
     clearRssiData,

@@ -14,9 +14,21 @@ import {
     prepareDevice,
     sdfuDeviceSetup,
 } from 'pc-nrfconnect-shared';
-import { SerialPort } from 'serialport';
 
-import { clearSerialPort, setSerialPort } from './deviceSlice';
+import {
+    clearRssiData,
+    getDelay,
+    getScanRepeat,
+    onReceiveNoRssiData,
+    onReceiveRssiData,
+    resetRssiStore,
+} from './deviceSlice';
+import {
+    closePort,
+    openPort,
+    registerCallbacks,
+    resumeReading,
+} from './rssiDevice';
 
 export const deviceSetupConfig: DeviceSetupConfig = {
     deviceSetups: [
@@ -45,13 +57,9 @@ export const deviceSetupConfig: DeviceSetupConfig = {
     ],
 };
 
-export const closeDevice = (): AppThunk => dispatch => {
-    dispatch(clearSerialPort());
-};
-
 export const openDevice =
     (device: Device): AppThunk =>
-    dispatch => {
+    async (dispatch, getState) => {
         // Reset serial port settings
         const ports = device.serialPorts;
 
@@ -59,41 +67,52 @@ export const openDevice =
             const comPort = ports[0].comName; // We want to connect to vComIndex 0
             if (comPort) {
                 logger.info(`Opening Serial port ${comPort}`);
-                const serialPort = new SerialPort(
-                    { path: comPort, baudRate: 115200 },
-                    error => {
-                        if (error) {
-                            logger.error(
-                                `Failed to open serial port ${comPort}.`
-                            );
-                            logger.error(`Error ${error}.`);
-                            return;
-                        }
 
-                        dispatch(setSerialPort(serialPort));
-                        logger.info(`Serial Port ${comPort} has been opened`);
-                    }
-                );
+                try {
+                    await openPort(comPort);
+
+                    logger.info(`Serial Port ${comPort} has been opened`);
+
+                    dispatch(resetRssiStore());
+
+                    resumeReading(
+                        getDelay(getState()),
+                        getScanRepeat(getState())
+                    );
+
+                    registerCallbacks({
+                        onDataReceived: data => {
+                            dispatch(onReceiveRssiData(data));
+                        },
+                        onNoDataReceived: () => {
+                            dispatch(onReceiveNoRssiData());
+                        },
+                        onClose: () => {
+                            dispatch(clearRssiData());
+                        },
+                    });
+                } catch (error) {
+                    logger.error(`Failed to open serial port ${comPort}.`);
+                    logger.error(`Error ${error}.`);
+                }
             }
         }
     };
 
 export const recoverHex =
     (device: Device): AppThunk =>
-    (dispatch, getState) => {
-        getState().app.rssi.serialPort?.close(() => {
-            dispatch(clearSerialPort());
-            dispatch(
-                prepareDevice(
-                    device,
-                    deviceSetupConfig,
-                    programmedDevice => {
-                        dispatch(openDevice(programmedDevice));
-                    },
-                    () => {},
-                    false,
-                    false
-                )
-            );
-        });
+    async dispatch => {
+        await closePort();
+        dispatch(
+            prepareDevice(
+                device,
+                deviceSetupConfig,
+                programmedDevice => {
+                    dispatch(openDevice(programmedDevice));
+                },
+                () => {},
+                false,
+                false
+            )
+        );
     };

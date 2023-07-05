@@ -6,23 +6,19 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from 'pc-nrfconnect-shared';
+import { Button, selectedDevice } from 'pc-nrfconnect-shared';
 
-import {
-    getIsConnected,
-    getRssiDevice,
-} from '../../features/device/deviceSlice';
+import { toggleLED } from '../../features/device/rssiDevice';
 
 export default () => {
-    const isConnected = useSelector(getIsConnected);
-    const rssiDevice = useSelector(getRssiDevice);
+    const isConnected = useSelector(selectedDevice) != null;
 
     return (
         <Button
             variant="secondary"
             className="w-100"
             disabled={!isConnected}
-            onClick={() => rssiDevice?.toggleLED()}
+            onClick={() => toggleLED()}
         >
             Toggle LED
         </Button>

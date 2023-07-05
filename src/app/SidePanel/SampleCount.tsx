@@ -10,10 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
 import {
-    getRssiDevice,
     getScanRepeat,
     setScanRepeat,
 } from '../../features/device/deviceSlice';
+import { writeScanRepeat } from '../../features/device/rssiDevice';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'sample-count-slider';
@@ -21,14 +21,13 @@ const sliderId = 'sample-count-slider';
 export default () => {
     const dispatch = useDispatch();
     const scanRepeat = useSelector(getScanRepeat);
-    const rssiDevice = useSelector(getRssiDevice);
 
     const setAndWriteScanRepeat = useCallback(
         newScanRepeat => {
             dispatch(setScanRepeat(newScanRepeat));
-            rssiDevice?.writeScanRepeat(newScanRepeat);
+            writeScanRepeat(newScanRepeat);
         },
-        [dispatch, rssiDevice]
+        [dispatch]
     );
 
     return (
@@ -49,7 +48,7 @@ export default () => {
                 onChange={[
                     newScanRepeat => dispatch(setScanRepeat(newScanRepeat)),
                 ]}
-                onChangeComplete={() => rssiDevice?.writeScanRepeat(scanRepeat)}
+                onChangeComplete={() => writeScanRepeat(scanRepeat)}
             />
         </>
     );

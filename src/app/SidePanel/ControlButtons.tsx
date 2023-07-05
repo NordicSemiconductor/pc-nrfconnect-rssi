@@ -6,33 +6,36 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, StartStopButton, useHotKey } from 'pc-nrfconnect-shared';
+import {
+    Button,
+    selectedDevice,
+    StartStopButton,
+    useHotKey,
+} from 'pc-nrfconnect-shared';
 
 import {
     clearRssiData,
     getDelay,
-    getIsConnected,
     getIsPaused,
-    getRssiDevice,
     getScanRepeat,
     toggleIsPaused,
 } from '../../features/device/deviceSlice';
+import { pauseReading, resumeReading } from '../../features/device/rssiDevice';
 
 export default () => {
-    const isConnected = useSelector(getIsConnected);
+    const isConnected = useSelector(selectedDevice) != null;
     const isPaused = useSelector(getIsPaused);
     const delay = useSelector(getDelay);
     const scanRepeat = useSelector(getScanRepeat);
-    const rssiDevice = useSelector(getRssiDevice);
     const dispatch = useDispatch();
 
     const togglePause = () => {
         dispatch(toggleIsPaused());
 
         if (isPaused) {
-            rssiDevice?.resumeReading(delay, scanRepeat);
+            resumeReading(delay, scanRepeat);
         } else {
-            rssiDevice?.pauseReading();
+            pauseReading();
         }
     };
 

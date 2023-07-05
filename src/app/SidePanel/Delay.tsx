@@ -9,11 +9,8 @@ import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import {
-    getDelay,
-    getRssiDevice,
-    setDelay,
-} from '../../features/device/deviceSlice';
+import { getDelay, setDelay } from '../../features/device/deviceSlice';
+import { writeDelay } from '../../features/device/rssiDevice';
 
 const range = { min: 5, max: 1000 };
 const sliderId = 'delay-slider';
@@ -21,14 +18,13 @@ const sliderId = 'delay-slider';
 export default () => {
     const dispatch = useDispatch();
     const delay = useSelector(getDelay);
-    const rssiDevice = useSelector(getRssiDevice);
 
     const setAndWriteDelay = useCallback(
         newDelay => {
             dispatch(setDelay(newDelay));
-            rssiDevice?.writeDelay(newDelay);
+            writeDelay(newDelay);
         },
-        [dispatch, rssiDevice]
+        [dispatch]
     );
 
     return (
@@ -47,7 +43,7 @@ export default () => {
                 values={[delay]}
                 range={range}
                 onChange={[newDelay => dispatch(setDelay(newDelay))]}
-                onChangeComplete={() => rssiDevice?.writeDelay(delay)}
+                onChangeComplete={() => writeDelay(delay)}
             />
         </>
     );

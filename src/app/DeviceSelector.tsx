@@ -10,10 +10,10 @@ import { DeviceTraits } from '@nordicsemiconductor/nrf-device-lib-js';
 import { DeviceSelector, logger } from 'pc-nrfconnect-shared';
 
 import {
-    closeDevice,
     deviceSetupConfig,
     openDevice,
 } from '../features/device/deviceEffects';
+import { closePort } from '../features/device/rssiDevice';
 
 /**
  * Configures which device types to show in the device selector.
@@ -49,7 +49,7 @@ export default () => {
             }}
             onDeviceDeselected={() => {
                 logger.info('Deselected device');
-                dispatch(closeDevice());
+                closePort();
             }}
         />
     );
