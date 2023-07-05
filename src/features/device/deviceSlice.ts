@@ -9,7 +9,7 @@ import type { AutoDetectTypes } from '@serialport/bindings-cpp';
 import { bleChannels } from 'pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
-import type { RootState } from '../appReducer';
+import type { RootState } from '../../app/appReducer';
 import { RssiDevice } from './rssiDevice';
 
 const initialData = () => new Array(81).fill(undefined).map(() => []);
@@ -54,7 +54,7 @@ const initialState: RssiState = {
     noDataReceived: false,
 };
 
-const rssiSlice = createSlice({
+const deviceSlice = createSlice({
     name: 'rssi',
     initialState,
     reducers: {
@@ -193,5 +193,5 @@ export const {
     setLevelRange,
     onReceiveRssiData,
     onReceiveNoRssiData,
-} = rssiSlice.actions;
-export default rssiSlice.reducer;
+} = deviceSlice.actions;
+export default deviceSlice.reducer;

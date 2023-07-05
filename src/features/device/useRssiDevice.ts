@@ -8,7 +8,6 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppThunk, logger } from 'pc-nrfconnect-shared';
 
-import { createRssiDevice } from './rssiDevice';
 import {
     clearRssiData,
     getSerialPort,
@@ -16,7 +15,8 @@ import {
     onReceiveRssiData,
     resetRssiStore,
     setRssiDevice,
-} from './rssiSlice';
+} from './deviceSlice';
+import { createRssiDevice } from './rssiDevice';
 
 export default () => {
     const dispatch = useDispatch();

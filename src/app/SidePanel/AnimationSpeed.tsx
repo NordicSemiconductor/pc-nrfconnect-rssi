@@ -12,7 +12,7 @@ import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 import {
     getAnimationDuration,
     setAnimationDuration,
-} from '../features/rssiSlice';
+} from '../../features/device/deviceSlice';
 
 const range = { min: 10, max: 1000 };
 const sliderId = 'animation-duration-slider';

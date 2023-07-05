@@ -8,7 +8,10 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from 'pc-nrfconnect-shared';
 
-import { getIsConnected, getRssiDevice } from '../features/rssiSlice';
+import {
+    getIsConnected,
+    getRssiDevice,
+} from '../../features/device/deviceSlice';
 
 export default () => {
     const isConnected = useSelector(getIsConnected);

@@ -13,7 +13,7 @@ import {
     closeDevice,
     deviceSetupConfig,
     openDevice,
-} from './actions/deviceActions';
+} from '../features/device/deviceEffects';
 
 /**
  * Configures which device types to show in the device selector.

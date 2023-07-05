@@ -18,7 +18,7 @@ import {
     selectedDevice,
 } from 'pc-nrfconnect-shared';
 
-import { recoverHex } from '../actions/deviceActions';
+import { recoverHex } from '../device/deviceEffects';
 import {
     getAnimationDuration,
     getChannelRangeSorted,
@@ -26,7 +26,7 @@ import {
     getNoDataReceived,
     getRssi,
     getRssiMax,
-} from '../features/rssiSlice';
+} from '../device/deviceSlice';
 import color from './rssiColors';
 
 import './alert.scss';

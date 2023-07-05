@@ -7,10 +7,10 @@
 import React from 'react';
 import { App } from 'pc-nrfconnect-shared';
 
-import appReducer from './appReducer';
-import Chart from './Chart/Chart';
-import DeviceSelector from './DeviceSelector';
-import SidePanel from './SidePanel/SidePanel';
+import appReducer from './app/appReducer';
+import DeviceSelector from './app/DeviceSelector';
+import SidePanel from './app/SidePanel/SidePanel';
+import Chart from './features/chart/Chart';
 
 export default () => (
     <App

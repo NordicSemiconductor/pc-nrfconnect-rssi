@@ -7,7 +7,7 @@
 import { NrfConnectState } from 'pc-nrfconnect-shared';
 import { combineReducers } from 'redux';
 
-import rssiReducer from './features/rssiSlice';
+import rssiReducer from '../features/device/deviceSlice';
 
 type AppState = ReturnType<typeof appReducer>;
 

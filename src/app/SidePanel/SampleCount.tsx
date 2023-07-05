@@ -13,7 +13,7 @@ import {
     getRssiDevice,
     getScanRepeat,
     setScanRepeat,
-} from '../features/rssiSlice';
+} from '../../features/device/deviceSlice';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'sample-count-slider';

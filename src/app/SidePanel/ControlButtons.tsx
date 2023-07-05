@@ -16,7 +16,7 @@ import {
     getRssiDevice,
     getScanRepeat,
     toggleIsPaused,
-} from '../features/rssiSlice';
+} from '../../features/device/deviceSlice';
 
 export default () => {
     const isConnected = useSelector(getIsConnected);

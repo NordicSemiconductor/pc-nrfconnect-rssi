@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
 
-import { getMaxScans, setMaxScans } from '../features/rssiSlice';
+import { getMaxScans, setMaxScans } from '../../features/device/deviceSlice';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'max-scans-slider';
