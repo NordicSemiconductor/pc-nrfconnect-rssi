@@ -77,6 +77,10 @@ const rssiSlice = createSlice({
             state.isPaused = !state.isPaused;
         },
 
+        setIsPaused: (state, action: PayloadAction<boolean>) => {
+            state.isPaused = action.payload;
+        },
+
         clearRssiData: state => {
             state.data = initialData();
             state.dataMax = [];
@@ -168,6 +172,7 @@ export const {
     setRssiDevice,
     clearSerialPort,
     toggleIsPaused,
+    setIsPaused,
     clearRssiData,
     setDelay,
     setMaxScans,
