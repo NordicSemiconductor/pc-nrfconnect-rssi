@@ -16,12 +16,7 @@ import {
 } from 'pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
-import {
-    clearSerialPort,
-    setAvailableSerialPorts,
-    setSelectedSerialport,
-    setSerialPort,
-} from '../features/rssiSlice';
+import { clearSerialPort, setSerialPort } from '../features/rssiSlice';
 
 export const deviceSetupConfig: DeviceSetupConfig = {
     deviceSetups: [
@@ -52,7 +47,6 @@ export const deviceSetupConfig: DeviceSetupConfig = {
 
 export const closeDevice = (): AppThunk => dispatch => {
     dispatch(clearSerialPort());
-    dispatch(setAvailableSerialPorts([]));
 };
 
 export const openDevice =
@@ -62,14 +56,6 @@ export const openDevice =
         const ports = device.serialPorts;
 
         if (ports) {
-            if (ports?.length > 0) {
-                dispatch(
-                    setAvailableSerialPorts(
-                        ports.map(port => port.comName ?? '')
-                    )
-                );
-            }
-
             const comPort = ports[0].comName; // We want to connect to vComIndex 0
             if (comPort) {
                 logger.info(`Opening Serial port ${comPort}`);
@@ -84,7 +70,6 @@ export const openDevice =
                             return;
                         }
 
-                        dispatch(setSelectedSerialport(comPort));
                         dispatch(setSerialPort(serialPort));
                         logger.info(`Serial Port ${comPort} has been opened`);
                     }
