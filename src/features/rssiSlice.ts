@@ -92,6 +92,14 @@ const rssiSlice = createSlice({
             state.noDataReceived = false;
         },
 
+        resetRssiStore: state => {
+            state.buffer = [];
+            state.data = initialData();
+            state.dataMax = [];
+            state.noDataReceived = false;
+            state.isPaused = false;
+        },
+
         setDelay: (state, action: PayloadAction<number>) => {
             state.delay = action.payload;
         },
@@ -187,6 +195,7 @@ export const {
     setAvailableSerialPorts,
     setSelectedSerialport,
     toggleIsPaused,
+    resetRssiStore,
     clearRssiData,
     setDelay,
     setMaxScans,
