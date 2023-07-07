@@ -117,9 +117,16 @@ const rssiSlice = createSlice({
         },
 
         onReceiveRssiData: (state, action: PayloadAction<Buffer>) => {
+            if (!state.serialPort || !state.serialPort.isOpen) {
+                state.data = initialData();
+                state.dataMax = [];
+                return;
+            }
+
             if (state.isPaused) {
                 return;
             }
+
             state.buffer = [...state.buffer, ...action.payload];
 
             if (state.buffer.length > 246) {
