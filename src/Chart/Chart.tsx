@@ -84,7 +84,7 @@ export default () => {
         <div className="d-flex flex-column h-100">
             {device && noData && readbackProtection === 'protected' && (
                 <Alert variant="warning">
-                    <div className="d-flex align-items-center flex-wrap readback-protection-warning">
+                    <div className="d-flex align-items-center readback-protection-warning flex-wrap">
                         No data received. Unable to verify compatible firmware
                         because the selected device has readback protection
                         enabled.
