@@ -36,10 +36,8 @@ interface RssiState {
     channelRange: NumberPair;
     levelRange: NumberPair;
     noDataReceived: boolean;
-    selectedSerialport?: string;
     serialPort?: SerialPort<AutoDetectTypes>;
     rssiDevice?: RssiDevice;
-    availableSerialPorts?: string[];
 }
 
 const initialState: RssiState = {
@@ -60,12 +58,6 @@ const rssiSlice = createSlice({
     name: 'rssi',
     initialState,
     reducers: {
-        setAvailableSerialPorts: (state, action: PayloadAction<string[]>) => {
-            state.availableSerialPorts = action.payload;
-        },
-        setSelectedSerialport: (state, action: PayloadAction<string>) => {
-            state.selectedSerialport = action.payload;
-        },
         setSerialPort: (
             state,
             action: PayloadAction<SerialPort<AutoDetectTypes>>
@@ -78,7 +70,6 @@ const rssiSlice = createSlice({
 
         clearSerialPort: state => {
             state.serialPort = undefined;
-            state.selectedSerialport = undefined;
             state.rssiDevice = undefined;
         },
 
@@ -163,8 +154,7 @@ const rssiSlice = createSlice({
 
 export const getSerialPort = (state: RootState) => state.app.rssi.serialPort;
 export const getRssiDevice = (state: RootState) => state.app.rssi.rssiDevice;
-export const getIsConnected = (state: RootState) =>
-    state.app.rssi.selectedSerialport != null;
+export const getIsConnected = (state: RootState) => !!state.app.rssi.serialPort;
 export const getIsPaused = (state: RootState) => state.app.rssi.isPaused;
 
 export const getRssi = (state: RootState) =>
@@ -192,8 +182,6 @@ export const {
     setSerialPort,
     setRssiDevice,
     clearSerialPort,
-    setAvailableSerialPorts,
-    setSelectedSerialport,
     toggleIsPaused,
     resetRssiStore,
     clearRssiData,

@@ -45,13 +45,13 @@ export default () => {
                 }, 3000);
             });
 
-            serialPort?.on('data', data => {
+            serialPort.on('data', data => {
                 clearTimeout(noDataTimeout);
                 dispatch(onReceiveRssiData(data));
             });
-            serialPort?.on('error', console.log);
+            serialPort.on('error', console.log);
 
-            serialPort?.on('close', () => {
+            serialPort.on('close', () => {
                 logger.info(`Serial Port ${serialPort.path} has been closed`);
                 dispatch(clearRssiData());
             });
