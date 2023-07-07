@@ -14,7 +14,7 @@ import {
     getSerialPort,
     onReceiveNoRssiData,
     onReceiveRssiData,
-    setIsPaused,
+    resetRssiStore,
     setRssiDevice,
 } from './rssiSlice';
 
@@ -27,13 +27,14 @@ export default () => {
             const device = createRssiDevice(serialPort);
             dispatch(setRssiDevice(device));
 
+            dispatch(resetRssiStore());
+
             dispatch<AppThunk>((_, getState) => {
                 device.resumeReading(
                     getState().app.rssi.delay,
                     getState().app.rssi.scanRepeat
                 );
             });
-            dispatch(setIsPaused(false));
 
             let noDataTimeout: NodeJS.Timeout;
             dispatch<AppThunk>((_, getState) => {
