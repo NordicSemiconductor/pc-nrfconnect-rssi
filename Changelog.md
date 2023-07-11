@@ -17,8 +17,8 @@
 
 -   Blocking dialog when disconnecting a device when the Programming dialog is
     open.
--   No longer auto reselect to the last disconnected device if it is in the device
-    list when clicking the `Auto Reconnect` Toggle.
+-   No longer auto reselect to the last disconnected device if it is in the
+    device list when clicking the `Auto Reconnect` Toggle.
 -   Dispatch `deviceSetupError` when `sdfu` programming fails.
 -   State not always updated when port is closed by a usb disconnect.
 
