@@ -2,9 +2,9 @@
 
 ### Fixed
 
--   Selecting a different device without ejecting will does work
--   Switching bootloader to application does not update graphs data
--   `Restart application with verbose logging` button did not restart app
+-   Selecting a different device without ejecting now works correctly.
+-   Switching from bootloader to application mode no longer updates graph data.
+-   The `Restart application with verbose logging` button now restarts the app.
 
 ## 1.4.4 - 2023-04-13
 
@@ -17,10 +17,10 @@
 
 -   Blocking dialog when disconnecting a device when the Programming dialog is
     open.
--   No longer auto reselect to the least disconnected device if is is in the
+-   No longer auto reselect to the last disconnected device if it is in the
     device list when clicking the `Auto Reconnect` Toggle.
 -   Dispatch `deviceSetupError` when `sdfu` programming fails.
--   State not always updated when port is closed by a usb disconnect
+-   State not always updated when port is closed by a usb disconnect.
 
 ## 1.4.3 - 2023-02-13
 
