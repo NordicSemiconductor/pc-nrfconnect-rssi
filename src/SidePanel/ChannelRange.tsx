@@ -7,7 +7,11 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
-import { bleChannels, NumberInlineInput, Slider } from 'pc-nrfconnect-shared';
+import {
+    bleChannels,
+    NumberInlineInput,
+    Slider,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { getChannelRange, setChannelRange } from '../features/rssiSlice';
 

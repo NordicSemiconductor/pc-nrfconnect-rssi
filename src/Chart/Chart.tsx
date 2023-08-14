@@ -7,16 +7,15 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
-import { Chart } from 'chart.js';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {
     Alert,
     bleChannels,
-    Button,
     getReadbackProtection,
     Main,
     selectedDevice,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { Chart } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import { recoverHex } from '../actions/deviceActions';
 import {
@@ -88,12 +87,12 @@ export default () => {
                         No data received. Unable to verify compatible firmware
                         because the selected device has readback protection
                         enabled.
-                        <Button
+                        <button
                             onClick={() => dispatch(recoverHex(device))}
-                            variant="custom"
+                            type="button"
                         >
                             Program compatible firmware
-                        </Button>
+                        </button>
                     </div>
                 </Alert>
             )}

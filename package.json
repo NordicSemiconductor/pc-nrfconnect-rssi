@@ -17,15 +17,16 @@
         "dist/",
         "fw/*.hex",
         "fw/*.zip",
-        "node_modules/pc-nrfconnect-shared/fw/bootloader/*.zip",
+        "node_modules/@nordicsemiconductor/pc-nrfconnect-shared/fw/bootloader/*.zip",
         "resources/icon.*",
         "Changelog.md",
         "LICENSE"
     ],
     "main": "dist/bundle.js",
-    "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js",
+    "html": "dist/index.html",
+    "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
     "eslintConfig": {
-        "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc"
+        "extends": "./node_modules/@nordicsemiconductor/pc-nrfconnect-shared/config/eslintrc"
     },
     "scripts": {
         "watch": "run-p --silent --continue-on-error watch:*",
@@ -43,10 +44,10 @@
         "prepare": "husky install"
     },
     "devDependencies": {
+        "@nordicsemiconductor/pc-nrfconnect-shared": "^85.0.0",
         "@types/chart.js": "2.9.30",
         "chart.js": "2.9.4",
         "chartjs-plugin-datalabels": "0.7.0",
-        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v71",
         "react-chartjs-2": "2.9.0"
     }
 }

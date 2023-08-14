@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
+import { bleChannels } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AutoDetectTypes } from '@serialport/bindings-cpp';
-import { bleChannels } from 'pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
 import type { RootState } from '../appReducer';

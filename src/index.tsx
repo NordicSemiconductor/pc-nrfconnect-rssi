@@ -5,14 +5,14 @@
  */
 
 import React from 'react';
-import { App } from 'pc-nrfconnect-shared';
+import { App, render } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import appReducer from './appReducer';
 import Chart from './Chart/Chart';
 import DeviceSelector from './DeviceSelector';
 import SidePanel from './SidePanel/SidePanel';
 
-export default () => (
+render(
     <App
         appReducer={appReducer}
         deviceSelect={<DeviceSelector />}
