@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import { colors } from 'pc-nrfconnect-shared';
+import { colors } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 export default {
     label: colors.gray300,
@@ -12,7 +12,7 @@ export default {
         normal: colors.blueSlate,
         normalMax: colors.blueSlateLighter,
         advertisement: colors.green,
-        advertisementMax: colors.greenLighter,
+        advertisementMax: colors.green200,
         background: colors.gray50,
     },
 };

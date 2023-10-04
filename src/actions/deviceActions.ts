@@ -13,7 +13,7 @@ import {
     logger,
     prepareDevice,
     sdfuDeviceSetup,
-} from 'pc-nrfconnect-shared';
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
 import { clearSerialPort, setSerialPort } from '../features/rssiSlice';

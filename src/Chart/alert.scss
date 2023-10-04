@@ -5,7 +5,7 @@
  */
 
 @use 'sass:color';
-@import '~pc-nrfconnect-shared/styles';
+@import '~@nordicsemiconductor/pc-nrfconnect-shared/styles';
 
 .readback-protection-warning {
     gap: 8px;

@@ -6,7 +6,7 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppThunk, logger } from 'pc-nrfconnect-shared';
+import { AppThunk, logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { createRssiDevice } from './rssiDevice';
 import {
