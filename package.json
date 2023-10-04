@@ -25,7 +25,6 @@
         "dist/",
         "fw/*.hex",
         "fw/*.zip",
-        "node_modules/@nordicsemiconductor/pc-nrfconnect-shared/fw/bootloader/*.zip",
         "resources/icon.*",
         "Changelog.md",
         "LICENSE"
@@ -51,7 +50,7 @@
         "prepare": "husky install"
     },
     "devDependencies": {
-        "@nordicsemiconductor/pc-nrfconnect-shared": "^116.0.0",
+        "@nordicsemiconductor/pc-nrfconnect-shared": "^117.0.0",
         "chart.js": "^4.0.1",
         "chartjs-plugin-datalabels": "2.2.0",
         "react-chartjs-2": "^5.0.1"
