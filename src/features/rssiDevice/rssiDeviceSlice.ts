@@ -9,8 +9,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { AutoDetectTypes } from '@serialport/bindings-cpp';
 import { SerialPort } from 'serialport';
 
-import type { RootState } from '../appReducer';
-import { RssiDevice } from './rssiDevice';
+import type { RootState } from '../../app/store';
+import { RssiDevice } from './createRssiDevice';
 
 const initialData = () => new Array(81).fill(undefined).map(() => []);
 

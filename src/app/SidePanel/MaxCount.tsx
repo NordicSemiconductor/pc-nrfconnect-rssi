@@ -12,7 +12,10 @@ import {
     Slider,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { getMaxScans, setMaxScans } from '../features/rssiSlice';
+import {
+    getMaxScans,
+    setMaxScans,
+} from '../../features/rssiDevice/rssiDeviceSlice';
 
 const range = { min: 1, max: 100 };
 const sliderId = 'max-scans-slider';

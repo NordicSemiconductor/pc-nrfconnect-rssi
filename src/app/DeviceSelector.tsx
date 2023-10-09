@@ -12,7 +12,11 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { DeviceTraits } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
-import * as deviceActions from './actions/deviceActions';
+import {
+    closeDevice,
+    deviceSetupConfig,
+    openDevice,
+} from '../features/rssiDevice/rssiDeviceEffects';
 
 const deviceListing: DeviceTraits = {
     nordicUsb: true,
@@ -26,7 +30,7 @@ export default () => {
 
     return (
         <DeviceSelector
-            deviceSetupConfig={deviceActions.deviceSetupConfig}
+            deviceSetupConfig={deviceSetupConfig}
             deviceListing={deviceListing}
             onDeviceConnected={device =>
                 logger.info(`Device Connected SN:${device.serialNumber}`)
@@ -39,11 +43,11 @@ export default () => {
             }
             onDeviceIsReady={device => {
                 logger.info(`Device isReady SN:${device.serialNumber}`);
-                dispatch(deviceActions.openDevice(device));
+                dispatch(openDevice(device));
             }}
             onDeviceDeselected={() => {
                 logger.info('Deselected device');
-                dispatch(deviceActions.closeDevice());
+                dispatch(closeDevice());
             }}
         />
     );
