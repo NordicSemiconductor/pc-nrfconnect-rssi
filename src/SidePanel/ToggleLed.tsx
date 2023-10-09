@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from 'pc-nrfconnect-shared';
+import { Button } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { getIsConnected, getRssiDevice } from '../features/rssiSlice';
 

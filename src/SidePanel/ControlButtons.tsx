@@ -6,7 +6,11 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, StartStopButton, useHotKey } from 'pc-nrfconnect-shared';
+import {
+    Button,
+    StartStopButton,
+    useHotKey,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import {
     clearRssiData,

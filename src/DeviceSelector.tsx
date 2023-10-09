@@ -6,20 +6,14 @@
 
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { DeviceTraits } from '@nordicsemiconductor/nrf-device-lib-js';
-import { DeviceSelector, logger } from 'pc-nrfconnect-shared';
-
 import {
-    closeDevice,
-    deviceSetupConfig,
-    openDevice,
-} from './actions/deviceActions';
+    DeviceSelector,
+    logger,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { DeviceTraits } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
-/**
- * Configures which device types to show in the device selector.
- * The config format is described on
- * https://github.com/NordicSemiconductor/nrf-device-lister-js.
- */
+import * as deviceActions from './actions/deviceActions';
+
 const deviceListing: DeviceTraits = {
     nordicUsb: true,
     serialPorts: true,
@@ -32,7 +26,7 @@ export default () => {
 
     return (
         <DeviceSelector
-            deviceSetupConfig={deviceSetupConfig}
+            deviceSetupConfig={deviceActions.deviceSetupConfig}
             deviceListing={deviceListing}
             onDeviceConnected={device =>
                 logger.info(`Device Connected SN:${device.serialNumber}`)
@@ -45,11 +39,11 @@ export default () => {
             }
             onDeviceIsReady={device => {
                 logger.info(`Device isReady SN:${device.serialNumber}`);
-                dispatch(openDevice(device));
+                dispatch(deviceActions.openDevice(device));
             }}
             onDeviceDeselected={() => {
                 logger.info('Deselected device');
-                dispatch(closeDevice());
+                dispatch(deviceActions.closeDevice());
             }}
         />
     );

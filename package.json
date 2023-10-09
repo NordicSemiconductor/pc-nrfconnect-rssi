@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-rssi",
-    "version": "1.4.5",
+    "version": "2.0.0",
     "displayName": "RSSI Viewer",
     "description": "Live visualization of RSSI vs frequency in the 2.4 GHz band",
     "homepage": "https://github.com/NordicSemiconductor/pc-nrfconnect-rssi",
@@ -11,21 +11,28 @@
     "author": "Nordic Semiconductor ASA",
     "license": "SEE LICENSE IN LICENSE",
     "engines": {
-        "nrfconnect": ">=4.0.0"
+        "nrfconnect": ">=4.2.0"
+    },
+    "nrfConnectForDesktop": {
+        "nrfutil": {
+            "device": [
+                "1.4.5"
+            ]
+        },
+        "html": "dist/index.html"
     },
     "files": [
         "dist/",
         "fw/*.hex",
         "fw/*.zip",
-        "node_modules/pc-nrfconnect-shared/fw/bootloader/*.zip",
         "resources/icon.*",
         "Changelog.md",
         "LICENSE"
     ],
     "main": "dist/bundle.js",
-    "prettier": "./node_modules/pc-nrfconnect-shared/config/prettier.config.js",
+    "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
     "eslintConfig": {
-        "extends": "./node_modules/pc-nrfconnect-shared/config/eslintrc"
+        "extends": "./node_modules/@nordicsemiconductor/pc-nrfconnect-shared/config/eslintrc"
     },
     "scripts": {
         "watch": "run-p --silent --continue-on-error watch:*",
@@ -43,10 +50,9 @@
         "prepare": "husky install"
     },
     "devDependencies": {
-        "@types/chart.js": "2.9.30",
-        "chart.js": "2.9.4",
-        "chartjs-plugin-datalabels": "0.7.0",
-        "pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#v71",
-        "react-chartjs-2": "2.9.0"
+        "@nordicsemiconductor/pc-nrfconnect-shared": "^117.0.0",
+        "chart.js": "^4.0.1",
+        "chartjs-plugin-datalabels": "2.2.0",
+        "react-chartjs-2": "^5.0.1"
     }
 }

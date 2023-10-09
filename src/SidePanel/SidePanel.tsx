@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Group, SidePanel } from 'pc-nrfconnect-shared';
+import { Group, SidePanel } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import useRssiDevice from '../features/useRssiDevice';
 import AnimationSpeed from './AnimationSpeed';
