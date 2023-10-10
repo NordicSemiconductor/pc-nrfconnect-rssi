@@ -17,7 +17,7 @@ import {
 import { BarElement, CategoryScale, Chart, LinearScale } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
-import { recoverHex } from '../actions/deviceActions';
+import { recoverHex } from '../rssiDevice/rssiDeviceEffects';
 import {
     getAnimationDuration,
     getChannelRangeSorted,
@@ -25,7 +25,7 @@ import {
     getNoDataReceived,
     getRssi,
     getRssiMax,
-} from '../features/rssiSlice';
+} from '../rssiDevice/rssiDeviceSlice';
 import color from './rssiColors';
 
 import './alert.scss';

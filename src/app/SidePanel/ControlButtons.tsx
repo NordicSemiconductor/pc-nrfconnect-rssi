@@ -20,7 +20,7 @@ import {
     getRssiDevice,
     getScanRepeat,
     toggleIsPaused,
-} from '../features/rssiSlice';
+} from '../../features/rssiDevice/rssiDeviceSlice';
 
 export default () => {
     const isConnected = useSelector(getIsConnected);

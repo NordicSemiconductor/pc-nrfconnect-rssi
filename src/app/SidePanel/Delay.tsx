@@ -12,7 +12,11 @@ import {
     Slider,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { getDelay, getRssiDevice, setDelay } from '../features/rssiSlice';
+import {
+    getDelay,
+    getRssiDevice,
+    setDelay,
+} from '../../features/rssiDevice/rssiDeviceSlice';
 
 const range = { min: 5, max: 1000 };
 const sliderId = 'delay-slider';

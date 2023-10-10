@@ -16,7 +16,7 @@ import {
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { SerialPort } from 'serialport';
 
-import { clearSerialPort, setSerialPort } from '../features/rssiSlice';
+import { clearSerialPort, setSerialPort } from './rssiDeviceSlice';
 
 export const deviceSetupConfig: DeviceSetupConfig = {
     deviceSetups: [

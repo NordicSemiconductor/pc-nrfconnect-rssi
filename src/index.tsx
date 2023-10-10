@@ -7,14 +7,14 @@
 import React from 'react';
 import { App, render } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import appReducer from './appReducer';
-import Chart from './Chart/Chart';
-import DeviceSelector from './DeviceSelector';
-import SidePanel from './SidePanel/SidePanel';
+import DeviceSelector from './app/DeviceSelector';
+import SidePanel from './app/SidePanel/SidePanel';
+import { reducer } from './app/store';
+import Chart from './features/Chart/Chart';
 
 render(
     <App
-        appReducer={appReducer}
+        appReducer={reducer}
         deviceSelect={<DeviceSelector />}
         sidePanel={<SidePanel />}
         panes={[{ name: 'RSSI Viewer', Main: Chart }]}

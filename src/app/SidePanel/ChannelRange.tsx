@@ -13,7 +13,10 @@ import {
     Slider,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
-import { getChannelRange, setChannelRange } from '../features/rssiSlice';
+import {
+    getChannelRange,
+    setChannelRange,
+} from '../../features/rssiDevice/rssiDeviceSlice';
 
 const sliderId = 'ble-channel-slider';
 

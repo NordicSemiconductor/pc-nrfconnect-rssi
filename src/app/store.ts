@@ -7,14 +7,12 @@
 import { NrfConnectState } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { combineReducers } from 'redux';
 
-import rssiReducer from './features/rssiSlice';
+import rssi from '../features/rssiDevice/rssiDeviceSlice';
 
-type AppState = ReturnType<typeof appReducer>;
-
-export type RootState = NrfConnectState<AppState>;
-
-const appReducer = combineReducers({
-    rssi: rssiReducer,
+export const reducer = combineReducers({
+    rssi,
 });
 
-export default appReducer;
+type AppState = ReturnType<typeof reducer>;
+
+export type RootState = NrfConnectState<AppState>;

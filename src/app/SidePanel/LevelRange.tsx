@@ -16,7 +16,7 @@ import {
     getLevelRange,
     initialLevelRange,
     setLevelRange,
-} from '../features/rssiSlice';
+} from '../../features/rssiDevice/rssiDeviceSlice';
 
 const sliderId = 'ble-level-slider';
 

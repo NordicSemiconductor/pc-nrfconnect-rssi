@@ -15,7 +15,7 @@ import {
 import {
     getAnimationDuration,
     setAnimationDuration,
-} from '../features/rssiSlice';
+} from '../../features/rssiDevice/rssiDeviceSlice';
 
 const range = { min: 10, max: 1000 };
 const sliderId = 'animation-duration-slider';
