@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     DeviceSelector,
     logger,
+    preventSleep,
+    selectedDevice,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
 import { DeviceTraits } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
 
@@ -27,6 +29,25 @@ const deviceListing: DeviceTraits = {
 
 export default () => {
     const dispatch = useDispatch();
+    const preventSleepNumber = useRef<number | undefined>();
+
+    const currentDevice = useSelector(selectedDevice);
+
+    useEffect(() => {
+        if (!currentDevice) return;
+
+        preventSleep.start().then(id => {
+            preventSleepNumber.current = id;
+        });
+
+        return () => {
+            if (preventSleepNumber.current) {
+                preventSleep.end(preventSleepNumber.current);
+            }
+
+            preventSleepNumber.current = undefined;
+        };
+    }, [currentDevice]);
 
     return (
         <DeviceSelector
