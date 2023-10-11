@@ -16,7 +16,7 @@
     "nrfConnectForDesktop": {
         "nrfutil": {
             "device": [
-                "1.4.5"
+                "2.0.0"
             ]
         },
         "html": "dist/index.html"
@@ -50,7 +50,7 @@
         "prepare": "husky install"
     },
     "devDependencies": {
-        "@nordicsemiconductor/pc-nrfconnect-shared": "^117.0.0",
+        "@nordicsemiconductor/pc-nrfconnect-shared": "github:NordicSemiconductor/pc-nrfconnect-shared#feat/support-devices-no-sn",
         "chart.js": "^4.0.1",
         "chartjs-plugin-datalabels": "2.2.0",
         "react-chartjs-2": "^5.0.1"
