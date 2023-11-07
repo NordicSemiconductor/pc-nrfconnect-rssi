@@ -6,11 +6,14 @@
 
 import React from 'react';
 import { App, render } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import usageData from '@nordicsemiconductor/pc-nrfconnect-shared/src/utils/usageData';
 
 import DeviceSelector from './app/DeviceSelector';
 import SidePanel from './app/SidePanel/SidePanel';
 import { reducer } from './app/store';
 import Chart from './features/Chart/Chart';
+
+usageData.enableTelemetry();
 
 render(
     <App

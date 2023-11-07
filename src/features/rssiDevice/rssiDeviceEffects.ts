@@ -91,6 +91,7 @@ export const recoverHex =
                         dispatch(openDevice(programmedDevice));
                     },
                     () => {},
+                    undefined,
                     false,
                     false
                 )
