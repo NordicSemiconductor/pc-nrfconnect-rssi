@@ -31,9 +31,6 @@
     ],
     "main": "dist/bundle.js",
     "prettier": "@nordicsemiconductor/pc-nrfconnect-shared/config/prettier.config.js",
-    "eslintConfig": {
-        "extends": "./node_modules/@nordicsemiconductor/pc-nrfconnect-shared/config/eslintrc"
-    },
     "scripts": {
         "watch": "run-p --silent --continue-on-error watch:*",
         "watch:build": "run-esbuild --watch --include-bootloader",
