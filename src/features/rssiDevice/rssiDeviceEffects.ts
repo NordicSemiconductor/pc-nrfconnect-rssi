@@ -40,6 +40,7 @@ export const deviceSetupConfig: DeviceSetupConfig = {
                     fwIdAddress: 0x2000,
                 },
             ],
+            true,
             true
         ),
     ],
