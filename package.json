@@ -47,7 +47,7 @@
         "prepare": "husky install"
     },
     "devDependencies": {
-        "@nordicsemiconductor/pc-nrfconnect-shared": "^139.0.0",
+        "@nordicsemiconductor/pc-nrfconnect-shared": "^141.0.0",
         "chart.js": "^4.0.1",
         "chartjs-plugin-datalabels": "2.2.0",
         "react-chartjs-2": "^5.0.1"
