@@ -1,6 +1,6 @@
 {
     "name": "pc-nrfconnect-rssi",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "displayName": "RSSI Viewer",
     "description": "Live visualization of RSSI vs frequency in the 2.4 GHz band",
     "homepage": "https://github.com/NordicSemiconductor/pc-nrfconnect-rssi",
