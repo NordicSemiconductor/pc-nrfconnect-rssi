@@ -1,3 +1,10 @@
+## 1.5.1 - 2023-12-14
+
+## Added
+
+-   Persist state of `show log` panel
+-   Feedback tab
+
 ## 1.5.0 - 2023-12-07
 
 ### Changed
