@@ -7,7 +7,7 @@
 
 ### Fixed
 
--   Duplication of the events send by analytics.
+-   Duplication of the events sent by analytics.
 
 ## 1.5.0 - 2023-12-07
 
