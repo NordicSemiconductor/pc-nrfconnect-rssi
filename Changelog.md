@@ -1,9 +1,13 @@
-## 1.5.1 - 2023-12-14
+## 1.6.0 - 2024-01-08
 
-## Added
+### Added
 
--   Persist state of `show log` panel
--   Feedback tab
+-   Persist state of `show log` panel.
+-   Feedback tab.
+
+### Fixed
+
+-   Duplication of the events sent by analytics.
 
 ## 1.5.0 - 2023-12-07
 
