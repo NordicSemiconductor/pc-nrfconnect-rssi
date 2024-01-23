@@ -10,7 +10,7 @@ import {
     DeviceSelector,
     logger,
 } from '@nordicsemiconductor/pc-nrfconnect-shared';
-import { DeviceTraits } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil';
+import { DeviceTraits } from '@nordicsemiconductor/pc-nrfconnect-shared/nrfutil/device';
 
 import {
     closeDevice,
