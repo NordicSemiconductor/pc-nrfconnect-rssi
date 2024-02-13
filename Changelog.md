@@ -1,3 +1,9 @@
+## 1.6.1 - UNRELEASED
+
+### Changed
+
+-   Update nrfutil device to v2.1.1.
+
 ## 1.6.0 - 2024-01-08
 
 ### Added
