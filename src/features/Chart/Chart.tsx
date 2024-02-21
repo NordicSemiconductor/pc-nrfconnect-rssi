@@ -81,21 +81,23 @@ export default () => {
 
     return (
         <div className="d-flex flex-column h-100">
-            {device && noData && readbackProtection === 'protected' && (
-                <Alert variant="warning">
-                    <div className="d-flex align-items-center readback-protection-warning flex-wrap">
-                        No data received. Unable to verify compatible firmware
-                        because the selected device has readback protection
-                        enabled.
-                        <button
-                            type="button"
-                            onClick={() => dispatch(recoverHex(device))}
-                        >
-                            Program compatible firmware
-                        </button>
-                    </div>
-                </Alert>
-            )}
+            {device &&
+                noData &&
+                readbackProtection !== 'NRFDL_PROTECTION_STATUS_NONE' && (
+                    <Alert variant="warning">
+                        <div className="d-flex align-items-center readback-protection-warning flex-wrap">
+                            No data received. Unable to verify compatible
+                            firmware because the selected device has readback
+                            protection enabled.
+                            <button
+                                type="button"
+                                onClick={() => dispatch(recoverHex(device))}
+                            >
+                                Program compatible firmware
+                            </button>
+                        </div>
+                    </Alert>
+                )}
             <div className="position-relative flex-grow-1 overflow-hidden">
                 <Main>
                     <Bar
