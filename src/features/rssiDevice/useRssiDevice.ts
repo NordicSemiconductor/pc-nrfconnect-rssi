@@ -6,7 +6,11 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppThunk, logger } from '@nordicsemiconductor/pc-nrfconnect-shared';
+import {
+    AppThunk,
+    getReadbackProtection,
+    logger,
+} from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import { createRssiDevice } from './createRssiDevice';
 import {
@@ -39,7 +43,10 @@ export default () => {
             let noDataTimeout: NodeJS.Timeout;
             dispatch<AppThunk>((_, getState) => {
                 noDataTimeout = setTimeout(() => {
-                    if (getState().device.readbackProtection === 'protected') {
+                    if (
+                        getReadbackProtection(getState()) !==
+                        'NRFDL_PROTECTION_STATUS_NONE'
+                    ) {
                         dispatch(onReceiveNoRssiData());
                     }
                 }, 3000);
