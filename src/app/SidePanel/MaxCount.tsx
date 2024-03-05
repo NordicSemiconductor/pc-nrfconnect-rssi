@@ -5,42 +5,27 @@
  */
 
 import React from 'react';
-import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    NumberInlineInput,
-    Slider,
-} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { NumberInput } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import {
     getMaxScans,
     setMaxScans,
 } from '../../features/rssiDevice/rssiDeviceSlice';
 
-const range = { min: 1, max: 100 };
-const sliderId = 'max-scans-slider';
-
 export default () => {
     const dispatch = useDispatch();
     const maxScans = useSelector(getMaxScans);
 
     return (
-        <>
-            <Form.Label htmlFor={sliderId}>
-                Show max for last{' '}
-                <NumberInlineInput
-                    value={maxScans}
-                    range={range}
-                    onChange={newMaxScans => dispatch(setMaxScans(newMaxScans))}
-                />{' '}
-                scans
-            </Form.Label>
-            <Slider
-                id={sliderId}
-                values={[maxScans]}
-                range={range}
-                onChange={[newMaxScans => dispatch(setMaxScans(newMaxScans))]}
-            />
-        </>
+        <NumberInput
+            showSlider
+            minWidth
+            range={{ min: 1, max: 100 }}
+            value={maxScans}
+            onChange={newMaxScans => dispatch(setMaxScans(newMaxScans))}
+            label="Show max for last"
+            unit="scans"
+        />
     );
 };

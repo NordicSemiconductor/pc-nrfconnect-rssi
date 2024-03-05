@@ -5,47 +5,29 @@
  */
 
 import React from 'react';
-import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    NumberInlineInput,
-    Slider,
-} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { NumberInput } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import {
     getAnimationDuration,
     setAnimationDuration,
 } from '../../features/rssiDevice/rssiDeviceSlice';
 
-const range = { min: 10, max: 1000 };
-const sliderId = 'animation-duration-slider';
-
 export default () => {
     const dispatch = useDispatch();
     const animationDuration = useSelector(getAnimationDuration);
 
     return (
-        <>
-            <Form.Label htmlFor={sliderId}>
-                Hold values for{' '}
-                <NumberInlineInput
-                    value={animationDuration}
-                    range={range}
-                    onChange={newAnimationDuration =>
-                        dispatch(setAnimationDuration(newAnimationDuration))
-                    }
-                />
-                &nbsp;ms
-            </Form.Label>
-            <Slider
-                id={sliderId}
-                values={[animationDuration]}
-                range={range}
-                onChange={[
-                    newAnimationDuration =>
-                        dispatch(setAnimationDuration(newAnimationDuration)),
-                ]}
-            />
-        </>
+        <NumberInput
+            minWidth
+            range={{ min: 10, max: 1000 }}
+            value={animationDuration}
+            onChange={newAnimationDuration =>
+                dispatch(setAnimationDuration(newAnimationDuration))
+            }
+            label="Hold values for"
+            unit="ms"
+            showSlider
+        />
     );
 };

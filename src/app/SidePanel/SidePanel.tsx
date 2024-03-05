@@ -17,13 +17,11 @@ import MaxCount from './MaxCount';
 import SampleCount from './SampleCount';
 import ToggleLed from './ToggleLed';
 
-import './sidepanel.scss';
-
 export default () => {
     useRssiDevice();
 
     return (
-        <SidePanel className="sidepanel">
+        <SidePanel>
             <Group heading="Controls">
                 <ControlButtons />
             </Group>

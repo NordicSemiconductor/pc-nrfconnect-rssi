@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     NumberInlineInput,
@@ -34,8 +33,8 @@ export default () => {
     };
 
     return (
-        <>
-            <Form.Label htmlFor={sliderId}>
+        <div className="tw-flex tw-flex-col tw-gap-1">
+            <div className="tw-flex tw-flex-row">
                 Levels from{' '}
                 <NumberInlineInput
                     value={-max}
@@ -53,7 +52,7 @@ export default () => {
                     }
                 />{' '}
                 dBm
-            </Form.Label>
+            </div>
             <Slider
                 id={sliderId}
                 values={levelRange.map(v => -v)}
@@ -68,6 +67,6 @@ export default () => {
                         setNewLevelRangeIfUnequal(levelRange[0], -newValue),
                 ]}
             />
-        </>
+        </div>
     );
 };

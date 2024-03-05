@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     bleChannels,
@@ -18,8 +17,6 @@ import {
     setChannelRange,
 } from '../../features/rssiDevice/rssiDeviceSlice';
 
-const sliderId = 'ble-channel-slider';
-
 export default () => {
     const dispatch = useDispatch();
     const channelRange = useSelector(getChannelRange);
@@ -28,8 +25,8 @@ export default () => {
     const max = Math.max(...channelRange);
 
     return (
-        <>
-            <Form.Label htmlFor={sliderId}>
+        <div className="tw-flex tw-flex-col tw-gap-1">
+            <div className="tw-flex tw-flex-row">
                 Channels from{' '}
                 <NumberInlineInput
                     value={min}
@@ -46,9 +43,8 @@ export default () => {
                         dispatch(setChannelRange([min, newMax]))
                     }
                 />
-            </Form.Label>
+            </div>
             <Slider
-                id={sliderId}
                 values={channelRange}
                 range={{ min: bleChannels.min, max: bleChannels.max }}
                 onChange={[
@@ -58,6 +54,6 @@ export default () => {
                         dispatch(setChannelRange([channelRange[0], newValue])),
                 ]}
             />
-        </>
+        </div>
     );
 };
