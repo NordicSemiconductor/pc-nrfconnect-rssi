@@ -5,21 +5,14 @@
  */
 
 import React, { useCallback } from 'react';
-import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    NumberInlineInput,
-    Slider,
-} from '@nordicsemiconductor/pc-nrfconnect-shared';
+import { NumberInput } from '@nordicsemiconductor/pc-nrfconnect-shared';
 
 import {
     getRssiDevice,
     getScanRepeat,
     setScanRepeat,
 } from '../../features/rssiDevice/rssiDeviceSlice';
-
-const range = { min: 1, max: 100 };
-const sliderId = 'sample-count-slider';
 
 export default () => {
     const dispatch = useDispatch();
@@ -35,25 +28,14 @@ export default () => {
     );
 
     return (
-        <>
-            <Form.Label htmlFor={sliderId}>
-                Sample each channel{' '}
-                <NumberInlineInput
-                    value={scanRepeat}
-                    range={range}
-                    onChange={setAndWriteScanRepeat}
-                />{' '}
-                times
-            </Form.Label>
-            <Slider
-                id={sliderId}
-                values={[scanRepeat]}
-                range={range}
-                onChange={[
-                    newScanRepeat => dispatch(setScanRepeat(newScanRepeat)),
-                ]}
-                onChangeComplete={() => rssiDevice?.writeScanRepeat(scanRepeat)}
-            />
-        </>
+        <NumberInput
+            showSlider
+            minWidth
+            range={{ min: 1, max: 100 }}
+            value={scanRepeat}
+            onChange={setAndWriteScanRepeat}
+            label="Sample each channel"
+            unit="times"
+        />
     );
 };
