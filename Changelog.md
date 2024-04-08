@@ -1,3 +1,10 @@
+## 1.7.0 - 2024-04-08
+
+### Changed
+
+-   Moved feedback tab to a dialog which can be opened by going to the about tab
+    and click **Give Feedback**.
+
 ## 1.6.1 - 2024-03-13
 
 ### Changed
