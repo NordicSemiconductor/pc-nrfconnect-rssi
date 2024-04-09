@@ -24,6 +24,5 @@ render(
         deviceSelect={<DeviceSelector />}
         sidePanel={<SidePanel />}
         panes={[{ name: 'RSSI Viewer', Main: Chart }]}
-        feedback
     />
 );
