@@ -1,8 +1,9 @@
-## 1.7.0 - 2024-04-08
+## 1.7.0 - 2024-04-09
 
 ### Changed
 
--   Integrated the functionality of the Feedback tab in the **Give Feedback** dialog in the About tab.
+-   Integrated the functionality of the Feedback tab in the **Give Feedback**
+    dialog in the About tab.
 
 ## 1.6.1 - 2024-03-13
 
