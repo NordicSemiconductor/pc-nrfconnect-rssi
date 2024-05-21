@@ -34,7 +34,10 @@ export const deviceSetupConfig: DeviceSetupConfig = {
             d =>
                 !isDeviceInDFUBootloader(d) &&
                 !!d.serialPorts &&
-                d.serialPorts.length > 0
+                d.serialPorts.length > 0 &&
+                !!d.traits.nordicUsb &&
+                !!d.usb &&
+                d.usb.device.descriptor.idProduct === 0xc00a
         ),
         jprogDeviceSetup(
             [
