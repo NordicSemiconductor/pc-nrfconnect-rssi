@@ -9,6 +9,7 @@ import {
     Device,
     DeviceSetupConfig,
     getAppFile,
+    isDeviceInDFUBootloader,
     jprogDeviceSetup,
     logger,
     prepareDevice,
@@ -29,7 +30,14 @@ export const deviceSetupConfig: DeviceSetupConfig = {
                     params: {},
                 },
             ],
-            true
+            true,
+            d =>
+                !isDeviceInDFUBootloader(d) &&
+                !!d.serialPorts &&
+                d.serialPorts.length > 0 &&
+                !!d.traits.nordicUsb &&
+                !!d.usb &&
+                d.usb.device.descriptor.idProduct === 0xc00a
         ),
         jprogDeviceSetup(
             [
