@@ -48,7 +48,7 @@ The **Toggle LED** button lets you toggle the LED on the connected device.
 
 This is the main area of the application where the sniffing results are displayed. Changing the side panel option settings is automatically reflected on the sniffing results when the sniffing is ongoing.
 
-![Chaning RSSI Viewer options during sniffing](./screenshots/rssi_viewer_showcase.gif "Chaning RSSI Viewer options during sniffing")
+![Changing RSSI Viewer options during sniffing](./screenshots/rssi_viewer_showcase.gif "Changing RSSI Viewer options during sniffing")
 
 ## Log
 
