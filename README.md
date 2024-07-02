@@ -16,6 +16,13 @@ steps, see
 [Installing nRF Connect for Desktop apps](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/installing_apps.html)
 in the nRF Connect from Desktop documentation.
 
+## Documentation
+
+Read the
+[nRF Connect RSSI Viewer](https://docs.nordicsemi.com/bundle/nrf-connect-rssi-viewer/page/index.html)
+official documentation, which includes information about the
+[application UI](https://docs.nordicsemi.com/bundle/nrf-connect-rssi-viewer/page/overview.html).
+
 ## Development
 
 See the
