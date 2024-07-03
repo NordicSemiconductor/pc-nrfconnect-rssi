@@ -35,6 +35,14 @@ This option lets you control the frequency with which the sniffing scan are run 
 
 The options in this area refer to the Bluetooth Low Energy channels displayed in the **RSSI Viewer** tab.
 
+- **Show max for last X scans** - The application will hold the maximum detected value of the last X scans for the given channel.
+
+    !!! info "Tip"
+          If you configure the scan to be run every `10` ms in the [**Sweep Scan**](#sweep-scan) area and set the `X` in **Show max for last X scans** to `30`, the numerical value for each channel in the **RSSI Viewer** tab will show the maximum value in the last 300 ms of sniffing.
+
+- **Sample each channel X times** - The application will sample each channel X times during each scan and will provide the average value as the maximum value.
+- **Hold values for X ms** - The application will hold the values measured for the given channel for X ms. The higher the value, the more values are held. This affects the dark blue part of the channel sniffing animation in the **RSSI Viewer** tab.
+
 ### Filters
 
 The options in this area allows you to filter out specific Bluetooth LE channels and dBm values in the **RSSI Viewer** tab.
@@ -42,13 +50,25 @@ Once you select the values, the sniffing will be performed only within your cust
 
 ### Device
 
-The **Toggle LED** button lets you toggle the LED on the connected device.
+The **Toggle LED** button lets you toggle the LED on the connected device. This feature is only available for the nRF52 DK and the nRF52840 Dongle.
 
 ## RSSI Viewer tab
 
 This is the main area of the application where the sniffing results are displayed. Changing the side panel option settings is automatically reflected on the sniffing results when the sniffing is ongoing.
 
 ![Changing RSSI Viewer options during sniffing](./screenshots/rssi_viewer_showcase.gif "Changing RSSI Viewer options during sniffing")
+
+You can read the animation color coding in the following way:
+
+| Color                 | Meaning                                                                          |
+| --------------------- | -------------------------------------------------------------------------------- |
+| Green column          | |
+| Blue column           | |
+| Dark blue             | |
+| Light blue            | |
+| Dark green            | |
+| Light green           | |
+| Numerical value       | |
 
 ## Log
 
