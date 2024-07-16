@@ -3,17 +3,25 @@
 [![Build Status](https://dev.azure.com/NordicSemiconductor/Wayland/_apis/build/status/NordicSemiconductor.pc-nrfconnect-rssi?branchName=main)](https://dev.azure.com/NordicSemiconductor/Wayland/_build/latest?definitionId=9&branchName=main)
 [![License](https://img.shields.io/badge/license-Modified%20BSD%20License-blue.svg)](LICENSE)
 
-_nRF Connect RSSI Viewer_ is a tool that shows dBm per frequency in the
-2400-2480 MHz range, and allows the user to tweak settings like sweep delay and
-animation duration.
+nRF Connect RSSI Viewer is a tool that shows dBm per frequency in the 2400-2480
+MHz range, and allows you to tweak settings like sweep delay and animation
+duration.
 
-![screenshot](resources/screenshot.gif)
+![screenshot](./doc/docs/screenshots/rssi_viewer_showcase.gif)
 
 ## Installation
 
-See the
-[InfoCenter](https://infocenter.nordicsemi.com/index.jsp?topic=%2Fstruct_nrftools%2Fstruct%2Fnrftools_nrfconnect.html)
-pages for information on how to install the application.
+nRF Connect RSSI Viewer is installed from nRF Connect from Desktop. For detailed
+steps, see
+[Installing nRF Connect for Desktop apps](https://docs.nordicsemi.com/bundle/nrf-connect-desktop/page/installing_apps.html)
+in the nRF Connect from Desktop documentation.
+
+## Documentation
+
+Read the
+[nRF Connect RSSI Viewer](https://docs.nordicsemi.com/bundle/nrf-connect-rssi-viewer/page/index.html)
+official documentation, which includes information about the
+[application UI](https://docs.nordicsemi.com/bundle/nrf-connect-rssi-viewer/page/overview.html).
 
 ## Development
 
@@ -29,7 +37,7 @@ Please report issues on the [DevZone](https://devzone.nordicsemi.com) portal.
 ## Contributing
 
 See the
-[infos on contributing](https://nordicsemiconductor.github.io/pc-nrfconnect-docs/contributing)
+[information on contributing](https://nordicsemiconductor.github.io/pc-nrfconnect-docs/contributing)
 for details.
 
 ## License
