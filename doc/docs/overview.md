@@ -1,8 +1,8 @@
 # Overview and user interface
 
-After starting RSSI Viewer, the main application window is displayed.
+After starting the {{app_name}}, the main application window is displayed.
 
-![RSSI Viewer application window](./screenshots/rssi_overview.png "RSSI Viewer application window")
+![{{app_name}} window](./screenshots/rssi_overview.png "{{app_name}} window")
 
 The available options and information change after you **Select Device**.
 
@@ -18,7 +18,7 @@ Dropdown to list the devices attached to the computer. When you select a [suppor
 
 When a device is selected, sniffing in the 2.4 GHz range starts automatically and the side panel options become available.
 
-![RSSI Viewer application window after selecting a device](./screenshots/rssi_viewer_working.gif "RSSI Viewer application window after selecting a device")
+![{{app_name}} window after selecting a device](./screenshots/rssi_viewer_working.gif "{{app_name}} window after selecting a device")
 
 ### Controls
 
