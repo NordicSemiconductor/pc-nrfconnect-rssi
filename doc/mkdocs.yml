@@ -1,4 +1,4 @@
-site_name: nRF Connect RSSI Viewer documentation
+site_name: RSSI Viewer app documentation
 site_url:
 use_directory_urls: false
 
@@ -30,7 +30,7 @@ extra_css:
   - stylesheets/style.css
 
 copyright:
-  Copyright &copy; 2023
+  Copyright &copy; 2019-2024
 
 markdown_extensions:
   - abbr
@@ -42,9 +42,6 @@ markdown_extensions:
   - pymdownx.keys
   - pymdownx.tabbed
   - pymdownx.superfences
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
   - toc:
       permalink: true
       toc_depth: 4
@@ -56,8 +53,9 @@ plugins:
 
 extra:
   test: This is a test abbreviation snippet
+  app_name: RSSI Viewer app
 
 nav:
   - Home: index.md
-  - Installing RSSI Viewer app: installing.md
+  - Installing the RSSI Viewer app: installing.md
   - Overview and user interface: overview.md
