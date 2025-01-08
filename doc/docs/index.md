@@ -10,3 +10,8 @@ The {{app_name}} is installed and updated using [nRF Connect for Desktop](https:
 
 Any of the nRF52 Series boards can be used as the sniffer with the {{app_name}}.
 When you [select the device](overview.md#select-device), the tool will reprogram the connected board to act as the sniffer.
+
+## Application source code
+
+The code of the application is open source and [available on GitHub](https://github.com/NordicSemiconductor/pc-nrfconnect-rssi).
+Feel free to fork the repository and clone it for secondary development or feature contributions.
