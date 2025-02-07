@@ -1,0 +1,32 @@
+name: Release
+
+on:
+    workflow_dispatch:
+        inputs:
+            source:
+                description: 'Source (like "official") to release to'
+                required: true
+                type: string
+            access_level:
+                description: 'Access level of the source'
+                required: true
+                type: choice
+                options:
+                    - external
+                    - external-confidential
+                    - internal
+                    - internal-confidential
+            ref:
+                description:
+                    'Ref (Tag, branch, commit SHA) to release. Default to the
+                    default branch'
+                type: string
+
+jobs:
+    release:
+        uses: NordicSemiconductor/pc-nrfconnect-shared/.github/workflows/release-app.yml@artifactory/github_actions
+        with:
+            source: ${{ inputs.source }}
+            access_level: ${{ inputs.access_level }}
+            ref: ${{ inputs.ref }}
+        secrets: inherit
