@@ -1,8 +1,5 @@
 .DS_Store
 .idea
-*.db
 dist
-jest.json
-log.txt
 node_modules
-npm-debug.log
+*.tgz
