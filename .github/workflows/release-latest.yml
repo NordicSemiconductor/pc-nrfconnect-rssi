@@ -1,0 +1,13 @@
+name: Release to latest
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    release:
+        uses: NordicSemiconductor/pc-nrfconnect-shared/.github/workflows/release-app.yml@artifactory/github_actions
+        with:
+            source: latest
+            access_level: internal
+        secrets: inherit
