@@ -38,15 +38,11 @@ export default () => {
             onDeviceDisconnected={device =>
                 logger.info(`Device Disconnected SN:${device.serialNumber}`)
             }
-            onDeviceSelected={device =>
-                logger.info(`Selected device with s/n ${device.serialNumber}`)
-            }
             onDeviceIsReady={device => {
                 logger.info(`Device isReady SN:${device.serialNumber}`);
                 dispatch(openDevice(device));
             }}
             onDeviceDeselected={() => {
-                logger.info('Deselected device');
                 dispatch(closeDevice());
             }}
         />
