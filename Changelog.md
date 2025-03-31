@@ -2,7 +2,7 @@
 
 ### Changed
 
--   Update dependencies to support nRF Connect for Desktop v5.2.0 release.
+-   Update dependencies to support the nRF Connect for Desktop v5.2.0 release.
 
 ## 1.7.2 - 2024-11-11
 
