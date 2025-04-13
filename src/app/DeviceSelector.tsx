@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-4-Clause
  */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     DeviceSelector,
@@ -29,23 +29,21 @@ const deviceListing: DeviceTraits = {
 
 export default () => {
     const dispatch = useDispatch();
-    const preventSleepNumber = useRef<number | undefined>();
-
     const currentDevice = useSelector(selectedDevice);
 
     useEffect(() => {
         if (!currentDevice) return;
 
+        let preventSleepId: number | undefined;
+
         preventSleep.start().then(id => {
-            preventSleepNumber.current = id;
+            preventSleepId = id;
         });
 
         return () => {
-            if (preventSleepNumber.current) {
-                preventSleep.end(preventSleepNumber.current);
+            if (preventSleepId != null) {
+                preventSleep.end(preventSleepId);
             }
-
-            preventSleepNumber.current = undefined;
         };
     }, [currentDevice]);
 
