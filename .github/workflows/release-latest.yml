@@ -9,4 +9,5 @@ jobs:
         uses: NordicSemiconductor/pc-nrfconnect-shared/.github/workflows/release-app.yml@main
         with:
             source: latest (internal)
+            doc_bundle_name: nrf-connect-rssi-viewer
         secrets: inherit
