@@ -8,7 +8,12 @@ The {{app_name}} is installed and updated using [nRF Connect for Desktop](https:
 
 ## Supported devices
 
-Any of the nRF52 Series boards can be used as the sniffer with the {{app_name}}.
+You can use the following Nordic Semiconductor devices as the sniffer with the {{app_name}}:
+
+- nRF52 DK (PCA10040)
+- nRF52840 DK (PCA10056)
+- nRF52840 Dongle (PCA10059)
+
 When you [select the device](overview.md#select-device), the tool will reprogram the connected board to act as the sniffer.
 
 ## Application source code

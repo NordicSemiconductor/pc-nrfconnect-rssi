@@ -12,7 +12,7 @@ Before a device is selected, the side panel contains the following buttons:
 
 ### Select Device
 
-Dropdown to list the devices attached to the computer. When you select a [supported device](index.md#supported-devices), the app programs the device with the sniffer firmware, and then connects to one of the available serial ports. Sniffing starts automatically.
+Drop-down to list the devices attached to the computer. When you connect a [supported device](index.md#supported-devices) and select it in this menu, the {{app_name}} programs the device with the correct sniffer firmware, and then connects to one of the available serial ports. Sniffing starts automatically.
 
 ## After selection
 
