@@ -14,6 +14,9 @@ Before a device is selected, the side panel contains the following buttons:
 
 Drop-down to list the devices attached to the computer. When you connect a [supported device](index.md#supported-devices) and select it in this menu, the {{app_name}} programs the device with the correct sniffer firmware, and then connects to one of the available serial ports. Sniffing starts automatically.
 
+!!! note "Note"
+    {{legacy_driver_note}}
+
 ## After selection
 
 When a device is selected, sniffing in the 2.4 GHz range starts automatically and the side panel options become available.

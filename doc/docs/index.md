@@ -16,6 +16,9 @@ You can use the following Nordic Semiconductor devices as the sniffer with the {
 
 When you [select the device](overview.md#select-device), the tool will reprogram the connected board to act as the sniffer.
 
+!!! note "Note"
+    {{legacy_driver_note}}
+
 ## Application source code
 
 The code of the application is open source and [available on GitHub](https://github.com/NordicSemiconductor/pc-nrfconnect-rssi).
